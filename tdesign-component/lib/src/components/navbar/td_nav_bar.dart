@@ -145,7 +145,7 @@ class _TDNavBarState extends State<TDNavBar> {
   Widget get backButton {
     var iconColor = widget.backIconColor ?? TDTheme.of(context).textColorPrimary;
     return TDNavBarItem(
-      icon: TDIcons.chevron_left,
+      icon: Icons.arrow_back_ios_new,
       iconSize: 28.0,
       iconColor: iconColor,
       action: () {
