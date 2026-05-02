@@ -240,7 +240,7 @@ class _TDNavBarState extends State<TDNavBar> {
         widget.screenAdaptation ? MediaQuery.of(context).padding.top : 0.0;
     var padding = widget.padding ??
         EdgeInsets.symmetric(
-          horizontal: TDTheme.of(context).spacer16,
+          horizontal: TDTheme.of(context).spacer12,
           vertical: TDTheme.of(context).spacer4,
         );
     Widget appBar = Container(
