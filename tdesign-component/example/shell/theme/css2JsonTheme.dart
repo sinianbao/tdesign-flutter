@@ -59,7 +59,7 @@ void genThemeJson({required List<ThemeItem> items, required String output}) {
 Map<dynamic, dynamic> parseCss(String cssContentLight) {
   final jsonMap = convertCssToJson(cssContentLight);
 
-  var filterMap = <String, String>{};
+  var filterMap = <String,String>{};
   var colorKeys = <String>['brand', 'warning', 'error', 'success', 'gray'];
   jsonMap.forEach((key, value) {
     for (var element in colorKeys) {
@@ -68,7 +68,8 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
           key.startsWith('--td-text-color') ||
           key.startsWith('--td-component') ||
           key.startsWith('--td-font-white') ||
-          key.startsWith('--td-font-gray')) {
+          key.startsWith('--td-font-gray')
+      ) {
         var newKey = convertToCamelCase(key);
         var valueString = value.toString();
         if (valueString.startsWith('#') || valueString.startsWith('var')) {
@@ -98,7 +99,7 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
             colorString = sb.toString();
           }
           filterMap[newKey] = colorString;
-        } else if (valueString.startsWith('rgba')) {
+        } else if(valueString.startsWith('rgba')){
           // 将 "rgba(255, 255, 255, 0.22);"格式的颜色字符串valueString，转换为#AARRGGBB格式的颜色字符串
           try {
             var colorString = valueString.replaceAll(';', '');
@@ -108,16 +109,16 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
             var g = int.parse(colorList[1].trim());
             var b = int.parse(colorList[2].trim());
             var a = double.parse(colorList[3].trim());
-
+            
             // 更精确的透明度计算，避免精度损失
             var alphaInt = (a * 255).toInt();
-
+            
             // 生成完整的十六进制颜色值
             var hexColor = '#${alphaInt.toRadixString(16).padLeft(2, '0')}'
-                '${r.toRadixString(16).padLeft(2, '0')}'
-                '${g.toRadixString(16).padLeft(2, '0')}'
-                '${b.toRadixString(16).padLeft(2, '0')}';
-
+                          '${r.toRadixString(16).padLeft(2, '0')}'
+                          '${g.toRadixString(16).padLeft(2, '0')}'
+                          '${b.toRadixString(16).padLeft(2, '0')}';
+            
             filterMap[newKey] = hexColor.toUpperCase();
           } catch (e) {
             print('颜色转换错误: $valueString, 错误: $e');
@@ -126,17 +127,13 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
         }
         break;
       }
+
     }
   });
 
-  var functionNames = ['Light', 'Focus', 'Disabled', 'Hover', 'Active'];
-  var defaultNames = [
-    'brandColor',
-    'warningColor',
-    'errorColor',
-    'successColor'
-  ];
-  var refMap = <String, String>{};
+  var functionNames = ['Light','Focus','Disabled','Hover','Active'];
+  var defaultNames = ['brandColor','warningColor','errorColor','successColor'];
+  var refMap = <String, String> {};
   var removeKey = [];
   filterMap.forEach((key, value) {
     // --td-bg-color-container-active
@@ -151,8 +148,8 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
           return;
         }
       }
-      for (var d in defaultNames) {
-        if (key == d) {
+      for (var d in defaultNames){
+        if(key == d){
           // 替换brandColor格式命名为brandNormalColor
           var reKey = key.replaceAll('Color', 'NormalColor');
           refMap[reKey] = convertToCamelCase(field);
@@ -165,7 +162,7 @@ Map<dynamic, dynamic> parseCss(String cssContentLight) {
     }
   });
   // 清除已处理的Key
-  removeKey.forEach((key) {
+  removeKey.forEach((key){
     filterMap.remove(key);
   });
   var themeMap = {};
@@ -210,22 +207,19 @@ String convertToCamelCase(String input) {
 
   var resultString = result.toString();
   // 特殊命名处理
-  if (resultString.contains('Secondarycontainer')) {
-    resultString =
-        resultString.replaceAll('Secondarycontainer', 'SecondaryContainer');
-  } else if (resultString.contains('Secondarycomponent')) {
-    resultString =
-        resultString.replaceAll('Secondarycomponent', 'SecondaryComponent');
-  } else if (resultString.contains('Specialcomponent')) {
-    resultString =
-        resultString.replaceAll('Specialcomponent', 'SpecialComponent');
-  } else if (resultString.startsWith('component')) {
+  if(resultString.contains('Secondarycontainer')){
+    resultString = resultString.replaceAll('Secondarycontainer', 'SecondaryContainer');
+  } else if(resultString.contains('Secondarycomponent')){
+    resultString = resultString.replaceAll('Secondarycomponent', 'SecondaryComponent');
+  } else if(resultString.contains('Specialcomponent')){
+    resultString = resultString.replaceAll('Specialcomponent', 'SpecialComponent');
+  } else if(resultString.startsWith('component')){
     resultString = '${resultString}Color';
-  } else if (resultString == 'textDisabledColor') {
+  } else if(resultString == 'textDisabledColor'){
     resultString = 'textColorDisabled';
-  } else if (resultString.startsWith('fontWhite')) {
+  } else if(resultString.startsWith('fontWhite')){
     resultString = resultString.replaceAll('fontWhite', 'fontWhColor');
-  } else if (resultString.startsWith('fontGray')) {
+  } else if(resultString.startsWith('fontGray')){
     resultString = resultString.replaceAll('fontGray', 'fontGyColor');
   }
   return resultString;
@@ -251,4 +245,3 @@ Map<String, dynamic> convertCssToJson(String cssContent) {
   // final jsonString = json.encode(jsonMap);
   // return jsonString;
 }
-// ignore_for_file: file_names

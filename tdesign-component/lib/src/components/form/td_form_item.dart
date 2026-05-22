@@ -11,7 +11,7 @@ enum TDFormItemType {
   stepper,
   rate,
   textarea,
-  upLoadImg,
+  upLoadImg
 }
 
 class TDFormItem extends StatefulWidget {
@@ -133,18 +133,18 @@ class _TDFormItemState extends State<TDFormItem> {
 
   @override
   void didChangeDependencies() {
-    if (formValidate) {
+    if (FormValidate) {
       startValidation();
     }
-    if (formIsReset) {
+    if (FormIsReset) {
       errorMessage = '';
     }
     super.didChangeDependencies();
   }
 
   /// 从 TDForm 继承获取整个表单的参数
-  /// 获取真正的 labelWidth
-  double get labelWidth {
+  /// 获取真正的 LabelWidth
+  double get LabelWidth {
     final inherited = TDFormInherited.of(context);
     final defaultLabelWidth = 8.0;
 
@@ -161,12 +161,12 @@ class _TDFormItemState extends State<TDFormItem> {
     return defaultLabelWidth;
   }
 
-  Map<String, dynamic> get formData {
+  Map<String, dynamic> get FormData {
     return TDFormInherited.of(context)!.formData;
   }
 
   /// 获取 form 以及 formItem 的内容排列方式
-  TextAlign get formContentAlign {
+  TextAlign get FormContentAlign {
     final inherited = TDFormInherited.of(context);
     if (widget.contentAlign != null) {
       /// 断言 widget.contentAlign 不会为空
@@ -178,7 +178,7 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   /// 获取 form 是否为水平排列的状态
-  bool get formIsHorizontal {
+  bool get FormIsHorizontal {
     final inherited = TDFormInherited.of(context);
     if (inherited?.isHorizontal != null) {
       return inherited!.isHorizontal;
@@ -186,7 +186,7 @@ class _TDFormItemState extends State<TDFormItem> {
     return false;
   }
 
-  bool get formIsReset {
+  bool get FormIsReset {
     final inherited = TDFormInherited.of(context);
     if (inherited?.isReset != null) {
       return inherited!.isReset;
@@ -195,22 +195,27 @@ class _TDFormItemState extends State<TDFormItem> {
   }
 
   /// 获取 form 整体是否校验的信号状态
-  bool get formValidate {
+  bool get FormValidate {
     final inherited = TDFormInherited.of(context);
     return inherited!.isValidate;
   }
 
-  bool get formRequiredMark {
+  bool get FormRequiredMark {
     return TDFormInherited.of(context)!.requiredMark ?? false;
   }
 
   /// 获取整个表格是否需要展示错误提示
-  bool get showErrorMessage {
-    return widget.showErrorMessage;
+  bool? get ShowErrorMessage {
+    final inherited = TDFormInherited.of(context);
+    if (widget.showErrorMessage != null) {
+      return widget.showErrorMessage;
+    } else {
+      return inherited!.formShowErrorMessage;
+    }
   }
 
   /// 获取整个表单的校验规则
-  Map<String, TDFormValidation> get formRules {
+  Map<String, TDFormValidation> get FormRules {
     final inherited = TDFormInherited.of(context);
     return inherited!.rules;
   }
@@ -230,12 +235,12 @@ class _TDFormItemState extends State<TDFormItem> {
   /// 遍历校验规则并执行
   String? validate() {
     String? value = widget.formItemNotifier?.formVal;
-    String? name = widget.name;
+    String name = widget.name!;
     if (name == null) {
       return null;
     }
-    if (formRules[name] != null) {
-      TDFormValidation rule = formRules[name]!;
+    if (FormRules[name] != null) {
+      TDFormValidation rule = FormRules[name]!;
 
       /// 只对类型匹配的项进行校验
       if (rule.type == widget.type) {
@@ -253,7 +258,7 @@ class _TDFormItemState extends State<TDFormItem> {
   void updateFormData(value) {
     if (widget.name != null) {
       String name = widget.name!;
-      Map<String, dynamic> _formData = formData;
+      Map<String, dynamic> _formData = FormData;
       _formData[name] = value;
       TDFormInherited.of(context)!.onFormDataChange(_formData);
       startValidation();
@@ -262,59 +267,51 @@ class _TDFormItemState extends State<TDFormItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = TDTheme.of(context);
     Widget labelContent = Visibility(
-      visible: widget.label != null ? true : false,
-      child: SizedBox(
-        width: labelWidth,
-        child:
-            widget.labelWidget ??
-            Row(
-              children: [
-                TDText(
-                  widget.label,
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textAlign: widget.labelAlign,
-                ),
-                if (formRequiredMark &&
-                    (widget.requiredMark != null &&
-                        widget.requiredMark == true))
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: TDText(
-                      '*',
-                      style: const TextStyle(fontSize: 12),
-                      textColor: Colors.red,
-                      textAlign: widget.labelAlign,
-                    ),
-                  ),
-              ],
-            ),
-      ),
-    );
+        visible: widget.label != null ? true : false,
+        child: SizedBox(
+            width: LabelWidth,
+            child: widget.labelWidget ??
+                Row(
+                  children: [
+                    TDText(widget.label,
+                        font: TDTheme.of(context).fontBodyMedium,
+                        textAlign: widget.labelAlign),
+                    if (FormRequiredMark &&
+                        (widget.requiredMark != null &&
+                            widget.requiredMark == true))
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: TDText('*',
+                            style: const TextStyle(fontSize: 12),
+                            textColor: Colors.red,
+                            textAlign: widget.labelAlign),
+                      ),
+                  ],
+                )));
     List<Widget> itemRowContent = [
       labelContent,
       Visibility(
-        visible: formIsHorizontal,
+        visible: FormIsHorizontal,
         child: Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: widget.child ?? SizedBox(),
-          ),
-        ),
+            child: Align(
+          alignment: Alignment.centerRight,
+          child: widget.child ?? SizedBox(),
+        )),
         replacement: widget.child ?? SizedBox(),
-      ),
+      )
     ];
     List<Widget> itemColumnContent = [
       labelContent,
       SizedBox(height: 8),
       Visibility(
-        visible: formIsHorizontal,
+        visible: FormIsHorizontal,
         child: Expanded(
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: widget.child ?? SizedBox(),
-          ),
-        ),
+            child: Align(
+          alignment: Alignment.centerRight,
+          child: widget.child ?? SizedBox(),
+        )),
         replacement: widget.child ?? SizedBox(),
       ),
     ];
@@ -322,55 +319,52 @@ class _TDFormItemState extends State<TDFormItem> {
       case TDFormItemType.input:
       case TDFormItemType.rate:
         return Container(
-          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: formIsHorizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: itemRowContent,
-                  ),
-                  replacement: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itemColumnContent,
-                  ),
-                ),
-                _buildTipRow(
-                  left: 0,
-                  top: TDFormItemType.rate == widget.type ? 4 : 0,
-                ),
-              ],
-            ),
-          ),
-        );
+            color:
+                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: FormIsHorizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: itemRowContent,
+                      ),
+                      replacement: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: itemColumnContent,
+                      ),
+                    ),
+                    _buildTipRow(
+                        left: 0,
+                        top: TDFormItemType.rate == widget.type ? 4 : 0)
+                  ],
+                )));
       case TDFormItemType.radios:
         return Container(
-          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: formIsHorizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: itemRowContent,
-                  ),
-                  replacement: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itemColumnContent,
-                  ),
-                ),
-                _buildTipRow(left: 0, top: 4),
-              ],
-            ),
-          ),
-        );
+            color:
+                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: FormIsHorizontal,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: itemRowContent,
+                      ),
+                      replacement: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: itemColumnContent,
+                      ),
+                    ),
+                    _buildTipRow(left: 0, top: 4)
+                  ],
+                )));
       case TDFormItemType.dateTimePicker:
       case TDFormItemType.cascader:
         return _buildSelectRow(context);
@@ -379,138 +373,118 @@ class _TDFormItemState extends State<TDFormItem> {
           color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: formIsHorizontal,
-                  child: Row(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Visibility(
+                visible: FormIsHorizontal,
+                child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [labelContent, widget.child ?? SizedBox()],
-                  ),
-                  replacement: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itemColumnContent,
-                  ),
+                    children: [labelContent, widget.child ?? SizedBox()]),
+                replacement: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: itemColumnContent,
                 ),
-                _buildTipRow(top: 4, left: 0, right: 20),
-              ],
-            ),
+              ),
+              _buildTipRow(top: 4, left: 0, right: 20)
+            ]),
           ),
         );
       case TDFormItemType.textarea:
         return Container(
-          color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Visibility(
-                  visible: formIsHorizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Visibility(
-                        visible: widget.label != null ? true : false,
-                        child: labelContent,
+            color:
+                widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
+            child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Visibility(
+                      visible: FormIsHorizontal,
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Visibility(
+                                visible: widget.label != null ? true : false,
+                                child: labelContent),
+                            Expanded(child: widget.child ?? SizedBox()),
+                          ]),
+                      replacement: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible: widget.label != null ? true : false,
+                            child: SizedBox(
+                              width: LabelWidth,
+                              child: widget.labelWidget ??
+                                  TDText(widget.label,
+                                      font: TDTheme.of(context).fontBodyMedium,
+                                      textAlign: widget.labelAlign),
+                            ),
+                          ),
+                          widget.child ?? SizedBox()
+                        ],
                       ),
-                      Expanded(child: widget.child ?? SizedBox()),
-                    ],
-                  ),
-                  replacement: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Visibility(
-                        visible: widget.label != null ? true : false,
-                        child: SizedBox(
-                          width: labelWidth,
-                          child:
-                              widget.labelWidget ??
-                              TDText(
-                                widget.label,
-                                font: TDTheme.of(context).fontBodyMedium,
-                                textAlign: widget.labelAlign,
-                              ),
-                        ),
-                      ),
-                      widget.child ?? SizedBox(),
-                    ],
-                  ),
-                ),
-                _buildTipRow(left: 0, top: 8),
-              ],
-            ),
-          ),
-        );
+                    ),
+                    _buildTipRow(left: 0, top: 8)
+                  ],
+                )));
       case TDFormItemType.upLoadImg:
         return Container(
           color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Visibility(
-                  visible: formIsHorizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: itemRowContent,
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: FormIsHorizontal,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: itemRowContent),
+                    replacement: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Visibility(
+                            visible: widget.label != null ? true : false,
+                            child: SizedBox(
+                              width: LabelWidth,
+                              child: widget.labelWidget ??
+                                  TDText(widget.label,
+                                      font: TDTheme.of(context).fontBodyMedium,
+                                      textAlign: widget.labelAlign),
+                            )),
+                        widget.child ?? SizedBox()
+                      ],
+                    ),
                   ),
-                  replacement: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Visibility(
-                        visible: widget.label != null ? true : false,
-                        child: SizedBox(
-                          width: labelWidth,
-                          child:
-                              widget.labelWidget ??
-                              TDText(
-                                widget.label,
-                                font: TDTheme.of(context).fontBodyMedium,
-                                textAlign: widget.labelAlign,
-                              ),
-                        ),
-                      ),
-                      widget.child ?? SizedBox(),
-                    ],
-                  ),
-                ),
-                _buildTipRow(top: 0),
-              ],
-            ),
-          ),
+                  _buildTipRow(top: 0)
+                ],
+              )),
         );
     }
   }
 
   Widget _buildSelectRow(BuildContext context) {
     Widget labelContent = SizedBox(
-      width: labelWidth,
-      child:
-          widget.labelWidget ??
+      width: LabelWidth,
+      child: widget.labelWidget ??
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TDText(
-                  widget.label ?? '',
-                  font: TDTheme.of(context).fontBodyMedium,
-                  textAlign: widget.labelAlign,
-                ),
-                if (formRequiredMark &&
+                TDText(widget.label ?? '',
+                    font: TDTheme.of(context).fontBodyMedium,
+                    textAlign: widget.labelAlign),
+                if (FormRequiredMark &&
                     (widget.requiredMark != null &&
                         widget.requiredMark == true))
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
-                    child: TDText(
-                      '*',
-                      style: const TextStyle(fontSize: 12),
-                      textColor: Colors.red,
-                      textAlign: widget.labelAlign,
-                    ),
+                    child: TDText('*',
+                        style: const TextStyle(fontSize: 12),
+                        textColor: Colors.red,
+                        textAlign: widget.labelAlign),
                   ),
               ],
             ),
@@ -518,7 +492,7 @@ class _TDFormItemState extends State<TDFormItem> {
     );
     Widget selectText = TDText(
       widget.select != '' ? widget.select : widget.hintText,
-      textAlign: formContentAlign,
+      textAlign: FormContentAlign,
       font: TDTheme.of(context).fontBodyLarge,
       textColor: widget.select != ''
           ? TDTheme.of(context).textColorPrimary
@@ -556,12 +530,14 @@ class _TDFormItemState extends State<TDFormItem> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Visibility(
-              visible: formIsHorizontal,
+              visible: FormIsHorizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   labelContent,
-                  Expanded(child: rowContent),
+                  Expanded(
+                    child: rowContent,
+                  )
                 ],
               ),
               replacement: Row(
@@ -569,17 +545,16 @@ class _TDFormItemState extends State<TDFormItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        labelContent,
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, left: 2),
-                          child: selectText,
-                        ),
-                      ],
-                    ),
-                  ),
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      labelContent,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, left: 2),
+                        child: selectText,
+                      ),
+                    ],
+                  )),
                   Padding(
                     padding: const EdgeInsets.only(left: 2),
                     child: Icon(
@@ -590,7 +565,7 @@ class _TDFormItemState extends State<TDFormItem> {
                 ],
               ),
             ),
-            _buildTipRow(right: 28, top: 4),
+            _buildTipRow(right: 28, top: 4)
           ],
         ),
       ),
@@ -605,37 +580,39 @@ class _TDFormItemState extends State<TDFormItem> {
         if (widget.help != null && (errorMessage == null || errorMessage == ''))
           Row(
             children: [
-              if (widget.label != null && formIsHorizontal)
-                SizedBox(width: labelWidth),
+              if (widget.label != null && FormIsHorizontal)
+                SizedBox(width: LabelWidth),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: left, right: right, top: top),
-                  child: TDText(
-                    widget.help,
-                    font: TDTheme.of(context).fontBodySmall,
-                    textAlign: widget.tipAlign ?? TextAlign.left,
-                    textColor: TDTheme.of(context).textColorPlaceholder,
-                  ),
-                ),
-              ),
+                    padding:
+                        EdgeInsets.only(left: left, right: right, top: top),
+                    child: TDText(
+                      widget.help,
+                      font: TDTheme.of(context).fontBodySmall,
+                      textAlign: widget.tipAlign ?? TextAlign.left,
+                      textColor: TDTheme.of(context).textColorPlaceholder,
+                    )),
+              )
             ],
           ),
-        if (showErrorMessage && errorMessage != null && errorMessage != '')
+        if (ShowErrorMessage != null &&
+            ShowErrorMessage! &&
+            errorMessage != null &&
+            errorMessage != '')
           Row(
             children: [
-              if (widget.label != null && formIsHorizontal)
-                SizedBox(width: labelWidth),
+              if (widget.label != null && FormIsHorizontal)
+                SizedBox(width: LabelWidth),
               Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: left, right: right, top: top),
-                  child: TDText(
-                    errorMessage,
-                    font: TDTheme.of(context).fontBodySmall,
-                    textAlign: widget.tipAlign ?? TextAlign.left,
-                    textColor: TDTheme.of(context).errorNormalColor,
-                  ),
-                ),
-              ),
+                  child: Padding(
+                      padding:
+                          EdgeInsets.only(left: left, right: right, top: top),
+                      child: TDText(
+                        errorMessage,
+                        font: TDTheme.of(context).fontBodySmall,
+                        textAlign: widget.tipAlign ?? TextAlign.left,
+                        textColor: TDTheme.of(context).errorNormalColor,
+                      )))
             ],
           ),
       ],

@@ -16,50 +16,50 @@ enum TDTextareaLayout { vertical, horizontal }
 
 /// 用于多行文本信息输入
 class TDTextarea extends StatefulWidget {
-  const TDTextarea({
-    Key? key,
-    this.width,
-    this.textStyle,
-    this.backgroundColor,
-    this.decoration,
-    this.labelStyle,
-    this.required,
-    this.readOnly = false,
-    this.autofocus = false,
-    this.onEditingComplete,
-    this.onSubmitted,
-    this.hintText,
-    this.inputType,
-    this.onChanged,
-    this.inputFormatters,
-    this.inputDecoration,
-    this.maxLines,
-    this.minLines = 4,
-    this.focusNode,
-    this.controller,
-    this.cursorColor,
-    this.hintTextStyle,
-    this.labelWidget,
-    this.textInputBackgroundColor,
-    this.size = TDInputSize.large,
-    this.maxLength,
-    this.maxLengthEnforcement,
-    this.allowInputOverMax = false,
-    this.additionInfo = '',
-    this.additionInfoColor,
-    this.textAlign,
-    this.label,
-    this.indicator = false,
-    this.layout = TDTextareaLayout.horizontal,
-    this.autosize,
-    this.labelIcon,
-    this.labelWidth,
-    this.margin,
-    this.padding,
-    this.textareaDecoration,
-    this.bordered,
-    this.showBottomDivider = true,
-  }) : super(key: key);
+  const TDTextarea(
+      {Key? key,
+      this.width,
+      this.textStyle,
+      this.backgroundColor,
+      this.decoration,
+      this.labelStyle,
+      this.required,
+      this.readOnly = false,
+      this.autofocus = false,
+      this.onEditingComplete,
+      this.onSubmitted,
+      this.hintText,
+      this.inputType,
+      this.onChanged,
+      this.inputFormatters,
+      this.inputDecoration,
+      this.maxLines,
+      this.minLines = 4,
+      this.focusNode,
+      this.controller,
+      this.cursorColor,
+      this.hintTextStyle,
+      this.labelWidget,
+      this.textInputBackgroundColor,
+      this.size = TDInputSize.large,
+      this.maxLength,
+      this.maxLengthEnforcement,
+      this.allowInputOverMax = false,
+      this.additionInfo = '',
+      this.additionInfoColor,
+      this.textAlign,
+      this.label,
+      this.indicator = false,
+      this.layout = TDTextareaLayout.horizontal,
+      this.autosize,
+      this.labelIcon,
+      this.labelWidth,
+      this.margin,
+      this.padding,
+      this.textareaDecoration,
+      this.bordered,
+      this.showBottomDivider = true})
+      : super(key: key);
 
   /// 输入框宽度
   final double? width;
@@ -216,31 +216,25 @@ class _TDTextareaState extends State<TDTextarea> {
   Widget build(BuildContext context) {
     var padding = _getInputPadding(context);
     var textareaView = _getTextareaView(
-      context,
-      _getInputView(context),
-      _getIndicatorView(context),
-    );
-    var container = _getContainer(
-      context,
-      _getLabelView(context),
-      textareaView,
-    );
+        context, _getInputView(context), _getIndicatorView(context));
+    var container =
+        _getContainer(context, _getLabelView(context), textareaView);
     if (widget.bordered == true || widget.decoration != null) {
       return container;
     }
     return Stack(
       children: [
         container,
-        if (widget.showBottomDivider == true)
+        if (widget.showBottomDivider != null &&
+            widget!.showBottomDivider == true)
           Positioned(
-            bottom: 0,
-            left: padding,
-            right: 0,
-            child: Divider(
-              height: 0.5,
-              color: TDTheme.of(context).componentStrokeColor,
-            ),
-          ),
+              bottom: 0,
+              left: padding,
+              right: 0,
+              child: Divider(
+                height: 0.5,
+                color: TDTheme.of(context).componentStrokeColor,
+              )),
       ],
     );
   }
@@ -269,10 +263,9 @@ class _TDTextareaState extends State<TDTextarea> {
               ? Flexible(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      left: widget.labelIcon != null
-                          ? TDTheme.of(context).spacer4
-                          : 0,
-                    ),
+                        left: widget.labelIcon != null
+                            ? TDTheme.of(context).spacer4
+                            : 0),
                     child: TDText(
                       widget.label!,
                       maxLines: isHorizontal ? 2 : 1,
@@ -289,10 +282,9 @@ class _TDTextareaState extends State<TDTextarea> {
                   child: TDText(
                     '*',
                     style: TextStyle(
-                      color: TDTheme.of(context).errorColor6,
-                      fontSize: fontSize,
-                      height: 1.3,
-                    ),
+                        color: TDTheme.of(context).errorColor6,
+                        fontSize: fontSize,
+                        height: 1.3),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -306,8 +298,7 @@ class _TDTextareaState extends State<TDTextarea> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 24), // 设置最小高度为24
         child: TDInputView(
-          textStyle:
-              widget.textStyle ??
+          textStyle: widget.textStyle ??
               TextStyle(color: TDTheme.of(context).textColorPrimary),
           readOnly: widget.readOnly ?? false,
           autofocus: widget.autofocus ?? false,
@@ -329,22 +320,20 @@ class _TDTextareaState extends State<TDTextarea> {
                     LengthLimitingTextInputFormatter(
                       widget.maxLength,
                       maxLengthEnforcement: widget.maxLengthEnforcement,
-                    ),
+                    )
                   ]
-                : []),
+                : [])
           ],
           inputDecoration: widget.inputDecoration,
           minLines: widget.minLines,
           maxLines: widget.autosize == true ? null : widget.maxLines,
           focusNode: _focusNode,
           isCollapsed: true,
-          hintTextStyle:
-              widget.hintTextStyle ??
+          hintTextStyle: widget.hintTextStyle ??
               TextStyle(
-                color: widget.readOnly == true
-                    ? TDTheme.of(context).textDisabledColor
-                    : TDTheme.of(context).textColorPlaceholder,
-              ),
+                  color: widget.readOnly == true
+                      ? TDTheme.of(context).textDisabledColor
+                      : TDTheme.of(context).textColorPlaceholder),
           cursorColor: widget.cursorColor,
           textInputBackgroundColor: widget.textInputBackgroundColor,
           controller: widget.controller,
@@ -372,8 +361,7 @@ class _TDTextareaState extends State<TDTextarea> {
                   widget.additionInfo!,
                   style: TextStyle(
                     fontSize: TDTheme.of(context).fontBodySmall?.size,
-                    color:
-                        widget.additionInfoColor ??
+                    color: widget.additionInfoColor ??
                         TDTheme.of(context).textColorPlaceholder,
                   ),
                 ),
@@ -387,15 +375,12 @@ class _TDTextareaState extends State<TDTextarea> {
       widgetList.add(SizedBox(width: padding));
     }
     if (showIndicator) {
-      widgetList.add(
-        TDText(
-          '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
-          style: TextStyle(
+      widgetList.add(TDText(
+        '${widget.controller?.text.length ?? 0}/${widget.maxLength}',
+        style: TextStyle(
             fontSize: TDTheme.of(context).fontBodySmall?.size,
-            color: TDTheme.of(context).textColorPlaceholder,
-          ),
-        ),
-      );
+            color: TDTheme.of(context).textColorPlaceholder),
+      ));
     }
     return Visibility(
       visible: showIndicator || showAdditionInfo,
@@ -408,38 +393,34 @@ class _TDTextareaState extends State<TDTextarea> {
   }
 
   Widget _getTextareaView(
-    BuildContext context,
-    Widget inputView,
-    Widget indicatorView,
-  ) {
+      BuildContext context, Widget inputView, Widget indicatorView) {
     var padding = _getInputPadding(context);
     return Container(
-      decoration:
-          widget.textareaDecoration ??
+      decoration: widget.textareaDecoration ??
           (widget.bordered == true
               ? BoxDecoration(
                   color: widget.decoration != null
                       ? null
                       : (widget.backgroundColor ??
-                            TDTheme.of(context).bgColorContainer),
-                  borderRadius: BorderRadius.circular(
-                    TDTheme.of(context).radiusDefault,
-                  ),
+                          TDTheme.of(context).bgColorContainer),
+                  borderRadius:
+                      BorderRadius.circular(TDTheme.of(context).radiusDefault),
                   border: Border.all(
-                    color: TDTheme.of(context).componentBorderColor,
-                  ),
+                      color: TDTheme.of(context).componentBorderColor),
                 )
               : null),
       padding: widget.bordered == true ? EdgeInsets.all(padding) : null,
-      child: Column(children: [inputView, indicatorView]),
+      child: Column(
+        children: [
+          inputView,
+          indicatorView,
+        ],
+      ),
     );
   }
 
   Widget _getContainer(
-    BuildContext context,
-    Widget labelView,
-    Widget textareaView,
-  ) {
+      BuildContext context, Widget labelView, Widget textareaView) {
     var padding = _getInputPadding(context);
     var isHorizontal = widget.layout == TDTextareaLayout.horizontal;
     return Container(
@@ -452,12 +433,17 @@ class _TDTextareaState extends State<TDTextarea> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 labelView,
-                Expanded(child: textareaView),
+                Expanded(
+                  child: textareaView,
+                ),
               ],
             )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [labelView, textareaView],
+              children: [
+                labelView,
+                textareaView,
+              ],
             ),
     );
   }

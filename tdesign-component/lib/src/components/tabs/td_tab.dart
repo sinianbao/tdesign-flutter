@@ -12,7 +12,7 @@ enum TDTabOutlineType {
   capsule,
 
   /// 卡片
-  card,
+  card
 }
 
 class TDTab extends Tab {
@@ -54,6 +54,7 @@ class TDTab extends Tab {
   /// 选项卡样式
   final TDTabOutlineType outlineType;
 
+  @override
   const TDTab({
     Key? key,
     this.text,
@@ -68,13 +69,13 @@ class TDTab extends Tab {
     this.enable = true,
     this.iconMargin = const EdgeInsets.only(bottom: 4.0, right: 4.0),
   }) : super(
-         key: key,
-         text: text,
-         child: child,
-         icon: icon,
-         height: height,
-         iconMargin: iconMargin,
-       );
+          key: key,
+          text: text,
+          child: child,
+          icon: icon,
+          height: height,
+          iconMargin: iconMargin,
+        );
 
   final double _kTabHeight = 48.0;
   final double _kTextAndIconTabHeight = 72.0;
@@ -96,7 +97,10 @@ class TDTab extends Tab {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           icon ?? Container(),
-          SizedBox(width: iconMargin.horizontal, height: iconMargin.vertical),
+          SizedBox(
+            width: iconMargin.horizontal,
+            height: iconMargin.vertical,
+          ),
           _buildLabelText(context),
         ],
       );
@@ -106,7 +110,11 @@ class TDTab extends Tab {
         alignment: Alignment.bottomLeft,
         children: [
           Container(margin: textMargin, child: label),
-          Positioned(child: badge!, right: 0, top: 0),
+          Positioned(
+            child: badge!,
+            right: 0,
+            top: 0,
+          ),
         ],
       );
     }
@@ -119,7 +127,10 @@ class TDTab extends Tab {
             ? const EdgeInsets.symmetric(horizontal: 16)
             : null,
         height: height ?? calculatedHeight,
-        child: Center(widthFactor: 1.0, child: label),
+        child: Center(
+          widthFactor: 1.0,
+          child: label,
+        ),
       ),
     );
   }
@@ -128,9 +139,9 @@ class TDTab extends Tab {
     if (child != null) {
       return DefaultTextStyle(
         child: child!,
-        style: DefaultTextStyle.of(context).style.copyWith(
-          fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14,
-        ),
+        style: DefaultTextStyle.of(context)
+            .style
+            .copyWith(fontSize: TDTheme.of(context).fontBodySmall?.size ?? 14),
       );
     }
     return Text(

@@ -37,11 +37,11 @@ class TDAlertDialog extends StatelessWidget {
     TDDialogButtonStyle buttonStyle = TDDialogButtonStyle.normal,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-  }) : assert((title != null || content != null || contentWidget != null)),
-       _vertical = false,
-       _buttons = null,
-       _buttonStyle = buttonStyle,
-       super(key: key);
+  })  : assert((title != null || content != null || contentWidget != null)),
+        _vertical = false,
+        _buttons = null,
+        _buttonStyle = buttonStyle,
+        super(key: key);
 
   /// 纵向按钮排列的对话框
   ///
@@ -61,14 +61,14 @@ class TDAlertDialog extends StatelessWidget {
     this.showCloseButton,
     this.padding = const EdgeInsets.fromLTRB(24, 32, 24, 0),
     this.buttonWidget,
-  }) : _vertical = true,
-       leftBtn = null,
-       rightBtn = null,
-       _buttons = buttons,
-       _buttonStyle = TDDialogButtonStyle.normal,
-       leftBtnAction = null,
-       rightBtnAction = null,
-       super(key: key);
+  })  : _vertical = true,
+        leftBtn = null,
+        rightBtn = null,
+        _buttons = buttons,
+        _buttonStyle = TDDialogButtonStyle.normal,
+        leftBtnAction = null,
+        rightBtnAction = null,
+        super(key: key);
 
   /// 背景颜色
   final Color? backgroundColor;
@@ -135,12 +135,10 @@ class TDAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // 标题和内容不能同时为空
     return TDDialogScaffold(
-      showCloseButton: showCloseButton,
-      backgroundColor: backgroundColor,
-      radius: radius,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+        showCloseButton: showCloseButton,
+        backgroundColor: backgroundColor,
+        radius: radius,
+        body: Column(mainAxisSize: MainAxisSize.min, children: [
           TDDialogInfoWidget(
             title: title,
             titleColor: titleColor,
@@ -153,32 +151,29 @@ class TDAlertDialog extends StatelessWidget {
           ),
           const TDDivider(height: 24, color: Colors.transparent),
           _vertical ? _verticalButtons(context) : _horizontalButtons(context),
-        ],
-      ),
-    );
+        ]));
   }
 
   Widget _horizontalButtons(BuildContext context) {
     if (buttonWidget != null) {
       return buttonWidget!;
     }
-    final left =
-        leftBtn ??
+    final left = leftBtn ??
         TDDialogButtonOptions(
-          title: context.resource.cancel,
-          theme: TDButtonTheme.light,
-          action: leftBtnAction,
-        );
-    final right =
-        rightBtn ??
+            title: context.resource.cancel,
+            theme: TDButtonTheme.light,
+            action: leftBtnAction);
+    final right = rightBtn ??
         TDDialogButtonOptions(
-          title: context.resource.confirm,
-          theme: TDButtonTheme.primary,
-          action: rightBtnAction,
-        );
+            title: context.resource.confirm,
+            theme: TDButtonTheme.primary,
+            action: rightBtnAction);
     return _buttonStyle == TDDialogButtonStyle.text
         ? HorizontalTextButtons(leftBtn: left, rightBtn: right)
-        : HorizontalNormalButtons(leftBtn: left, rightBtn: right);
+        : HorizontalNormalButtons(
+            leftBtn: left,
+            rightBtn: right,
+          );
   }
 
   Widget _verticalButtons(BuildContext context) {
@@ -202,14 +197,16 @@ class TDAlertDialog extends StatelessWidget {
         },
       );
       widgets.add(btn);
-      if (index < _buttons.length - 1) {
+      if (index < _buttons!.length - 1) {
         widgets.add(const TDDivider(height: 12, color: Colors.transparent));
       }
     });
 
     return Container(
       padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
-      child: Column(children: widgets),
+      child: Column(
+        children: widgets,
+      ),
     );
   }
 }

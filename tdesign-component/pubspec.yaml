@@ -4,8 +4,8 @@ version: 0.2.6
 homepage: https://github.com/Tencent/tdesign-flutter
 
 environment:
-  sdk: ">=3.12.0 <4.0.0"
-  flutter: ">=3.44.0"
+  sdk: ">=3.2.6 <4.0.0"
+  flutter: ">=3.16.0"
 
 dependencies:
   flutter:

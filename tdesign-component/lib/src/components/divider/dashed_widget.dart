@@ -14,9 +14,9 @@ class DashedWidget extends StatelessWidget {
     this.width,
     this.height = 0.5,
     this.direction = Axis.horizontal,
-  }) : assert(gap > 0, 'gap 必须大于 0'),
-       assert(solidLength > 0, 'solidLength 必须大于 0'),
-       super(key: key);
+  })  : assert(gap > 0, 'gap 必须大于 0'),
+        assert(solidLength > 0, 'solidLength 必须大于 0'),
+        super(key: key);
 
   final Color? color;
   final double gap;
@@ -33,23 +33,21 @@ class DashedWidget extends StatelessWidget {
         height: height,
         child: CustomPaint(
           painter: DashedPainter(
-            color: color ?? TDTheme.of(context).componentStrokeColor,
-            strokeWidth: height,
-            direction: direction,
-          ),
+              color: color ?? TDTheme.of(context).componentStrokeColor,
+              strokeWidth: height,
+              direction: direction),
         ),
       );
     }
 
     return SizedBox(
       width: width,
-      height: height,
+      height: height ?? MediaQuery.of(context).size.height,
       child: CustomPaint(
         painter: DashedPainter(
-          color: color ?? TDTheme.of(context).componentStrokeColor,
-          strokeWidth: width ?? 1,
-          direction: direction,
-        ),
+            color: color ?? TDTheme.of(context).componentStrokeColor,
+            strokeWidth: width ?? 1,
+            direction: direction),
       ),
     );
   }
