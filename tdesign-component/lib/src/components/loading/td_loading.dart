@@ -79,9 +79,7 @@ class TDLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [_contentWidget(context)],
-    );
+    return Wrap(children: [_contentWidget(context)]);
   }
 
   Widget _contentWidget(BuildContext context) {
@@ -113,9 +111,6 @@ class TDLoading extends StatelessWidget {
                   : (size == TDLoadingSize.medium ? 16 : 20),
               duration: _innerDuration,
             );
-            break;
-          default:
-            indicator = _getCircleIndicator();
             break;
         }
       }
@@ -197,11 +192,7 @@ class TDLoading extends StatelessWidget {
       result = Row(
         // spacing: 8,
         mainAxisSize: MainAxisSize.min,
-        children: [
-          result,
-          const SizedBox(width: 8),
-          refreshWidget!,
-        ],
+        children: [result, const SizedBox(width: 8), refreshWidget!],
       );
     }
     return result;

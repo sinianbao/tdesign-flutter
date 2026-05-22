@@ -135,8 +135,9 @@ class _TDButtonState extends State<TDButton> {
   double? _iconSize;
 
   _updateParams() {
-    _buttonStatus =
-        widget.disabled ? TDButtonStatus.disable : TDButtonStatus.defaultState;
+    _buttonStatus = widget.disabled
+        ? TDButtonStatus.disable
+        : TDButtonStatus.defaultState;
     _innerDefaultStyle = widget.style;
     _innerActiveStyle = widget.activeStyle;
     _innerDisableStyle = widget.disableStyle;
@@ -176,7 +177,6 @@ class _TDButtonState extends State<TDButton> {
     super.didChangeDependencies();
     _updateParams();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -266,10 +266,7 @@ class _TDButtonState extends State<TDButton> {
     }
 
     if (children.length == 2) {
-      children.insert(
-        1,
-        SizedBox(width: widget.iconTextSpacing ?? 8),
-      );
+      children.insert(1, SizedBox(width: widget.iconTextSpacing ?? 8));
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -283,25 +280,7 @@ class _TDButtonState extends State<TDButton> {
       return widget.iconWidget;
     }
     if (widget.icon != null) {
-      return Icon(
-        widget.icon,
-        size: _iconSize,
-        color: style.textColor,
-      );
-      return RichText(
-        overflow: TextOverflow.visible,
-        text: TextSpan(
-          text: String.fromCharCode(widget.icon!.codePoint),
-          style: TextStyle(
-            inherit: false,
-            color: style.textColor,
-            height: 1,
-            fontSize: _iconSize,
-            fontFamily: widget.icon!.fontFamily,
-            package: widget.icon!.fontPackage,
-          ),
-        ),
-      );
+      return Icon(widget.icon, size: _iconSize, color: style.textColor);
     }
 
     return null;
@@ -385,7 +364,8 @@ class _TDButtonState extends State<TDButton> {
     if (widget.padding != null) {
       return widget.padding;
     }
-    var equalSide = widget.shape == TDButtonShape.square ||
+    var equalSide =
+        widget.shape == TDButtonShape.square ||
         widget.shape == TDButtonShape.circle;
 
     double horizontalPadding;
@@ -419,10 +399,11 @@ class _TDButtonState extends State<TDButton> {
       }
     }
     return EdgeInsets.only(
-        left: horizontalPadding,
-        right: horizontalPadding,
-        bottom: verticalPadding,
-        top: verticalPadding);
+      left: horizontalPadding,
+      right: horizontalPadding,
+      bottom: verticalPadding,
+      top: verticalPadding,
+    );
   }
 
   @override
@@ -435,16 +416,28 @@ class _TDButtonState extends State<TDButton> {
     switch (widget.type) {
       case TDButtonType.fill:
         return TDButtonStyle.generateFillStyleByTheme(
-            context, widget.theme, _buttonStatus);
+          context,
+          widget.theme,
+          _buttonStatus,
+        );
       case TDButtonType.outline:
         return TDButtonStyle.generateOutlineStyleByTheme(
-            context, widget.theme, _buttonStatus);
+          context,
+          widget.theme,
+          _buttonStatus,
+        );
       case TDButtonType.text:
         return TDButtonStyle.generateTextStyleByTheme(
-            context, widget.theme, _buttonStatus);
+          context,
+          widget.theme,
+          _buttonStatus,
+        );
       case TDButtonType.ghost:
         return TDButtonStyle.generateGhostStyleByTheme(
-            context, widget.theme, _buttonStatus);
+          context,
+          widget.theme,
+          _buttonStatus,
+        );
     }
   }
 

@@ -127,8 +127,9 @@ class _TDStepperState extends State<TDStepper> {
         }
       });
     }
-    _textController =
-        TextEditingController(text: _controller._value.toString());
+    _textController = TextEditingController(
+      text: _controller._value.toString(),
+    );
 
     _focusNode.addListener(() {
       if (!_focusNode.hasFocus) {
@@ -158,8 +159,6 @@ class _TDStepperState extends State<TDStepper> {
         return 38;
       case TDStepperSize.large:
         return 45;
-      default:
-        return 38;
     }
   }
 
@@ -176,8 +175,6 @@ class _TDStepperState extends State<TDStepper> {
         return 24;
       case TDStepperSize.large:
         return 28;
-      default:
-        return 24;
     }
   }
 
@@ -190,7 +187,6 @@ class _TDStepperState extends State<TDStepper> {
       case TDStepperTheme.outline:
         return null;
       case TDStepperTheme.normal:
-      default:
         return null;
     }
   }
@@ -203,8 +199,6 @@ class _TDStepperState extends State<TDStepper> {
         return 12;
       case TDStepperSize.large:
         return 16;
-      default:
-        return 12;
     }
   }
 
@@ -260,21 +254,27 @@ class _TDStepperState extends State<TDStepper> {
   cleanValue() {
     _controller._value = 0;
     _textController.value = TextEditingValue(
-        text: _controller._value.toString(),
-        selection: TextSelection.fromPosition(TextPosition(
+      text: _controller._value.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(
           affinity: TextAffinity.downstream,
           offset: _controller._value.toString().length,
-        )));
+        ),
+      ),
+    );
     _focusNode.unfocus();
   }
 
   void renderNumber() {
     _textController.value = TextEditingValue(
-        text: _controller._value.toString(),
-        selection: TextSelection.fromPosition(TextPosition(
+      text: _controller._value.toString(),
+      selection: TextSelection.fromPosition(
+        TextPosition(
           affinity: TextAffinity.downstream,
           offset: _controller._value.toString().length,
-        )));
+        ),
+      ),
+    );
     _focusNode.unfocus();
 
     if (widget.onChange != null) {
@@ -295,112 +295,115 @@ class _TDStepperState extends State<TDStepper> {
         ),
         Container(
           decoration: BoxDecoration(
-              border: widget.theme == TDStepperTheme.outline
-                  ? Border(
-                      top: BorderSide(
-                        color: TDTheme.of(context).componentBorderColor,
-                      ),
-                      bottom: BorderSide(
-                        color: TDTheme.of(context).componentBorderColor,
-                      ))
-                  : null),
+            border: widget.theme == TDStepperTheme.outline
+                ? Border(
+                    top: BorderSide(
+                      color: TDTheme.of(context).componentBorderColor,
+                    ),
+                    bottom: BorderSide(
+                      color: TDTheme.of(context).componentBorderColor,
+                    ),
+                  )
+                : null,
+          ),
           child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: widget.theme == TDStepperTheme.normal ? 0 : 4),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    minWidth: _getWidth(),
-                    maxWidth: _getWidth() + _getTextWidth()),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.theme == TDStepperTheme.normal ? 0 : 4,
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: _getWidth(),
+                maxWidth: _getWidth() + _getTextWidth(),
+              ),
+              child: Container(
+                height: _getHeight(),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: _getBackgroundColor(context)),
                 child: Container(
-                  height: _getHeight(),
-                  alignment: Alignment.center,
-                  decoration:
-                      BoxDecoration(color: _getBackgroundColor(context)),
-                  child: Container(
-                    height: PlatformUtil.isWeb ? _getFontSize() : null,
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: TextField(
-                      controller: _textController,
-                      enabled: !widget.disabled && !widget.disableInput,
-                      focusNode: _focusNode,
-                      style: TextStyle(
-                          fontSize: _getFontSize(),
-                          color: widget.disabled
-                              ? TDTheme.of(context).textDisabledColor
-                              : TDTheme.of(context).textColorPrimary),
-                      textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.center,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          try {
-                            if (newValue.text == '') {
-                              setState(() {
-                                _controller._value = widget.min;
-                              });
+                  height: PlatformUtil.isWeb ? _getFontSize() : null,
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: TextField(
+                    controller: _textController,
+                    enabled: !widget.disabled && !widget.disableInput,
+                    focusNode: _focusNode,
+                    style: TextStyle(
+                      fontSize: _getFontSize(),
+                      color: widget.disabled
+                          ? TDTheme.of(context).textDisabledColor
+                          : TDTheme.of(context).textColorPrimary,
+                    ),
+                    textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      TextInputFormatter.withFunction((oldValue, newValue) {
+                        try {
+                          if (newValue.text == '') {
+                            setState(() {
+                              _controller._value = widget.min;
+                            });
 
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TDStepperOverlimitType.minus);
-                              }
-
-                              return newValue.copyWith(
-                                  text: _controller._value.toString(),
-                                  selection: TextSelection.collapsed(
-                                      offset: _controller._value
-                                          .toString()
-                                          .length));
-                            }
-
-                            final newNum = int.parse(newValue.text);
-                            if (newNum < widget.min) {
-                              setState(() {
-                                _controller._value = widget.min;
-                              });
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TDStepperOverlimitType.minus);
-                              }
-                            } else if (newNum > widget.max) {
-                              setState(() {
-                                _controller._value = widget.max;
-                              });
-                              if (widget.onOverlimit != null) {
-                                widget
-                                    .onOverlimit!(TDStepperOverlimitType.plus);
-                              }
-                            } else {
-                              setState(() {
-                                _controller._value = newNum;
-                              });
+                            if (widget.onOverlimit != null) {
+                              widget.onOverlimit!(TDStepperOverlimitType.minus);
                             }
 
                             return newValue.copyWith(
-                                text: _controller._value.toString(),
-                                selection: TextSelection.collapsed(
-                                    offset:
-                                        _controller._value.toString().length));
-                          } catch (e) {
-                            return oldValue;
+                              text: _controller._value.toString(),
+                              selection: TextSelection.collapsed(
+                                offset: _controller._value.toString().length,
+                              ),
+                            );
                           }
-                        })
-                      ],
-                      onChanged: (newValue) {
-                        final result = int.parse(newValue);
-                        if (widget.onChange != null) {
-                          widget.onChange!(result);
+
+                          final newNum = int.parse(newValue.text);
+                          if (newNum < widget.min) {
+                            setState(() {
+                              _controller._value = widget.min;
+                            });
+                            if (widget.onOverlimit != null) {
+                              widget.onOverlimit!(TDStepperOverlimitType.minus);
+                            }
+                          } else if (newNum > widget.max) {
+                            setState(() {
+                              _controller._value = widget.max;
+                            });
+                            if (widget.onOverlimit != null) {
+                              widget.onOverlimit!(TDStepperOverlimitType.plus);
+                            }
+                          } else {
+                            setState(() {
+                              _controller._value = newNum;
+                            });
+                          }
+
+                          return newValue.copyWith(
+                            text: _controller._value.toString(),
+                            selection: TextSelection.collapsed(
+                              offset: _controller._value.toString().length,
+                            ),
+                          );
+                        } catch (e) {
+                          return oldValue;
                         }
-                      },
-                    ),
+                      }),
+                    ],
+                    onChanged: (newValue) {
+                      final result = int.parse(newValue);
+                      if (widget.onChange != null) {
+                        widget.onChange!(result);
+                      }
+                    },
                   ),
                 ),
-              )),
+              ),
+            ),
+          ),
         ),
         TDStepperIconButton(
           type: TDStepperIconType.add,
@@ -408,7 +411,7 @@ class _TDStepperState extends State<TDStepper> {
           theme: widget.theme,
           size: widget.size,
           onTap: onAdd,
-        )
+        ),
       ],
     );
   }
@@ -416,11 +419,14 @@ class _TDStepperState extends State<TDStepper> {
   void updateUI() {
     if (mounted) {
       _textController.value = TextEditingValue(
-          text: _controller._value.toString(),
-          selection: TextSelection.fromPosition(TextPosition(
+        text: _controller._value.toString(),
+        selection: TextSelection.fromPosition(
+          TextPosition(
             affinity: TextAffinity.downstream,
             offset: _controller._value.toString().length,
-          )));
+          ),
+        ),
+      );
     }
   }
 }
@@ -451,19 +457,19 @@ class TDStepperIconButton extends StatelessWidget {
         return 16;
       case TDStepperSize.small:
         return 12;
-      default:
-        return 16;
     }
   }
 
   Icon _getIcon(context) {
     var iconType = type == TDStepperIconType.add ? Icons.add : Icons.remove;
 
-    return Icon(iconType,
-        size: _getIconSize(),
-        color: disabled
-            ? TDTheme.of(context).textDisabledColor
-            : TDTheme.of(context).textColorPrimary);
+    return Icon(
+      iconType,
+      size: _getIconSize(),
+      color: disabled
+          ? TDTheme.of(context).textDisabledColor
+          : TDTheme.of(context).textColorPrimary,
+    );
   }
 
   Color? _getBackgroundColor(BuildContext context) {
@@ -475,7 +481,6 @@ class TDStepperIconButton extends StatelessWidget {
       case TDStepperTheme.outline:
         return disabled ? TDTheme.of(context).bgColorComponentDisabled : null;
       case TDStepperTheme.normal:
-      default:
         return null;
     }
   }
@@ -487,16 +492,18 @@ class TDStepperIconButton extends StatelessWidget {
 
     return type == TDStepperIconType.remove
         ? const BorderRadius.only(
-            topLeft: Radius.circular(3), bottomLeft: Radius.circular(3))
+            topLeft: Radius.circular(3),
+            bottomLeft: Radius.circular(3),
+          )
         : const BorderRadius.only(
-            topRight: Radius.circular(3), bottomRight: Radius.circular(3));
+            topRight: Radius.circular(3),
+            bottomRight: Radius.circular(3),
+          );
   }
 
   BoxBorder? _getBoxBorder(BuildContext context) {
     if (theme == TDStepperTheme.outline) {
-      return Border.all(
-        color: TDTheme.of(context).componentBorderColor,
-      );
+      return Border.all(color: TDTheme.of(context).componentBorderColor);
     }
 
     return null;
@@ -505,17 +512,18 @@ class TDStepperIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: disabled ? null : onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _getBackgroundColor(context),
-            borderRadius: _getBorderRadius(context),
-            border: _getBoxBorder(context),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: _getIcon(context),
-          ),
-        ));
+      onTap: disabled ? null : onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: _getBackgroundColor(context),
+          borderRadius: _getBorderRadius(context),
+          border: _getBoxBorder(context),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: _getIcon(context),
+        ),
+      ),
+    );
   }
 }

@@ -10,7 +10,7 @@ enum IconTextDirection {
   horizontal,
 
   /// 竖向
-  vertical
+  vertical,
 }
 
 /// Toast配置类，支持独立样式定制
@@ -39,11 +39,7 @@ class _ToastInstance {
   final Timer? disposeTimer;
   bool showing = true;
 
-  _ToastInstance({
-    required this.overlayEntry,
-    this.timer,
-    this.disposeTimer,
-  });
+  _ToastInstance({required this.overlayEntry, this.timer, this.disposeTimer});
 
   void cancel() {
     timer?.cancel();
@@ -315,7 +311,7 @@ class TDToast {
         .where((entry) => entry.key.startsWith('toast_'))
         .map((entry) => entry.key)
         .toList();
-    
+
     for (final id in loadingIds) {
       dismissToast(id);
     }
@@ -330,7 +326,7 @@ class TDToast {
   }) {
     // 不自动关闭之前的Toast，支持多个Toast同时显示
     final overlayState = Overlay.of(context);
-    
+
     OverlayEntry overlayEntry;
     if (preventTap ?? false) {
       overlayEntry = OverlayEntry(
@@ -341,22 +337,17 @@ class TDToast {
           left: 0,
           child: Container(
             color: Colors.transparent,
-            child: Align(
-              alignment: Alignment.center,
-              child: widget,
-            ),
+            child: Align(alignment: Alignment.center, child: widget),
           ),
         ),
       );
     } else {
       overlayEntry = OverlayEntry(
-        builder: (BuildContext context) => Center(
-          child: widget,
-        ),
+        builder: (BuildContext context) => Center(child: widget),
       );
     }
 
-    overlayState?.insert(overlayEntry);
+    overlayState.insert(overlayEntry);
 
     Timer? timer;
     Timer? disposeTimer;
@@ -367,7 +358,7 @@ class TDToast {
         if (instance != null && instance.showing) {
           instance.showing = false;
           overlayEntry.markNeedsBuild();
-          
+
           disposeTimer = Timer(const Duration(milliseconds: 200), () {
             overlayEntry.remove();
             _toastInstances.remove(toastId);
@@ -404,31 +395,32 @@ class _TDIconTextToast extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 191, maxHeight: 94),
       child: Container(
-          padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
-          decoration: BoxDecoration(
-            color: config.backgroundColor ?? theme.fontGyColor1,
-            borderRadius: BorderRadius.circular(theme.radiusDefault),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                iconData,
-                size: config.iconSize ?? 24,
-                color: config.iconColor ?? theme.whiteColor1,
-              ),
-              const SizedBox(width: 8),
-              TDText(
-                text ?? '',
-                font: config.textStyle != null ? null : theme.fontBodyMedium,
-                style: config.textStyle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textColor: config.textStyle?.color ?? theme.whiteColor1,
-              )
-            ],
-          )),
+        padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+        decoration: BoxDecoration(
+          color: config.backgroundColor ?? theme.fontGyColor1,
+          borderRadius: BorderRadius.circular(theme.radiusDefault),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              iconData,
+              size: config.iconSize ?? 24,
+              color: config.iconColor ?? theme.whiteColor1,
+            ),
+            const SizedBox(width: 8),
+            TDText(
+              text ?? '',
+              font: config.textStyle != null ? null : theme.fontBodyMedium,
+              style: config.textStyle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textColor: config.textStyle?.color ?? theme.whiteColor1,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -459,7 +451,7 @@ class _TDIconTextToast extends StatelessWidget {
               maxLines: maxLines ?? 1,
               overflow: TextOverflow.ellipsis,
               textColor: config.textStyle?.color ?? theme.whiteColor1,
-            )
+            ),
           ],
         ),
       ),
@@ -479,53 +471,48 @@ class _TDToastLoading extends StatelessWidget {
   final Widget? customWidget;
   final TDToastConfig config;
 
-  const _TDToastLoading({
-    this.text,
-    this.customWidget,
-    required this.config,
-  });
+  const _TDToastLoading({this.text, this.customWidget, required this.config});
 
   @override
   Widget build(BuildContext context) {
     final theme = TDTheme.of(context);
     return Container(
-        height: 110,
-        width: 110,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: config.backgroundColor ?? theme.fontGyColor1,
-          borderRadius: BorderRadius.circular(theme.radiusDefault),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            TDCircleIndicator(
-              color: config.iconColor ?? theme.whiteColor1,
-              size: config.iconSize ?? 32,
-              lineWidth: 4,
-            ),
-            const SizedBox(height: 8),
-            customWidget ??
-                TDText(
-                  text ?? context.resource.loadingWithPoint,
-                  font: config.textStyle != null ? null : theme.fontBodyMedium,
-                  style: config.textStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textColor: config.textStyle?.color ?? theme.whiteColor1,
-                )
-          ],
-        ));
+      height: 110,
+      width: 110,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: config.backgroundColor ?? theme.fontGyColor1,
+        borderRadius: BorderRadius.circular(theme.radiusDefault),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          TDCircleIndicator(
+            color: config.iconColor ?? theme.whiteColor1,
+            size: config.iconSize ?? 32,
+            lineWidth: 4,
+          ),
+          const SizedBox(height: 8),
+          customWidget ??
+              TDText(
+                text ?? context.resource.loadingWithPoint,
+                font: config.textStyle != null ? null : theme.fontBodyMedium,
+                style: config.textStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textColor: config.textStyle?.color ?? theme.whiteColor1,
+              ),
+        ],
+      ),
+    );
   }
 }
 
 class _TDToastLoadingWithoutText extends StatelessWidget {
   final TDToastConfig config;
 
-  const _TDToastLoadingWithoutText({
-    required this.config,
-  });
+  const _TDToastLoadingWithoutText({required this.config});
 
   @override
   Widget build(BuildContext context) {
@@ -573,7 +560,8 @@ class _TDTextToast extends StatelessWidget {
           color: config.backgroundColor ?? theme.fontGyColor1,
           borderRadius: BorderRadius.circular(theme.radiusDefault),
         ),
-        child: customWidget ??
+        child:
+            customWidget ??
             TDText(
               text ?? '',
               font: config.textStyle != null ? null : theme.fontBodyMedium,

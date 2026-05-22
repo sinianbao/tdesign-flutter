@@ -153,8 +153,9 @@ class TDTableState extends State<TDTable> {
     for (var i = 0; i < fixedRightCol.length; i++) {
       var cell = _getCell(fixedRightCol[i], true, null, start, i == 0);
       if (fixedRightCol[i].width != null) {
-        fixedRightCells
-            .add(SizedBox(width: fixedRightCol[i].width, child: cell));
+        fixedRightCells.add(
+          SizedBox(width: fixedRightCol[i].width, child: cell),
+        );
       } else {
         fixedRightCells.add(Expanded(flex: 1, child: cell));
       }
@@ -170,7 +171,8 @@ class TDTableState extends State<TDTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
+          child:
+              widget.loadingWidget ??
               const TDLoading(size: TDLoadingSize.large),
         ),
       );
@@ -201,33 +203,42 @@ class TDTableState extends State<TDTable> {
           row.add(Expanded(flex: 1, child: cell));
         }
       }
-      cells.add(Container(
-        color: (widget.stripe ?? false) && i % 2 == 0
-            ? TDTheme.of(context).bgColorSecondaryContainer
-            : TDTheme.of(context).bgColorContainer,
-        child: Row(children: row),
-      ));
+      cells.add(
+        Container(
+          color: (widget.stripe ?? false) && i % 2 == 0
+              ? TDTheme.of(context).bgColorSecondaryContainer
+              : TDTheme.of(context).bgColorContainer,
+          child: Row(children: row),
+        ),
+      );
     }
-    if (widget.footerWidget != null){
+    if (widget.footerWidget != null) {
       cells.add(widget.footerWidget!);
     }
-    return Column(
-      children: cells,
-    );
+    return Column(children: cells);
   }
 
   /// 获取单元格
-  Widget _getCell(TDTableCol col, bool isHeader, dynamic data, int index,
-      bool fixedBorder) {
+  Widget _getCell(
+    TDTableCol col,
+    bool isHeader,
+    dynamic data,
+    int index,
+    bool fixedBorder,
+  ) {
     var title = isHeader ? (col.title ?? '') : (data[col.colKey] ?? '');
     var ellipsis = (isHeader ? col.ellipsisTitle : col.ellipsis) ?? false;
     var sortable = col.sortable ?? false;
 
     // 单元格边框
-    var halfBorder =
-        BorderSide(width: 0.5, color: TDTheme.of(context).componentStrokeColor);
-    var doubleBorder =
-        BorderSide(width: 1, color: TDTheme.of(context).componentStrokeColor);
+    var halfBorder = BorderSide(
+      width: 0.5,
+      color: TDTheme.of(context).componentStrokeColor,
+    );
+    var doubleBorder = BorderSide(
+      width: 1,
+      color: TDTheme.of(context).componentStrokeColor,
+    );
     var topBorder = BorderSide.none,
         rightBorder = BorderSide.none,
         leftBorder = BorderSide.none;
@@ -256,14 +267,19 @@ class TDTableState extends State<TDTable> {
           enable: enable,
           customIconBuilder: (context, checked) {
             if (checked) {
-              return Icon(TDIcons.check_rectangle_filled,
-                  size: 16, color: TDTheme.of(context).brandNormalColor);
-            }
-            return Icon(TDIcons.rectangle,
+              return Icon(
+                TDIcons.check_rectangle_filled,
                 size: 16,
-                color: enable
-                    ? TDTheme.of(context).textColorPrimary
-                    : TDTheme.of(context).textColorPlaceholder);
+                color: TDTheme.of(context).brandNormalColor,
+              );
+            }
+            return Icon(
+              TDIcons.rectangle,
+              size: 16,
+              color: enable
+                  ? TDTheme.of(context).textColorPrimary
+                  : TDTheme.of(context).textColorPlaceholder,
+            );
           },
           onCheckBoxChanged: (checked) {
             setState(() {
@@ -324,12 +340,7 @@ class TDTableState extends State<TDTable> {
         );
       }
 
-      content = Row(
-        children: [
-          checkBox,
-          text,
-        ],
-      );
+      content = Row(children: [checkBox, text]);
     }
 
     // 单元格构建
@@ -340,43 +351,52 @@ class TDTableState extends State<TDTable> {
         }
       },
       child: Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: topBorder,
-              right: rightBorder,
-              bottom: bottomBorder,
-              left: leftBorder,
+        decoration: BoxDecoration(
+          border: Border(
+            top: topBorder,
+            right: rightBorder,
+            bottom: bottomBorder,
+            left: leftBorder,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: SizedBox(
+            height: widget.rowHeight ?? 22,
+            child: Align(
+              alignment: _getVerticalAlign(col.align!),
+              child: content,
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: SizedBox(
-              height: widget.rowHeight ?? 22,
-              child: Align(
-                alignment: _getVerticalAlign(col.align!),
-                child: content,
-              ),
-            ),
-          )),
+        ),
+      ),
     );
     return cell;
   }
 
   /// 获取单元格内容
-  Widget _getCellText(TDTableCol col, String title, bool ellipsis,
-      bool isHeader, bool sortable, int index) {
+  Widget _getCellText(
+    TDTableCol col,
+    String title,
+    bool ellipsis,
+    bool isHeader,
+    bool sortable,
+    int index,
+  ) {
     var overflow = ellipsis ? TextOverflow.ellipsis : TextOverflow.visible;
-    var titleWidget = TDText(title,
-        maxLines: 1,
-        overflow: overflow,
-        style: TextStyle(
-          color: isHeader
-              ? TDTheme.of(context).textColorPlaceholder
-              : TDTheme.of(context).textColorPrimary,
-          fontSize: 14,
-          height: 1,
-          letterSpacing: 0,
-        ));
+    var titleWidget = TDText(
+      title,
+      maxLines: 1,
+      overflow: overflow,
+      style: TextStyle(
+        color: isHeader
+            ? TDTheme.of(context).textColorPlaceholder
+            : TDTheme.of(context).textColorPrimary,
+        fontSize: 14,
+        height: 1,
+        letterSpacing: 0,
+      ),
+    );
 
     // 表头（需考虑排序模式）
     if (isHeader) {
@@ -426,13 +446,13 @@ class TDTableState extends State<TDTable> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       );
     }
     // 自定义单元格内容
     if (col.cellBuilder != null) {
-      return Builder(builder: (_) => col.cellBuilder!(_, index));
+      return Builder(builder: (context) => col.cellBuilder!(context, index));
     }
     return titleWidget;
   }
@@ -508,13 +528,19 @@ class TDTableState extends State<TDTable> {
     var cellWidth = width / widget.columns.length;
 
     // 生成左侧固定列
-    var fixedLeftCols =
-        _getVerticalCell(fixedLeftCol, fixedLeftTitle, cellWidth);
+    var fixedLeftCols = _getVerticalCell(
+      fixedLeftCol,
+      fixedLeftTitle,
+      cellWidth,
+    );
     // 生成非固定列
     var fixedNonCols = _getVerticalCell(fixedNonCol, fixedNonTitle, cellWidth);
     // 生成右侧固定列
-    var fixedRightCols =
-        _getVerticalCell(fixedRightCol, fixedRightTitle, cellWidth);
+    var fixedRightCols = _getVerticalCell(
+      fixedRightCol,
+      fixedRightTitle,
+      cellWidth,
+    );
 
     // 固定列宽度
     var fixedCellsWidth = 0.0;
@@ -542,7 +568,8 @@ class TDTableState extends State<TDTable> {
             alignment: Alignment.center,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
-              child: widget.loadingWidget ??
+              child:
+                  widget.loadingWidget ??
                   const TDLoading(size: TDLoadingSize.large),
             ),
           ),
@@ -566,7 +593,7 @@ class TDTableState extends State<TDTable> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [...fixedRightCols],
-            )
+            ),
           ],
         ),
       );
@@ -575,11 +602,7 @@ class TDTableState extends State<TDTable> {
       width: width,
       color: widget.backgroundColor ?? TDTheme.of(context).bgColorContainer,
       child: Row(
-        children: [
-          ...fixedLeftCols,
-          ...fixedNonCols,
-          ...fixedRightCols,
-        ],
+        children: [...fixedLeftCols, ...fixedNonCols, ...fixedRightCols],
       ),
     );
     var placeholder = _buildEmpty();
@@ -588,7 +611,8 @@ class TDTableState extends State<TDTable> {
         alignment: Alignment.center,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 32),
-          child: widget.loadingWidget ??
+          child:
+              widget.loadingWidget ??
               const TDLoading(size: TDLoadingSize.large),
         ),
       );
@@ -629,14 +653,22 @@ class TDTableState extends State<TDTable> {
 
   /// 竖向生成单元格
   List<Widget> _getVerticalCell(
-      List<TDTableCol> cols, List<List<String>> titles, double cellWidth) {
+    List<TDTableCol> cols,
+    List<List<String>> titles,
+    double cellWidth,
+  ) {
     var rows = <Widget>[];
     for (var i = 0; i < titles.length; i++) {
       var cells = <Widget>[];
       for (var j = 0; j < titles[i].length; j++) {
         var col = cols[i];
-        var cell = _getCell(col, j == 0, j == 0 ? '' : widget.data?[j - 1], i,
-            i == titles.length - 1);
+        var cell = _getCell(
+          col,
+          j == 0,
+          j == 0 ? '' : widget.data?[j - 1],
+          i,
+          i == titles.length - 1,
+        );
         cells.add(SizedBox(width: col.width ?? cellWidth, child: cell));
       }
       rows.add(Column(children: cells));
@@ -666,15 +698,16 @@ class TDTableState extends State<TDTable> {
   /// 半选图标
   Widget getAllIcon(bool checked, bool halfSelected) {
     return Icon(
-        checked
-            ? TDIcons.check_rectangle_filled
-            : halfSelected
-                ? TDIcons.minus_rectangle_filled
-                : TDIcons.check_rectangle,
-        size: 16,
-        color: (checked || halfSelected)
-            ? TDTheme.of(context).brandNormalColor
-            : TDTheme.of(context).textDisabledColor);
+      checked
+          ? TDIcons.check_rectangle_filled
+          : halfSelected
+          ? TDIcons.minus_rectangle_filled
+          : TDIcons.check_rectangle,
+      size: 16,
+      color: (checked || halfSelected)
+          ? TDTheme.of(context).brandNormalColor
+          : TDTheme.of(context).textDisabledColor,
+    );
   }
 
   @override
@@ -686,7 +719,7 @@ class TDTableState extends State<TDTable> {
     var width = widget.width ?? MediaQuery.of(context).size.width;
     var fixedCols = [
       ..._getCol(TDTableColFixed.left),
-      ..._getCol(TDTableColFixed.right)
+      ..._getCol(TDTableColFixed.right),
     ];
 
     // 存在固定列
@@ -715,7 +748,7 @@ class TDTableState extends State<TDTable> {
                   physics: const BouncingScrollPhysics(),
                   child: _getTableContent(context),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -737,7 +770,7 @@ class TDTableState extends State<TDTable> {
               physics: const BouncingScrollPhysics(),
               child: _getTableContent(context),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -745,10 +778,7 @@ class TDTableState extends State<TDTable> {
 }
 
 class ChevronPainter extends CustomPainter {
-  ChevronPainter({
-    required this.upColor,
-    required this.downColor,
-  });
+  ChevronPainter({required this.upColor, required this.downColor});
 
   /// 线条颜色（向上）
   final Color upColor;

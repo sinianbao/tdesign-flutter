@@ -276,7 +276,6 @@ class _TDFormPageState extends State<TDFormPage> {
 
   @Demo(group: 'form')
   Widget _buildForm(BuildContext context) {
-    final theme = TDTheme.of(context);
     return TDForm(
         formController: _formController,
         disabled: _formDisableState,
@@ -457,7 +456,7 @@ class _TDFormPageState extends State<TDFormPage> {
                 child: TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: _formDisableState,
-                  eventController: _stepController!,
+                  eventController: _stepController,
                   value: int.parse(_formData['age']),
                   onChange: (value) {
                     _formItemNotifier['age']?.upDataForm('${value}');
@@ -531,7 +530,7 @@ class _TDFormPageState extends State<TDFormPage> {
                     if (_formDisableState) {
                       return;
                     }
-                    files = _onValueChanged(files ?? [], imgList, type);
+                    files = _onValueChanged(files, imgList, type);
                     List imgs =
                         files.map((e) => e.remotePath ?? e.assetPath).toList();
                     setState(() {
@@ -608,7 +607,6 @@ class _TDFormPageState extends State<TDFormPage> {
 
   @Demo(group: 'form')
   Widget _buildCustomForm(BuildContext context) {
-    final theme = TDTheme.of(context);
     return TDForm(
         formController: _formController,
         disabled: _formDisableState,
@@ -762,7 +760,7 @@ class _TDFormPageState extends State<TDFormPage> {
                 child: TDStepper(
                   theme: TDStepperTheme.filled,
                   disabled: _formDisableState,
-                  eventController: _stepController!,
+                  eventController: _stepController,
                   value: int.parse(_formData['age']),
                   onChange: (value) {
                     _formItemNotifier['age']?.upDataForm('${value}');
@@ -840,7 +838,7 @@ class _TDFormPageState extends State<TDFormPage> {
                     if (_formDisableState) {
                       return;
                     }
-                    files = _onValueChanged(files ?? [], imgList, type);
+                    files = _onValueChanged(files, imgList, type);
                     List imgs =
                         files.map((e) => e.remotePath ?? e.assetPath).toList();
                     setState(() {
@@ -877,7 +875,6 @@ class _TDFormPageState extends State<TDFormPage> {
   /// todo
   /// 横 竖 排版模式切换按钮
   Widget _buildArrangementSwitch(BuildContext buildContext) {
-    final theme = TDTheme.of(context);
     return Padding(
         padding: const EdgeInsets.all(16),
         child: Row(

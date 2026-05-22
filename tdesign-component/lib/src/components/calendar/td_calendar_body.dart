@@ -37,15 +37,14 @@ class TDCalendarBody extends StatelessWidget {
     Map<DateTime, List<TDate?>> data,
     int rowIndex,
     int colIndex,
-  ) builder;
+  )
+  builder;
   final double bodyPadding;
   final String displayFormat;
   final List<String> monthNames;
   final TextStyle? monthTitleStyle;
-  final Widget Function(
-    BuildContext context,
-    DateTime monthDate,
-  )? monthTitleBuilder;
+  final Widget Function(BuildContext context, DateTime monthDate)?
+  monthTitleBuilder;
   final double monthTitleHeight;
   final double verticalGap;
   final double cellHeight;
@@ -93,7 +92,8 @@ class TDCalendarBody extends StatelessWidget {
           children: [
             SizedBox(
               height: monthTitleHeight,
-              child: monthTitleBuilder?.call(context, monthDate) ??
+              child:
+                  monthTitleBuilder?.call(context, monthDate) ??
                   TDText(monthDateText, style: monthTitleStyle),
             ),
             ...List.generate(
@@ -115,7 +115,7 @@ class TDCalendarBody extends StatelessWidget {
                           colIndex,
                         ),
                       ),
-                    ]
+                    ],
                   ],
                 ),
               ],
@@ -127,8 +127,11 @@ class TDCalendarBody extends StatelessWidget {
     );
   }
 
-  void _scrollToItem(ScrollController scrollController, List<DateTime> months,
-      Map<int, double> monthHeight) {
+  void _scrollToItem(
+    ScrollController scrollController,
+    List<DateTime> months,
+    Map<int, double> monthHeight,
+  ) {
     if (value == null || value!.isEmpty) {
       return;
     }
@@ -145,7 +148,7 @@ class TDCalendarBody extends StatelessWidget {
         if (item.year == scrollDate.year && item.month == scrollDate.month) {
           break;
         }
-        height += (_getMonthHeight(months, i, monthHeight) ?? 0);
+        height += _getMonthHeight(months, i, monthHeight);
       }
       if (height <= 0) {
         return;
@@ -184,10 +187,15 @@ class TDCalendarBody extends StatelessWidget {
   }
 
   List<TDate?> _getDaysInMonth(DateTime curDate, DateTime min, DateTime max) {
-    final daysInMonth =
-        List<TDate?>.generate(_getPreOffset(curDate), (index) => null);
-    final daysInMonthCount = DateTime(curDate.year, curDate.month + 1, 0)
-        .day; // 获取下个月的第一天的前一天，即当前月的最后一天
+    final daysInMonth = List<TDate?>.generate(
+      _getPreOffset(curDate),
+      (index) => null,
+    );
+    final daysInMonthCount = DateTime(
+      curDate.year,
+      curDate.month + 1,
+      0,
+    ).day; // 获取下个月的第一天的前一天，即当前月的最后一天
     for (var day = 1; day <= daysInMonthCount; day++) {
       final date = DateTime(curDate.year, curDate.month, day);
       var selectType = DateSelectType.empty;
@@ -215,11 +223,13 @@ class TDCalendarBody extends StatelessWidget {
           }
         }
       }
-      daysInMonth.add(TDate(
-        date: date,
-        typeNotifier: DateSelectTypeNotifier(selectType),
-        isLastDayOfMonth: daysInMonthCount == day,
-      ));
+      daysInMonth.add(
+        TDate(
+          date: date,
+          typeNotifier: DateSelectTypeNotifier(selectType),
+          isLastDayOfMonth: daysInMonthCount == day,
+        ),
+      );
     }
     var sufOffset = 7 - daysInMonth.length % 7;
     sufOffset = sufOffset == 7 ? 0 : sufOffset;
@@ -239,7 +249,10 @@ class TDCalendarBody extends StatelessWidget {
 
   /// 获取月份高度，带缓存
   double _getMonthHeight(
-      List<DateTime> months, int index, Map<int, double> monthHeight) {
+    List<DateTime> months,
+    int index,
+    Map<int, double> monthHeight,
+  ) {
     if (months.getOrNull(index) == null) {
       return 1;
     }
@@ -251,7 +264,8 @@ class TDCalendarBody extends StatelessWidget {
     final preOffset = _getPreOffset(item);
     final daysInMonthCount = DateTime(item.year, item.month + 1, 0).day;
     final daysInMonth = preOffset + daysInMonthCount;
-    final height = monthTitleHeight +
+    final height =
+        monthTitleHeight +
         (daysInMonth / 7).ceil() * (verticalGap + cellHeight) +
         (isLast ? 0 : bodyPadding);
     monthHeight[index] = height;

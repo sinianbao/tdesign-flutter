@@ -9,7 +9,8 @@ import 'td_action_sheet_list.dart';
 
 export 'td_action_sheet_item.dart';
 
-typedef TDActionSheetItemCallback = void Function(TDActionSheetItem item, int index);
+typedef TDActionSheetItemCallback =
+    void Function(TDActionSheetItem item, int index);
 
 enum TDActionSheetTheme { list, grid, group }
 
@@ -332,8 +333,6 @@ class TDActionSheet {
               itemMinWidth: itemMinWidth,
               useSafeArea: useSafeArea,
             );
-          default:
-            return const SizedBox.shrink();
         }
       },
     );

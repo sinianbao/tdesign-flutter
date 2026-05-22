@@ -48,10 +48,7 @@ class TDActionSheetItemWidget extends StatelessWidget {
                 SizedBox(
                   width: item!.iconSize ?? 40,
                   height: item!.iconSize ?? 40,
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: item!.icon!,
-                  ),
+                  child: FittedBox(fit: BoxFit.contain, child: item!.icon!),
                 ),
                 if (item!.badge != null)
                   ValueListenableBuilder(
@@ -81,8 +78,10 @@ class TDActionSheetItemWidget extends StatelessWidget {
     );
   }
 
-  void _setOffsetValue(GlobalKey<State<StatefulWidget>> offsetKey,
-      ValueNotifier<List<double>> offsetValue) {
+  void _setOffsetValue(
+    GlobalKey<State<StatefulWidget>> offsetKey,
+    ValueNotifier<List<double>> offsetValue,
+  ) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final renderBox =
           offsetKey.currentContext?.findRenderObject() as RenderBox;
@@ -104,7 +103,6 @@ MainAxisAlignment getMainAxisAlignment(TDActionSheetAlign align) {
     case TDActionSheetAlign.right:
       return MainAxisAlignment.end;
     case TDActionSheetAlign.center:
-    default:
       return MainAxisAlignment.center;
   }
 }
@@ -117,9 +115,10 @@ Widget buildCancelButton(
 ) {
   return Padding(
     padding: EdgeInsets.only(
-        top: showPagination
-            ? TDTheme.of(context).spacer16
-            : TDTheme.of(context).spacer8),
+      top: showPagination
+          ? TDTheme.of(context).spacer16
+          : TDTheme.of(context).spacer8,
+    ),
     child: GestureDetector(
       onTap: () {
         onCancel?.call();
