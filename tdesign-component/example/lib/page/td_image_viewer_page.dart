@@ -31,7 +31,8 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       children: [
         ExampleModule(title: '组件类型', children: [
           ExampleItem(desc: '基础图片预览', builder: _basicImageViewer),
-          ExampleItem(desc: '带操作图片预览', builder: _actionImageViewer)
+          ExampleItem(desc: '带操作图片预览', builder: _actionImageViewer),
+          ExampleItem(desc: 'Hero 动画预览', builder: _heroImageViewer),
         ]),
       ],
       test: [
@@ -54,6 +55,43 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
       onTap: () {
         TDImageViewer.showImageViewer(context: context, images: images);
       },
+    );
+  }
+
+  @Demo(group: 'image_viewer')
+  Widget _heroImageViewer(BuildContext context) {
+    return Row(
+      children: List.generate(images.length, (index) {
+        final image = images[index];
+        final tag = TDImageViewer.heroTag(image, index);
+        return Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(left: index == 0 ? 0 : 4),
+            child: GestureDetector(
+              onTap: () {
+                TDImageViewer.showImageViewer(
+                  context: context,
+                  images: images,
+                  defaultIndex: index,
+                  heroTags: List.generate(
+                    images.length,
+                    (i) => TDImageViewer.heroTag(images[i], i),
+                  ),
+                );
+              },
+              child: TDImageViewer.wrapHero(
+                tag: tag,
+                child: TDImage(
+                  imgUrl: image,
+                  type: TDImageType.roundedSquare,
+                  width: double.infinity,
+                  height: 80,
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 

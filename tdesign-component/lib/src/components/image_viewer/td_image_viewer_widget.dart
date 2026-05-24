@@ -42,6 +42,7 @@ class TDImageViewerWidget extends StatefulWidget {
     this.onLongPress,
     this.leftItemBuilder,
     this.rightItemBuilder,
+    this.heroTags,
   }) : super(key: key);
 
   /// 是否展示关闭按钮
@@ -116,6 +117,9 @@ class TDImageViewerWidget extends StatefulWidget {
   /// 右侧自定义操作
   final RightItemBuilder? rightItemBuilder;
 
+  /// Hero 动画 tag 列表，需与 [images] 一一对应；缩略图侧使用相同 tag 包裹 [Hero]。
+  final List<Object>? heroTags;
+
   @override
   State<StatefulWidget> createState() {
     return _TDImageViewerWidgetState();
@@ -138,10 +142,25 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         widget.images.length != widget.labels!.length) {
       throw FlutterError('labels.length must be equals images.length');
     }
+    if (widget.heroTags != null &&
+        widget.images.length != widget.heroTags!.length) {
+      throw FlutterError('heroTags.length must be equals images.length');
+    }
     _index = (widget.defaultIndex ?? 0) + 1;
   }
 
-  Widget _getImage(dynamic image) {
+  Widget _wrapHero(Widget child, int index) {
+    final heroTags = widget.heroTags;
+    if (heroTags == null || index < 0 || index >= heroTags.length) {
+      return child;
+    }
+    return Hero(
+      tag: heroTags[index],
+      child: Material(type: MaterialType.transparency, child: child),
+    );
+  }
+
+  Widget _getImage(dynamic image, int index) {
     var size = MediaQuery.of(context).size;
     var boxFit = ((widget.width != null) || (widget.height != null))
         ? BoxFit.fill
@@ -196,6 +215,10 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       );
     }
     throw FlutterError('image ${image} type is not supported');
+  }
+
+  Widget _buildImageItem(dynamic image, int index) {
+    return _wrapHero(_getImage(image, index), index);
   }
 
   Widget _getPageTitle() {
@@ -311,7 +334,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
               return GestureDetector(
                 onTap: () => widget.onTap?.call(index),
                 onLongPress: () => widget.onLongPress?.call(index),
-                child: _getImage(image),
+                child: _buildImageItem(image, index),
               );
             },
             itemCount: widget.images.length,
