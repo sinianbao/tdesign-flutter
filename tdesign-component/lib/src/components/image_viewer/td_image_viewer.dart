@@ -185,7 +185,10 @@ class _TDImageViewerPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return builder(context);
+    return Material(
+      type: MaterialType.transparency,
+      child: builder(context),
+    );
   }
 
   @override

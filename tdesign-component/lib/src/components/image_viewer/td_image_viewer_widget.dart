@@ -229,42 +229,68 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     return _wrapHero(_getImage(image, index), index);
   }
 
+  TextStyle _mergeTextStyle(TextStyle? style, TextStyle defaults) {
+    return (style ?? defaults).copyWith(decoration: TextDecoration.none);
+  }
+
+  Widget _buildLabelText(String text) {
+    final defaults = TextStyle(
+      color: TDTheme.of(context).textColorAnti,
+      fontSize: 16,
+      height: 1.0,
+      decoration: TextDecoration.none,
+    );
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: _mergeTextStyle(widget.labelStyle, defaults),
+    );
+  }
+
+  Widget _buildIndexText(String text, {bool withLabel = false}) {
+    final defaults = TextStyle(
+      color: withLabel
+          ? TDTheme.of(context).brandClickColor
+          : TDTheme.of(context).textColorAnti,
+      fontSize: 10,
+      height: 1.0,
+      decoration: TextDecoration.none,
+    );
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: _mergeTextStyle(widget.indexStyle, defaults),
+    );
+  }
+
   Widget _getPageTitle() {
     if (widget.labels != null) {
       return Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
             visible: (widget.labels![_index - 1]) != '',
-            child: Text(
-              widget.labels![_index - 1],
-              textAlign: TextAlign.center,
-              style: widget.labelStyle ??
-                  TextStyle(color: TDTheme.of(context).textColorAnti),
-            ),
+            child: _buildLabelText(widget.labels![_index - 1]),
           ),
           Visibility(
             visible: widget.showIndex ?? false,
-            child: Text(
+            child: _buildIndexText(
               '$_index / ${widget.images.length}',
-              textAlign: TextAlign.center,
-              style: widget.indexStyle ??
-                  TextStyle(
-                      color: TDTheme.of(context).brandClickColor, fontSize: 10),
+              withLabel: true,
             ),
-          )
+          ),
         ],
       );
     }
-    return Text(
-      (widget.showIndex ?? false) ? '$_index / ${widget.images.length}' : '',
-      textAlign: TextAlign.center,
-      style: widget.indexStyle ??
-          TextStyle(
-            color: TDTheme.of(context).textColorAnti,
-            fontSize: 10,
-          ),
-    );
+    if (!(widget.showIndex ?? false)) {
+      return const SizedBox.shrink();
+    }
+    return _buildIndexText('$_index / ${widget.images.length}');
   }
 
   Widget _getLeft() {
@@ -363,6 +389,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         ),
         SafeArea(
           child: Container(
+            clipBehavior: Clip.hardEdge,
             color: widget.navBarBgColor ??
                 TDTheme.of(context).textColorPlaceholder,
             height: 44,
@@ -372,7 +399,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                 _getLeft(),
                 Expanded(
                   flex: 1,
-                  child: _getPageTitle(),
+                  child: Center(child: _getPageTitle()),
                 ),
                 _getRight(),
               ],
