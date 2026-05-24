@@ -165,6 +165,14 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     var boxFit = ((widget.width != null) || (widget.height != null))
         ? BoxFit.fill
         : BoxFit.fitWidth;
+    if (widget.heroTags != null) {
+      return TDImageViewer.buildHeroImage(
+        image,
+        width: widget.width ?? size.width,
+        height: widget.height,
+        fit: boxFit == BoxFit.fitWidth ? BoxFit.contain : boxFit,
+      );
+    }
     var horizontal =
         widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
     var vertical =
@@ -252,7 +260,10 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
       (widget.showIndex ?? false) ? '$_index / ${widget.images.length}' : '',
       textAlign: TextAlign.center,
       style: widget.indexStyle ??
-          TextStyle(color: TDTheme.of(context).textColorAnti),
+          TextStyle(
+            color: TDTheme.of(context).textColorAnti,
+            fontSize: 10,
+          ),
     );
   }
 
@@ -326,7 +337,9 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
           right: 0,
           child: Swiper(
             index: _index - 1,
-            loop: widget.loop ?? true,
+            loop: widget.heroTags != null
+                ? (widget.loop ?? false)
+                : (widget.loop ?? true),
             autoplay: widget.autoplay ?? false,
             duration: widget.duration ?? kDefaultAutoplayTransactionDuration,
             itemBuilder: (BuildContext context, int index) {

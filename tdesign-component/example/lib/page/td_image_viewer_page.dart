@@ -81,11 +81,11 @@ class _TDImageViewerPageState extends State<TDImageViewerPage> {
               },
               child: TDImageViewer.wrapHero(
                 tag: tag,
-                child: TDImage(
-                  imgUrl: image,
-                  type: TDImageType.roundedSquare,
+                child: TDImageViewer.buildHeroImage(
+                  image,
                   width: double.infinity,
                   height: 80,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

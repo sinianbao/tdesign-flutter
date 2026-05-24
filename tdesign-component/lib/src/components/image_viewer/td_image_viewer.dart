@@ -20,6 +20,43 @@ class TDImageViewer {
     return index != null ? '${image.hashCode}#$index' : image.hashCode;
   }
 
+  /// 构建 Hero 动画使用的图片，需与预览页 [buildHeroImage] 使用相同图片源。
+  static Widget buildHeroImage(
+    dynamic image, {
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    if (image is File) {
+      return Image.file(
+        image,
+        width: width,
+        height: height,
+        fit: fit,
+        gaplessPlayback: true,
+      );
+    }
+    if (image is String) {
+      if (image.startsWith('http')) {
+        return Image.network(
+          image,
+          width: width,
+          height: height,
+          fit: fit,
+          gaplessPlayback: true,
+        );
+      }
+      return Image.asset(
+        image,
+        width: width,
+        height: height,
+        fit: fit,
+        gaplessPlayback: true,
+      );
+    }
+    throw FlutterError('image $image type is not supported');
+  }
+
   /// 包裹缩略图以支持进入预览时的 Hero 动画。
   static Widget wrapHero({
     required Object tag,
@@ -92,19 +129,14 @@ class TDImageViewer {
     );
     final useHero = heroTags != null && heroTags.isNotEmpty;
     if (useHero) {
-      showGeneralDialog(
-        context: context,
-        barrierDismissible: barrierDismissible ?? false,
-        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: modalBarrierColor,
-        useRootNavigator: true,
-        transitionDuration: const Duration(milliseconds: 300),
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return viewer;
-        },
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          return child;
-        },
+      Navigator.of(context).push<void>(
+        _TDImageViewerPageRoute(
+          barrierDismissible: barrierDismissible ?? false,
+          barrierColor: modalBarrierColor,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          builder: (_) => viewer,
+        ),
       );
       return;
     }
@@ -115,5 +147,54 @@ class TDImageViewer {
       useSafeArea: false,
       builder: (context) => viewer,
     );
+  }
+}
+
+/// Hero 动画需使用 [PageRoute]，Dialog 路由不会触发 Hero 过渡。
+class _TDImageViewerPageRoute<T> extends PageRoute<T> {
+  _TDImageViewerPageRoute({
+    required this.builder,
+    required this.barrierDismissible,
+    required this.barrierColor,
+    this.barrierLabel,
+  });
+
+  final WidgetBuilder builder;
+  @override
+  final bool barrierDismissible;
+  @override
+  final Color barrierColor;
+  @override
+  final String? barrierLabel;
+
+  @override
+  bool get opaque => false;
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  Duration get reverseTransitionDuration => const Duration(milliseconds: 300);
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
+    return builder(context);
+  }
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return child;
   }
 }
