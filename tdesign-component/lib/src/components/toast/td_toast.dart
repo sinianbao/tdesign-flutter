@@ -491,7 +491,7 @@ class _TDToastLoading extends StatelessWidget {
     return Container(
         height: 110,
         width: 110,
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: config.backgroundColor ?? theme.fontGyColor1,
           borderRadius: BorderRadius.circular(theme.radiusDefault),
@@ -509,7 +509,7 @@ class _TDToastLoading extends StatelessWidget {
             customWidget ??
                 TDText(
                   text ?? context.resource.loadingWithPoint,
-                  font: config.textStyle != null ? null : theme.fontBodyExtraSmall,
+                  font: config.textStyle != null ? null : theme.fontBodySmall,
                   style: config.textStyle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
