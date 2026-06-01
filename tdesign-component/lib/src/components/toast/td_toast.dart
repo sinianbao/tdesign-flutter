@@ -509,7 +509,7 @@ class _TDToastLoading extends StatelessWidget {
             customWidget ??
                 TDText(
                   text ?? context.resource.loadingWithPoint,
-                  font: config.textStyle != null ? null : theme.fontBodyMedium,
+                  font: config.textStyle != null ? null : theme.fontBodyExtraSmall,
                   style: config.textStyle,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
