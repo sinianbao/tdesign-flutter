@@ -163,7 +163,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
         iconColor: TDTheme.of(context).brandNormalColor,
         axis: Axis.horizontal,
         text: context.resource.refreshing,
-        textColor: TDTheme.of(context).textColorPlaceholder,
+        textColor: TDTheme.of(context).textColorSecondary,
       );
 
   @override
@@ -207,7 +207,7 @@ class TGIconHeaderWidgetState extends State<TGIconHeaderWidget>
                             ? context.resource.completeRefresh
                             : context.resource.releaseRefresh,
                     font: TDTheme.of(context).fontBodyMedium,
-                    textColor: TDTheme.of(context).textColorPlaceholder,
+                    textColor: TDTheme.of(context).textColorSecondary,
                   ),
                 ),
               ),
