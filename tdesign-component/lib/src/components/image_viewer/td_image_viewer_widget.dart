@@ -269,6 +269,8 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         key: ValueKey<Object>(widget.heroTags?[index] ?? '$index-$image'),
         minScale: widget.minScale ?? 1.0,
         maxScale: widget.maxScale ?? 3.0,
+        onTap: () => widget.onTap?.call(index),
+        onLongPress: () => widget.onLongPress?.call(index),
         onZoomingChanged: (isZooming) => _updateZooming(index, isZooming),
         child: child,
       ),
@@ -419,11 +421,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
                 : null,
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
-              return GestureDetector(
-                onTap: () => widget.onTap?.call(index),
-                onLongPress: () => widget.onLongPress?.call(index),
-                child: _buildImageItem(image, index),
-              );
+              return _buildImageItem(image, index);
             },
             itemCount: widget.images.length,
             onIndexChanged: (index) {
@@ -464,12 +462,16 @@ class _TDImageZoomItem extends StatefulWidget {
     required this.child,
     required this.minScale,
     required this.maxScale,
+    this.onTap,
+    this.onLongPress,
     required this.onZoomingChanged,
   }) : super(key: key);
 
   final Widget child;
   final double minScale;
   final double maxScale;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
   final ValueChanged<bool> onZoomingChanged;
 
   @override
@@ -523,6 +525,9 @@ class _TDImageZoomItemState extends State<_TDImageZoomItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       onDoubleTapDown: (details) {
         _doubleTapPosition = details.localPosition;
       },
@@ -533,7 +538,9 @@ class _TDImageZoomItemState extends State<_TDImageZoomItem> {
         maxScale: widget.maxScale,
         boundaryMargin: const EdgeInsets.all(80),
         clipBehavior: Clip.none,
-        child: widget.child,
+        child: SizedBox.expand(
+          child: Center(child: widget.child),
+        ),
       ),
     );
   }
