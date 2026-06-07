@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../tdesign_flutter.dart';
 import '../navbar/td_nav_bar.dart';
@@ -136,7 +137,7 @@ class TDImageViewerWidget extends StatefulWidget {
 
 class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   int _index = 1;
-  int? _zoomingIndex;
+  final Set<int> _zoomingIndexes = <int>{};
 
   @override
   void initState() {
@@ -241,24 +242,25 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     throw FlutterError('image ${image} type is not supported');
   }
 
-  void _updateZooming(int index, bool isZooming) {
+  void _updateZooming(int index, PhotoViewScaleState scaleState) {
     if (!mounted) {
       return;
     }
+    final isZooming = scaleState.isScaleStateZooming;
     if (isZooming) {
-      if (_zoomingIndex == index) {
+      if (_zoomingIndexes.contains(index)) {
         return;
       }
       setState(() {
-        _zoomingIndex = index;
+        _zoomingIndexes.add(index);
       });
       return;
     }
-    if (_zoomingIndex != index) {
+    if (!_zoomingIndexes.contains(index)) {
       return;
     }
     setState(() {
-      _zoomingIndex = null;
+      _zoomingIndexes.remove(index);
     });
   }
 
@@ -271,7 +273,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         maxScale: widget.maxScale ?? 3.0,
         onTap: () => widget.onTap?.call(index),
         onLongPress: () => widget.onLongPress?.call(index),
-        onZoomingChanged: (isZooming) => _updateZooming(index, isZooming),
+        onScaleStateChanged: (scaleState) => _updateZooming(index, scaleState),
         child: child,
       ),
     );
@@ -414,9 +416,9 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             loop: widget.heroTags != null
                 ? (widget.loop ?? false)
                 : (widget.loop ?? true),
-            autoplay: (widget.autoplay ?? false) && _zoomingIndex == null,
+            autoplay: (widget.autoplay ?? false) && _zoomingIndexes.isEmpty,
             duration: widget.duration ?? kDefaultAutoplayTransactionDuration,
-            physics: _zoomingIndex != null
+            physics: _zoomingIndexes.isNotEmpty
                 ? const NeverScrollableScrollPhysics()
                 : null,
             itemBuilder: (BuildContext context, int index) {
@@ -425,7 +427,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             },
             itemCount: widget.images.length,
             onIndexChanged: (index) {
-              _zoomingIndex = null;
+              _zoomingIndexes.clear();
               if ((widget.showIndex ?? false) || widget.labels != null) {
                 setState(() {
                   _index = index + 1;
@@ -464,7 +466,7 @@ class _TDImageZoomItem extends StatefulWidget {
     required this.maxScale,
     this.onTap,
     this.onLongPress,
-    required this.onZoomingChanged,
+    required this.onScaleStateChanged,
   }) : super(key: key);
 
   final Widget child;
@@ -472,74 +474,29 @@ class _TDImageZoomItem extends StatefulWidget {
   final double maxScale;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
-  final ValueChanged<bool> onZoomingChanged;
+  final ValueChanged<PhotoViewScaleState> onScaleStateChanged;
 
   @override
   State<_TDImageZoomItem> createState() => _TDImageZoomItemState();
 }
 
 class _TDImageZoomItemState extends State<_TDImageZoomItem> {
-  late final TransformationController _controller;
-  Offset _doubleTapPosition = Offset.zero;
-  bool _isZooming = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TransformationController();
-    _controller.addListener(_handleScaleChanged);
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_handleScaleChanged);
-    widget.onZoomingChanged(false);
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _handleScaleChanged() {
-    final isZooming =
-        _controller.value.getMaxScaleOnAxis() > widget.minScale + 0.01;
-    if (_isZooming == isZooming) {
-      return;
-    }
-    _isZooming = isZooming;
-    widget.onZoomingChanged(isZooming);
-  }
-
-  void _handleDoubleTap() {
-    final scale = _controller.value.getMaxScaleOnAxis();
-    if (scale > widget.minScale + 0.01) {
-      _controller.value = Matrix4.identity();
-      return;
-    }
-    final targetScale = widget.maxScale > 2.0 ? 2.0 : widget.maxScale;
-    _controller.value = Matrix4.identity()
-      ..setEntry(0, 0, targetScale)
-      ..setEntry(1, 1, targetScale)
-      ..setEntry(0, 3, _doubleTapPosition.dx * (1 - targetScale))
-      ..setEntry(1, 3, _doubleTapPosition.dy * (1 - targetScale));
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: widget.onTap,
-      onLongPress: widget.onLongPress,
-      onDoubleTapDown: (details) {
-        _doubleTapPosition = details.localPosition;
-      },
-      onDoubleTap: _handleDoubleTap,
-      child: InteractiveViewer(
-        transformationController: _controller,
+    return PhotoViewGestureDetectorScope(
+      axis: Axis.horizontal,
+      child: PhotoView.customChild(
         minScale: widget.minScale,
         maxScale: widget.maxScale,
-        boundaryMargin: const EdgeInsets.all(80),
-        clipBehavior: Clip.none,
-        child: SizedBox.expand(
-          child: Center(child: widget.child),
+        initialScale: widget.minScale,
+        backgroundDecoration: const BoxDecoration(color: Colors.transparent),
+        gestureDetectorBehavior: HitTestBehavior.opaque,
+        scaleStateChangedCallback: widget.onScaleStateChanged,
+        onTapUp: (_, __, ___) => widget.onTap?.call(),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPress: widget.onLongPress,
+          child: widget.child,
         ),
       ),
     );
