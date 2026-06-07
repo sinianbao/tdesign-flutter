@@ -164,82 +164,33 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     _index = (widget.defaultIndex ?? 0) + 1;
   }
 
-  Widget _wrapHero(Widget child, int index) {
-    final heroTags = widget.heroTags;
-    if (heroTags == null || index < 0 || index >= heroTags.length) {
-      return child;
-    }
-    return Hero(
-      tag: heroTags[index],
-      child: Material(type: MaterialType.transparency, child: child),
-    );
-  }
-
-  Widget _getImage(dynamic image, int index) {
-    var size = MediaQuery.of(context).size;
-    var boxFit = ((widget.width != null) || (widget.height != null))
-        ? BoxFit.fill
-        : BoxFit.fitWidth;
-    if (widget.heroTags != null) {
-      return TDImageViewer.buildHeroImage(
-        image,
-        width: widget.width ?? size.width,
-        height: widget.height,
-        fit: boxFit == BoxFit.fitWidth ? BoxFit.contain : boxFit,
-      );
-    }
-    var horizontal =
-        widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
-    var vertical =
-        widget.height != null ? (size.height - (widget.height ?? 0)) / 2 : 0.0;
-    var margin = EdgeInsets.symmetric(
-      horizontal: horizontal,
-      vertical: vertical,
-    );
+  ImageProvider _getImageProvider(dynamic image) {
     if (image is File) {
-      return Container(
-        margin: margin,
-        child: TDImage(
-          imageFile: image,
-          fit: boxFit,
-          type: TDImageType.fitWidth,
-        ),
-      );
+      return FileImage(image);
     }
     if (image is String) {
       if (image.startsWith('http')) {
-        return Container(
-          margin: margin,
-          child: TDImage(
-            imgUrl: image,
-            fit: boxFit,
-            type: TDImageType.fitWidth,
-            loadingWidget: Container(
-              width: size.width,
-              height: size.height,
-              // todo
-              color: TDTheme.of(context).fontGyColor1,
-              child: Center(
-                child: TDLoading(
-                  icon: TDLoadingIcon.circle,
-                  size: TDLoadingSize.large,
-                  iconColor: TDTheme.of(context).brandNormalColor,
-                ),
-              ),
-            ),
-          ),
-        );
+        return NetworkImage(image);
       }
-      return Container(
-        margin: margin,
-        child: TDImage(
-          assetUrl: image,
-          fit: boxFit,
-          type: TDImageType.fitWidth,
-        ),
-      );
+      return AssetImage(image);
     }
     throw FlutterError('image ${image} type is not supported');
+  }
+
+  Widget _getLoadingWidget() {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width,
+      height: size.height,
+      color: TDTheme.of(context).fontGyColor1,
+      child: Center(
+        child: TDLoading(
+          icon: TDLoadingIcon.circle,
+          size: TDLoadingSize.large,
+          iconColor: TDTheme.of(context).brandNormalColor,
+        ),
+      ),
+    );
   }
 
   void _updateZooming(int index, PhotoViewScaleState scaleState) {
@@ -265,16 +216,22 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   }
 
   Widget _buildImageItem(dynamic image, int index) {
-    final child = _wrapHero(_getImage(image, index), index);
     return RepaintBoundary(
       child: _TDImageZoomItem(
         key: ValueKey<Object>(widget.heroTags?[index] ?? '$index-$image'),
+        imageProvider: _getImageProvider(image),
+        heroTag: widget.heroTags?[index],
         minScale: widget.minScale ?? 1.0,
         maxScale: widget.maxScale ?? 3.0,
+        loadingWidget: _getLoadingWidget(),
+        errorWidget: Icon(
+          TDIcons.close,
+          size: 22,
+          color: TDTheme.of(context).textColorPlaceholder,
+        ),
         onTap: () => widget.onTap?.call(index),
         onLongPress: () => widget.onLongPress?.call(index),
         onScaleStateChanged: (scaleState) => _updateZooming(index, scaleState),
-        child: child,
       ),
     );
   }
@@ -461,17 +418,23 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
 class _TDImageZoomItem extends StatefulWidget {
   const _TDImageZoomItem({
     Key? key,
-    required this.child,
+    required this.imageProvider,
+    this.heroTag,
     required this.minScale,
     required this.maxScale,
+    required this.loadingWidget,
+    required this.errorWidget,
     this.onTap,
     this.onLongPress,
     required this.onScaleStateChanged,
   }) : super(key: key);
 
-  final Widget child;
+  final ImageProvider imageProvider;
+  final Object? heroTag;
   final double minScale;
   final double maxScale;
+  final Widget loadingWidget;
+  final Widget errorWidget;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final ValueChanged<PhotoViewScaleState> onScaleStateChanged;
@@ -485,18 +448,26 @@ class _TDImageZoomItemState extends State<_TDImageZoomItem> {
   Widget build(BuildContext context) {
     return PhotoViewGestureDetectorScope(
       axis: Axis.horizontal,
-      child: PhotoView.customChild(
-        minScale: widget.minScale,
-        maxScale: widget.maxScale,
-        initialScale: widget.minScale,
-        backgroundDecoration: const BoxDecoration(color: Colors.transparent),
-        gestureDetectorBehavior: HitTestBehavior.opaque,
-        scaleStateChangedCallback: widget.onScaleStateChanged,
-        onTapUp: (_, __, ___) => widget.onTap?.call(),
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onLongPress: widget.onLongPress,
-          child: widget.child,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPress: widget.onLongPress,
+        child: PhotoView(
+          imageProvider: widget.imageProvider,
+          minScale: PhotoViewComputedScale.contained * widget.minScale,
+          maxScale: PhotoViewComputedScale.contained * widget.maxScale,
+          initialScale: PhotoViewComputedScale.contained * widget.minScale,
+          backgroundDecoration: const BoxDecoration(color: Colors.transparent),
+          gestureDetectorBehavior: HitTestBehavior.opaque,
+          scaleStateChangedCallback: widget.onScaleStateChanged,
+          onTapUp: (_, __, ___) => widget.onTap?.call(),
+          loadingBuilder: (_, __) => widget.loadingWidget,
+          errorBuilder: (_, __, ___) => widget.errorWidget,
+          heroAttributes: widget.heroTag == null
+              ? null
+              : PhotoViewHeroAttributes(
+                  tag: widget.heroTag!,
+                  transitionOnUserGestures: true,
+                ),
         ),
       ),
     );
