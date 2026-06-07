@@ -43,6 +43,8 @@ class TDImageViewerWidget extends StatefulWidget {
     this.leftItemBuilder,
     this.rightItemBuilder,
     this.heroTags,
+    this.minScale,
+    this.maxScale,
   }) : super(key: key);
 
   /// 是否展示关闭按钮
@@ -120,6 +122,12 @@ class TDImageViewerWidget extends StatefulWidget {
   /// Hero 动画 tag 列表，需与 [images] 一一对应；缩略图侧使用相同 tag 包裹 [Hero]。
   final List<Object>? heroTags;
 
+  /// 图片最小缩放比例。
+  final double? minScale;
+
+  /// 图片最大缩放比例。
+  final double? maxScale;
+
   @override
   State<StatefulWidget> createState() {
     return _TDImageViewerWidgetState();
@@ -128,6 +136,7 @@ class TDImageViewerWidget extends StatefulWidget {
 
 class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
   int _index = 1;
+  int? _zoomingIndex;
 
   @override
   void initState() {
@@ -145,6 +154,11 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     if (widget.heroTags != null &&
         widget.images.length != widget.heroTags!.length) {
       throw FlutterError('heroTags.length must be equals images.length');
+    }
+    final minScale = widget.minScale ?? 1.0;
+    final maxScale = widget.maxScale ?? 3.0;
+    if (minScale <= 0 || maxScale < minScale) {
+      throw FlutterError('maxScale must be greater than or equal to minScale');
     }
     _index = (widget.defaultIndex ?? 0) + 1;
   }
@@ -177,8 +191,10 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
         widget.width != null ? (size.width - (widget.width ?? 0)) / 2 : 0.0;
     var vertical =
         widget.height != null ? (size.height - (widget.height ?? 0)) / 2 : 0.0;
-    var margin =
-        EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical);
+    var margin = EdgeInsets.symmetric(
+      horizontal: horizontal,
+      vertical: vertical,
+    );
     if (image is File) {
       return Container(
         margin: margin,
@@ -225,8 +241,38 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
     throw FlutterError('image ${image} type is not supported');
   }
 
+  void _updateZooming(int index, bool isZooming) {
+    if (!mounted) {
+      return;
+    }
+    if (isZooming) {
+      if (_zoomingIndex == index) {
+        return;
+      }
+      setState(() {
+        _zoomingIndex = index;
+      });
+      return;
+    }
+    if (_zoomingIndex != index) {
+      return;
+    }
+    setState(() {
+      _zoomingIndex = null;
+    });
+  }
+
   Widget _buildImageItem(dynamic image, int index) {
-    return _wrapHero(_getImage(image, index), index);
+    final child = _wrapHero(_getImage(image, index), index);
+    return RepaintBoundary(
+      child: _TDImageZoomItem(
+        key: ValueKey<Object>(widget.heroTags?[index] ?? '$index-$image'),
+        minScale: widget.minScale ?? 1.0,
+        maxScale: widget.maxScale ?? 3.0,
+        onZoomingChanged: (isZooming) => _updateZooming(index, isZooming),
+        child: child,
+      ),
+    );
   }
 
   TextStyle _mergeTextStyle(TextStyle? style, TextStyle defaults) {
@@ -366,8 +412,11 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             loop: widget.heroTags != null
                 ? (widget.loop ?? false)
                 : (widget.loop ?? true),
-            autoplay: widget.autoplay ?? false,
+            autoplay: (widget.autoplay ?? false) && _zoomingIndex == null,
             duration: widget.duration ?? kDefaultAutoplayTransactionDuration,
+            physics: _zoomingIndex != null
+                ? const NeverScrollableScrollPhysics()
+                : null,
             itemBuilder: (BuildContext context, int index) {
               var image = widget.images[index];
               return GestureDetector(
@@ -378,6 +427,7 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             },
             itemCount: widget.images.length,
             onIndexChanged: (index) {
+              _zoomingIndex = null;
               if ((widget.showIndex ?? false) || widget.labels != null) {
                 setState(() {
                   _index = index + 1;
@@ -397,16 +447,94 @@ class _TDImageViewerWidgetState extends State<TDImageViewerWidget> {
             child: Row(
               children: [
                 _getLeft(),
-                Expanded(
-                  flex: 1,
-                  child: Center(child: _getPageTitle()),
-                ),
+                Expanded(flex: 1, child: Center(child: _getPageTitle())),
                 _getRight(),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class _TDImageZoomItem extends StatefulWidget {
+  const _TDImageZoomItem({
+    Key? key,
+    required this.child,
+    required this.minScale,
+    required this.maxScale,
+    required this.onZoomingChanged,
+  }) : super(key: key);
+
+  final Widget child;
+  final double minScale;
+  final double maxScale;
+  final ValueChanged<bool> onZoomingChanged;
+
+  @override
+  State<_TDImageZoomItem> createState() => _TDImageZoomItemState();
+}
+
+class _TDImageZoomItemState extends State<_TDImageZoomItem> {
+  late final TransformationController _controller;
+  Offset _doubleTapPosition = Offset.zero;
+  bool _isZooming = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TransformationController();
+    _controller.addListener(_handleScaleChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_handleScaleChanged);
+    widget.onZoomingChanged(false);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleScaleChanged() {
+    final isZooming =
+        _controller.value.getMaxScaleOnAxis() > widget.minScale + 0.01;
+    if (_isZooming == isZooming) {
+      return;
+    }
+    _isZooming = isZooming;
+    widget.onZoomingChanged(isZooming);
+  }
+
+  void _handleDoubleTap() {
+    final scale = _controller.value.getMaxScaleOnAxis();
+    if (scale > widget.minScale + 0.01) {
+      _controller.value = Matrix4.identity();
+      return;
+    }
+    final targetScale = widget.maxScale > 2.0 ? 2.0 : widget.maxScale;
+    _controller.value = Matrix4.identity()
+      ..setEntry(0, 0, targetScale)
+      ..setEntry(1, 1, targetScale)
+      ..setEntry(0, 3, _doubleTapPosition.dx * (1 - targetScale))
+      ..setEntry(1, 3, _doubleTapPosition.dy * (1 - targetScale));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onDoubleTapDown: (details) {
+        _doubleTapPosition = details.localPosition;
+      },
+      onDoubleTap: _handleDoubleTap,
+      child: InteractiveViewer(
+        transformationController: _controller,
+        minScale: widget.minScale,
+        maxScale: widget.maxScale,
+        boundaryMargin: const EdgeInsets.all(80),
+        clipBehavior: Clip.none,
+        child: widget.child,
+      ),
     );
   }
 }

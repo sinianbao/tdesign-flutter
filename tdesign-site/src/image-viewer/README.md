@@ -81,6 +81,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | deleteBtn | bool? | - | 是否显示删除操作 |
 | duration | int? | - | 自动播放间隔 |
 | height | double? | - | 图片高度 |
+| heroTags | List<Object>? | - | Hero 动画 tag 列表，需与 [images] 一一对应；缩略图侧使用相同 tag 包裹 [Hero]。 |
 | iconColor | Color? | - | 图标颜色 |
 | ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
 | images | List<dynamic> | - | 图片数组 |
@@ -90,6 +91,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 | labelStyle | TextStyle? | - | label文字样式 |
 | leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
 | loop | bool? | - | 图片是否循环 |
+| maxScale | double? | - | 图片最大缩放比例。 |
+| minScale | double? | - | 图片最小缩放比例。 |
 | navBarBgColor | Color? | - | 导航栏背景色 |
 | onClose | OnClose? | - | 关闭点击 |
 | onDelete | OnDelete? | - | 删除点击 |
@@ -108,7 +111,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 | 名称 | 返回类型 | 参数 | 说明 |
 | --- | --- | --- | --- |
-| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder, | 显示图片预览 |
+| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder,  List<Object>? heroTags,  double? minScale,  double? maxScale, | 显示图片预览 |
 
 
   

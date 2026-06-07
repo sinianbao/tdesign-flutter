@@ -58,10 +58,7 @@ class TDImageViewer {
   }
 
   /// 包裹缩略图以支持进入预览时的 Hero 动画。
-  static Widget wrapHero({
-    required Object tag,
-    required Widget child,
-  }) {
+  static Widget wrapHero({required Object tag, required Widget child}) {
     return Hero(
       tag: tag,
       child: Material(type: MaterialType.transparency, child: child),
@@ -98,6 +95,8 @@ class TDImageViewer {
     LeftItemBuilder? leftItemBuilder,
     RightItemBuilder? rightItemBuilder,
     List<Object>? heroTags,
+    double? minScale,
+    double? maxScale,
   }) {
     modalBarrierColor ??= TDTheme.of(context).fontGyColor1;
     final viewer = TDImageViewerWidget(
@@ -126,6 +125,8 @@ class TDImageViewer {
       leftItemBuilder: leftItemBuilder,
       rightItemBuilder: rightItemBuilder,
       heroTags: heroTags,
+      minScale: minScale,
+      maxScale: maxScale,
     );
     final useHero = heroTags != null && heroTags.isNotEmpty;
     if (useHero) {
@@ -133,8 +134,9 @@ class TDImageViewer {
         _TDImageViewerPageRoute(
           barrierDismissible: barrierDismissible ?? false,
           barrierColor: modalBarrierColor,
-          barrierLabel:
-              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierLabel: MaterialLocalizations.of(
+            context,
+          ).modalBarrierDismissLabel,
           builder: (_) => viewer,
         ),
       );
@@ -185,10 +187,7 @@ class _TDImageViewerPageRoute<T> extends PageRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return Material(
-      type: MaterialType.transparency,
-      child: builder(context),
-    );
+    return Material(type: MaterialType.transparency, child: builder(context));
   }
 
   @override
