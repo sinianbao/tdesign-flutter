@@ -53,15 +53,6 @@ class _TPointBounceIndicatorState extends State<TPointBounceIndicator>
   }
 
   @override
-  void didUpdateWidget(covariant TDPointBounceIndicator oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.duration != oldWidget.duration) {
-      _controller.duration = Duration(milliseconds: widget.duration);
-      _controller.repeat();
-    }
-  }
-
-  @override
   void dispose() {
     if (widget.controller == null) {
       _controller.dispose();
