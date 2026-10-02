@@ -12,9 +12,7 @@ class StepTestApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Step Test',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: TestPage(),
     );
   }
@@ -28,25 +26,25 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 创建水平步骤条的数据
-    List<TDStepsItemData> horizontalSteps = [
-      TDStepsItemData(title: 'Step 1', content: 'Horizontal Step 1'),
-      TDStepsItemData(title: 'Step 2', content: 'Horizontal Step 2'),
-      TDStepsItemData(title: 'Step 3', content: 'Horizontal Step 3'),
+    var horizontalSteps = <TStepsItemData>[
+      const TStepsItemData(title: 'Step 1', content: 'Horizontal Step 1'),
+      const TStepsItemData(title: 'Step 2', content: 'Horizontal Step 2'),
+      const TStepsItemData(title: 'Step 3', content: 'Horizontal Step 3'),
     ];
 
     // 创建垂直步骤条的数据
-    List<TDStepsItemData> verticalSteps = [
-      TDStepsItemData(
+    var verticalSteps = <TStepsItemData>[
+      TStepsItemData(
         title: '2025-01-11',
         content: '今天是星期六',
         customContent: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TDText(
+            TText(
               '今天是星期六，下面是拍摄的照片',
               style: TextStyle(
                 fontWeight: FontWeight.w400,
-                color: TDTheme.of(context).fontGyColor3,
+                color: context.tTheme.fontGyColor3,
                 fontSize: 12,
               ),
             ),
@@ -54,14 +52,12 @@ class TestPage extends StatelessWidget {
           ],
         ),
       ),
-      TDStepsItemData(title: '2025-01-12', content: '今天是星期天'),
-      TDStepsItemData(content: '今天是星期一'),
+      const TStepsItemData(title: '2025-01-12', content: '今天是星期天'),
+      const TStepsItemData(content: '今天是星期一'),
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const TDText('TDSteps Test Page'),
-      ),
+      appBar: AppBar(title: const TText('TSteps Test Page')),
       body: Form(
         key: _formKey,
         child: Column(
@@ -70,11 +66,11 @@ class TestPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TDSteps(
+                child: TSteps.progress(
                   steps: horizontalSteps,
-                  activeIndex: 1, // 设置当前激活的步骤索引
-                  direction: TDStepsDirection.horizontal, // 设置步骤条方向为水平
-                  status: TDStepsStatus.success, // 设置步骤条状态
+                  value: 1, // 设置当前激活的步骤索引
+                  direction: TStepsDirection.horizontal, // 设置步骤条方向为水平
+                  status: TStepsStatus.process, // 设置步骤条状态
                 ),
               ),
             ),
@@ -82,11 +78,11 @@ class TestPage extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: TDSteps(
+                child: TSteps.progress(
                   steps: verticalSteps,
-                  activeIndex: 1, // 设置当前激活的步骤索引
-                  direction: TDStepsDirection.vertical, // 设置步骤条方向为垂直
-                  status: TDStepsStatus.success, // 设置步骤条状态
+                  value: 1, // 设置当前激活的步骤索引
+                  direction: TStepsDirection.vertical, // 设置步骤条方向为垂直
+                  status: TStepsStatus.process, // 设置步骤条状态
                 ),
               ),
             ),

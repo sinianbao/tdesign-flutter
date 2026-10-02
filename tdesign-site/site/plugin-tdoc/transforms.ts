@@ -1,13 +1,14 @@
 import path from 'path';
 import fs from 'fs';
-import mdToVue from './md-to-vue';
+import mdToVue from '../scripts/md-to-vue';
+import { replaceFlutterExampleDirectives } from '../flutter-example-docs/transform.mjs';
 
 let demoCodesImports: Record<string, string> = {};
 
 export default {
   before({ source, file, md }: any) {
     const resourceDir = path.dirname(file);
-    const reg = file.match(/src\/(\S*)(?=\/\S*.md)/);
+    const reg = file.match(/docs\/components\/(\S*)(?=\/\S*.md)/);
     const name = reg && reg[1];
     demoCodesImports = {};
 
@@ -21,7 +22,10 @@ export default {
       return content;
     };
 
-    // 替换成对应 demo 文件
+    // Flutter Web 文档直接读取 Example App 生成的唯一代码资产。
+    source = replaceFlutterExampleDirectives(source);
+
+    // 兼容历史小程序 demo 文件占位符。
     source = source.replace(/{{\s+(.+)\s+}}/g, (_: string, demoDirName: string) => {
       const demoPath = path.resolve(resourceDir, `./_example/${demoDirName}`);
       if (!fs.existsSync(demoPath)) {

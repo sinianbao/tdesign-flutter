@@ -1,44 +1,39 @@
 ## API
-### TDImageViewerWidget
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| autoplay | bool? | - | 图片轮播是否自动播放 |
-| bgColor | Color? | - | 背景色 |
-| closeBtn | bool? | - | 是否展示关闭按钮 |
-| defaultIndex | int? | - | 默认预览图片所在的下标 |
-| deleteBtn | bool? | - | 是否显示删除操作 |
-| duration | int? | - | 自动播放间隔 |
-| height | double? | - | 图片高度 |
-| heroTags | List<Object>? | - | Hero 动画 tag 列表，需与 [images] 一一对应；缩略图侧使用相同 tag 包裹 [Hero]。 |
-| iconColor | Color? | - | 图标颜色 |
-| ignoreDeleteError | bool? | false | 是否忽略单张图片删除错误提示 |
-| images | List<dynamic> | - | 图片数组 |
-| indexStyle | TextStyle? | - | 页码样式 |
-| key |  | - |  |
-| labels | List<String>? | - | 图片描述 |
-| labelStyle | TextStyle? | - | label文字样式 |
-| leftItemBuilder | LeftItemBuilder? | - | 左侧自定义操作 |
-| loop | bool? | - | 图片是否循环 |
-| maxScale | double? | - | 图片最大缩放比例。 |
-| minScale | double? | - | 图片最小缩放比例。 |
-| navBarBgColor | Color? | - | 导航栏背景色 |
-| onClose | OnClose? | - | 关闭点击 |
-| onDelete | OnDelete? | - | 删除点击 |
-| onIndexChange | OnIndexChange? | - | 预览图片切换回调 |
-| onLongPress | OnLongPress? | - | 长按图片 |
-| onTap | OnImageTap? | - | 点击图片 |
-| rightItemBuilder | RightItemBuilder? | - | 右侧自定义操作 |
-| showIndex | bool? | - | 是否显示页码 |
-| width | double? | - | 图片宽度 |
-
-```
-```
- ### TDImageViewer
+### TImageViewer
 
 #### 静态方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
+##### TImageViewer.show
+
+显示全屏图片预览。
+调用方需要主动关闭时，可通过持有的 `NavigatorState` 调用
+`NavigatorState.pop`；返回的 Future 会在路由关闭后完成一次。
+
+返回类型：`Future<void>`
+
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showImageViewer |  |   required BuildContext context,  required List<dynamic> images,  List<String>? labels,  bool? closeBtn,  bool? deleteBtn,  bool? showIndex,  bool? loop,  bool? autoplay,  int? duration,  Color? bgColor,  Color? navBarBgColor,  Color? iconColor,  TextStyle? labelStyle,  TextStyle? indexStyle,  Color? modalBarrierColor,  bool? barrierDismissible,  int? defaultIndex,  double? width,  double? height,  OnIndexChange? onIndexChange,  OnClose? onClose,  OnDelete? onDelete,  bool? ignoreDeleteError,  OnImageTap? onTap,  OnLongPress? onLongPress,  LeftItemBuilder? leftItemBuilder,  RightItemBuilder? rightItemBuilder,  List<Object>? heroTags,  double? minScale,  double? maxScale, | 显示图片预览 |
+| context | BuildContext | - | 用于展示预览弹窗。 |
+| images | List<ImageProvider<Object>> | - | 是待预览的图片列表，不能为空。 |
+| labels | List<String>? | - | 是与图片一一对应的标签文案。 |
+| initialIndex | int | 0 | 设置初始展示的图片索引。 |
+| showClose | bool | true | 控制关闭按钮是否显示。 |
+| showDelete | bool | false | 控制删除按钮是否显示。 |
+| showIndex | bool | true | 控制当前页码是否显示。 |
+| loop | bool | false | 控制是否循环切换图片。 |
+| autoplay | bool | false | 控制是否自动切换图片；图片放大时暂停，还原后恢复。 |
+| autoplayInterval | Duration | const Duration(seconds: 3) | 设置自动切换图片的时间间隔。 |
+| onIndexChanged | ValueChanged<int>? | - | 在当前图片索引变化时触发。 |
+| onDelete | ValueChanged<int>? | - | 在点击删除按钮时触发，仅通知当前索引。 |
+| onTap | ValueChanged<int>? | - | 在点击当前全屏预览区、关闭预览前触发。 |
+| onLongPress | ValueChanged<int>? | - | 在长按当前图片时触发。 |
+| leadingBuilder | TImageViewerItemBuilder? | - | 构建导航栏起始区域。 |
+| trailingBuilder | TImageViewerItemBuilder? | - | 构建导航栏末尾区域。 |
+
+
+### TImageViewerItemBuilder
+#### 类型定义
+
+```dart
+typedef TImageViewerItemBuilder = Widget Function(BuildContext context, int index);
+```

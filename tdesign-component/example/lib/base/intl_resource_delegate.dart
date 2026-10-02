@@ -4,7 +4,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../l10n/app_localizations.dart';
 
 /// 国际化资源代理
-class IntlResourceDelegate extends TDResourceDelegate {
+class IntlResourceDelegate extends TResourceDelegate {
   IntlResourceDelegate(this.context);
 
   BuildContext context;
@@ -81,8 +81,9 @@ class IntlResourceDelegate extends TDResourceDelegate {
   String get dateLabel => AppLocalizations.of(context)!.dateLabel;
 
   @override
-  String get weeksLabel => AppLocalizations.of(context)!.dateLabel;
+  String get weeksLabel => AppLocalizations.of(context)!.weeks;
 
+  @override
   String get friday => AppLocalizations.of(context)!.friday;
 
   @override
@@ -166,4 +167,10 @@ class IntlResourceDelegate extends TDResourceDelegate {
   @override
   String get emptyData => AppLocalizations.of(context)!.emptyData;
 
+  @override
+  String get picker => AppLocalizations.of(context)!.picker;
+
+  @override
+  String pickerColumn(int colIndex) =>
+      AppLocalizations.of(context)!.pickerColumn(colIndex);
 }

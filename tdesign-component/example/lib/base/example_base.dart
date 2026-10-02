@@ -13,19 +13,14 @@ class ExamplePageModel {
     required this.name,
     this.apiVisible = false,
     this.showAction = false,
-    this.isTodo = false,
-    this.pageName,
     required this.pageBuilder,
   });
 
   final String text;
   final String name;
   String? codePath;
-  String? spline;
   bool apiVisible;
   bool showAction;
-  String? pageName;
-  bool isTodo;
   final PageBuilder pageBuilder;
 }
 

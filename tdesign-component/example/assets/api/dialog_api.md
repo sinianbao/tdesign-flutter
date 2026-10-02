@@ -1,221 +1,126 @@
 ## API
-### TDImageDialog
+### TDialog
+
+#### 静态方法
+
+##### TDialog.show
+
+使用居中模态路由展示 Dialog。
+显式开启后，蒙层关闭成功时返回 `barrierResult`（默认 null）；
+操作按钮与内置关闭按钮分别返回各自配置的结果。
+蒙层与内置关闭按钮通过 Navigator.maybePop 关闭，遵守 PopScope。
+系统返回及未携带结果的 Navigator.pop 仍返回 null，不使用 `barrierResult`。
+
+返回类型：`Future<T?>`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| dialog | Widget | - | - |
+| barrierDismissible | bool | false | 默认为 false，点击蒙层不会关闭。 |
+| barrierResult | T? | - | - |
+| barrierColor | Color? | - | - |
+| useRootNavigator | bool | true | - |
+| useSafeArea | bool | true | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| image | Image | - | 图片 |
-| imagePosition | TDDialogImagePosition? | TDDialogImagePosition.top | 图片位置 |
-| key |  | - |  |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | - | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
+| actions | List<TDialogAction> | const <TDialogAction>[] | 操作列表；一到两个操作横向排列，更多操作纵向排列。 一到两个操作全部显式使用 `TButtonVariant.text` 时，操作区使用带分隔线的 贴边文字按钮 Footer；其他情况使用带内边距的普通操作区。 纵向排列时，`TDialogAction.role` 为 `TDialogActionRole.primary` 或 `TDialogActionRole.destructive` 的强调操作优先展示，同类操作保持声明顺序。 |
+| actionSpacing | double? | - | 操作之间的间距。未设置时使用主题 token 默认值。 |
+| actionsPadding | EdgeInsetsGeometry? | - | 操作区内边距。未设置时使用主题 token 默认值。 一到两个操作全部显式使用 `TButtonVariant.text` 时，默认仅保留 32dp 顶部间距，使文字按钮 Footer 横向贴边；显式设置后使用传入的内边距。 |
+| actionsWidget | Widget? | - | 完全自定义操作区。 使用后 `actions` 必须为空；仅在标准操作列表无法表达布局时使用。 |
+| backgroundColor | Color? | - | 面板背景色。 |
+| closeButtonResult | Object? | - | 点击内置关闭按钮并成功关闭时的返回值，默认为 null。 类型应与 `show` 的泛型一致。可与 `TDialogAction.result` 和 `show` 的 `barrierResult` 配合，通过同一个 Future 区分关闭来源。 不影响系统返回或业务调用 Navigator.pop 的返回值。 |
+| content | Widget? | - | 内容槽位。 |
+| contentPadding | EdgeInsetsGeometry? | - | 标题和内容区域内边距。 |
+| elevation | double? | - | 面板阴影高度。 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxHeight | double? | - | 面板最大高度。 内容超过该高度时，标题保持固定，正文区域显示滚动条并可滚动。 |
+| semanticLabel | String? | - | 无障碍语义标签。 |
+| shape | ShapeBorder? | - | 面板形状。 |
+| showCloseButton | bool | false | 是否显示右上角关闭按钮。 |
+| title | Widget? | - | 标题槽位。 |
+| width | double? | - | 面板宽度。 |
 
-```
-```
- ### TDDialogButtonOptions
+
+### TDialogAction
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action |  Function()? | - | 点击操作 |
-| fontWeight | FontWeight? | - | 字体粗细 |
-| height | double? | - | 按钮高度 |
-| style | TDButtonStyle? | - | 按钮样式 |
-| theme | TDButtonTheme? | - | 按钮类型 |
-| title | String | - | 标题内容 |
-| titleColor | Color? | - | 标题颜色 |
-| titleSize | double? | - | 字体大小 |
-| type | TDButtonType? | - | 按钮类型 |
+| child | Widget | - | 按钮内容。 |
+| closeOnPressed | bool | true | 点击后是否自动关闭。 |
+| colorScheme | TButtonColorScheme? | - | 显式按钮配色；未指定时由角色和最终变体解析。 普通操作的填充变体使用 `TButtonColorScheme.light`，其他变体使用 `TButtonColorScheme.defaultTheme`；主要和危险操作分别使用 `TButtonColorScheme.primary`、`TButtonColorScheme.danger`。 |
+| disabled | bool | false | 是否禁用。 |
+| onPressed | VoidCallback? | - | 点击回调，在自动关闭前执行。 |
+| result | Object? | - | 关闭 Dialog 时返回的结果。 |
+| role | TDialogActionRole | TDialogActionRole.normal | 操作语义角色，默认为 `TDialogActionRole.normal`。 未指定 `variant` 时使用填充按钮：普通操作采用 `TButtonColorScheme.light`， 主要操作采用 `TButtonColorScheme.primary`，危险操作采用 `TButtonColorScheme.danger`。显式设置的 `variant`、`colorScheme` 和 `style` 优先于角色提供的默认值。 |
+| style | ButtonStyle? | - | 显式按钮样式；用于覆盖单个操作，未设置时使用 Dialog Theme 和角色默认样式。 |
+| variant | TButtonVariant? | - | 显式按钮变体；未指定时使用 `TButtonVariant.fill`。 当 `TDialog.actions` 中有一到两个操作，且所有操作都显式使用 `TButtonVariant.text` 时，Dialog 自动切换为带分隔线的贴边文字按钮 Footer。 混合使用不同变体时仍采用普通操作区布局，每个按钮保留各自的变体。 |
 
-```
-```
- ### TDConfirmDialog
+
+### TConfirmDialog
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| action |  Function()? | - | 点击 |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle | TDDialogButtonStyle | TDDialogButtonStyle.normal | 按钮样式 |
-| buttonStyleCustom | TDButtonStyle? | - | 按钮自定义样式属性，背景色、边框... |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key |  | - |  |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| showCloseButton | bool? | - | 右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-| width |  | - |  |
+| backgroundColor | Color? | - | - |
+| buttonStyle | ButtonStyle? | - | - |
+| buttonText | String? | - | - |
+| closeButtonResult | Object? | - | 内置关闭按钮成功关闭时返回的值，默认 null；透传至 `TDialog.closeButtonResult`。 |
+| closeOnPressed | bool | true | - |
+| content | String? | - | - |
+| contentPadding | EdgeInsetsGeometry? | - | - |
+| contentWidget | Widget? | - | - |
+| elevation | double? | - | - |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxHeight | double? | - | - |
+| onPressed | VoidCallback? | - | - |
+| result | Object? | true | - |
+| semanticLabel | String? | - | - |
+| shape | ShapeBorder? | - | - |
+| showCloseButton | bool | false | - |
+| title | String? | - | - |
+| width | double? | - | - |
 
-```
-```
- ### TDInputDialog
+
+### TDialogThemeData
+
+#### 静态方法
+
+##### TDialogThemeData.lerpDouble
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | - |
+| b | double? | - | - |
+| t | double | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentWidget | Widget? | - | 内容Widget |
-| customInputWidget | Widget? | - | 自定义输入框 |
-| hintText | String? | '' | 输入提示 |
-| key |  | - |  |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| textEditingController | TextEditingController | - | 输入controller |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-```
-```
- ### TDAlertDialog
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景颜色 |
-| buttonStyle |  | TDDialogButtonStyle.normal |  |
-| buttonWidget | Widget? | - | 自定义按钮 |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key |  | - |  |
-| leftBtn | TDDialogButtonOptions? | - | 左侧按钮配置 |
-| leftBtnAction |  Function()? | - | 左侧按钮默认点击 |
-| padding | EdgeInsets? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容内边距 |
-| radius | double | 12.0 | 圆角 |
-| rightBtn | TDDialogButtonOptions? | - | 右侧按钮配置 |
-| rightBtnAction |  Function()? | - | 右侧按钮默认点击 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-
-#### 工厂构造方法
-
-| 名称  | 说明 |
-| --- |  --- |
-| TDAlertDialog.vertical  | 纵向按钮排列的对话框
-
- [buttons]参数是必须的，纵向按钮默认样式都是[TDButtonTheme.primary] |
-
-```
-```
- ### TDDialogScaffold
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| backgroundColor | Color? | - | 背景色 |
-| body | Widget | - | Dialog主体 |
-| key |  | - |  |
-| radius | double | 12.0 | 圆角 |
-| showCloseButton | bool? | - | 显示右上角关闭按钮 |
+| actionButtonStyle | ButtonStyle? | - | 按钮区样式（对应 Material `TextButtonThemeData`；TDesign 扩展） |
+| backgroundColor | Color? | - | 背景色（对应 Material `DialogThemeData.backgroundColor`） |
+| contentPadding | EdgeInsetsGeometry? | - | 内容内边距（对应 Material `Dialog` 的 contentPadding；TDesign 扩展） |
+| contentTextStyle | TextStyle? | - | 内容文案样式（对应 Material `DialogThemeData.contentTextStyle`） |
+| elevation | double? | - | 阴影（对应 Material `DialogThemeData.elevation`） |
+| maxHeight | double? | - | 面板最大高度。 |
+| shape | ShapeBorder? | - | 形状（圆角；对应 Material `DialogThemeData.shape`） |
+| titleTextStyle | TextStyle? | - | 标题文案样式（对应 Material `DialogThemeData.titleTextStyle`） |
 | width | double? | - | 弹窗宽度 |
 
-```
-```
- ### TDDialogTitle
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| title | String? | - | 标题文字 |
-| titleColor | Color? | - | 标题颜色 |
+### TDialogActionRole
+#### 枚举值
 
-```
-```
- ### TDDialogContent
-#### 默认构造方法
 
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| content | String? | - | 标题文字 |
-| contentColor | Color? | - | 标题颜色 |
-| key |  | - |  |
-
-```
-```
- ### TDDialogInfoWidget
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| content | String? | - | 内容 |
-| contentColor | Color? | - | 内容颜色 |
-| contentMaxHeight | double | 0 | 内容的最大高度，默认为0，也就是不限制高度 |
-| contentWidget | Widget? | - | 内容Widget |
-| key |  | - |  |
-| padding | EdgeInsetsGeometry? | const EdgeInsets.fromLTRB(24, 32, 24, 0) | 内容的内边距 |
-| title | String? | - | 标题 |
-| titleAlignment | AlignmentGeometry? | - | 标题对齐模式 |
-| titleColor | Color? | - | 标题颜色 |
-
-```
-```
- ### HorizontalNormalButtons
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| leftBtn | TDDialogButtonOptions | - | 左按钮 |
-| rightBtn | TDDialogButtonOptions | - | 右按钮 |
-
-```
-```
- ### HorizontalTextButtons
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| key |  | - |  |
-| leftBtn | TDDialogButtonOptions | - | 左按钮 |
-| rightBtn | TDDialogButtonOptions | - | 右按钮 |
-
-```
-```
- ### TDDialogButton
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| buttonStyle | TDButtonStyle? | - | 按钮样式 |
-| buttonText | String? | - | 按钮文字 |
-| buttonTextColor | Color? | - | 按钮文字颜色 |
-| buttonTextFontWeight | FontWeight? | FontWeight.w600 | 按钮文字粗细 |
-| buttonTextSize | double? | - | 按钮文字大小 |
-| buttonTheme | TDButtonTheme? | - | 按钮主题 |
-| buttonType | TDButtonType? | - | 按钮类型 |
-| height | double? | 40.0 | 按钮高度 |
-| isBlock | bool | true | 按钮高度 |
-| key |  | - |  |
-| onPressed |  Function() | - | 点击 |
-| width | double? | - | 按钮宽度 |
+| 名称 | 说明 |
+| --- | --- |
+| normal | 次要操作。 |
+| primary | 主要操作。 |
+| destructive | 危险操作。 |

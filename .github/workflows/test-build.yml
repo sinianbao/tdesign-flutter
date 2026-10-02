@@ -3,62 +3,203 @@ name: test-build
 on:
   pull_request:
     branches: [develop]
-    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "*.md"
   push:
     branches: [develop]
+    paths-ignore:
+      - "tdesign-site/**"
+      - "*.md"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_name != 'develop' }}
 
 jobs:
+  analyze:
+    name: analyze (flutter ${{ matrix.flutter-version }})
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.32.0
+          - latest
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ matrix.flutter-version }}
+          channel: stable
+          cache: true
+          cache-sdk: true
+
+      - name: Install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Analyze component
+        working-directory: ./tdesign-component
+        run: flutter analyze --no-pub --fatal-infos
+
+  test:
+    name: test (flutter ${{ matrix.flutter-version }})
+    strategy:
+      fail-fast: false
+      matrix:
+        flutter-version:
+          - 3.32.0
+          - latest
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ matrix.flutter-version }}
+          channel: stable
+          cache: true
+          cache-sdk: true
+
+      - name: Install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Install example dependencies
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Run component regression tests with coverage
+        working-directory: ./tdesign-component
+        run: dart run tool/run_component_regression.dart
+
+      - name: Test regression tooling
+        working-directory: ./tdesign-component
+        run: flutter test --no-pub test/tool/check_component_coverage_test.dart test/tool/run_component_regression_test.dart test/tool/run_visual_regression_test.dart
+
+      - name: Check example structure and copied snippets
+        working-directory: ./tdesign-component
+        run: |
+          dart run tool/check_demo_structure.dart
+          dart run tool/check_demo_snippets.dart
+
+      - name: Run example shared functional tests
+        working-directory: ./tdesign-component
+        run: dart run tool/run_example_regression.dart
+
+  visual-regression:
+    name: visual regression (flutter 3.32.0 linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Flutter
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          version: 3.32.0
+          channel: stable
+          cache: true
+          cache-sdk: true
+
+      - name: Install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Install example dependencies
+        working-directory: ./tdesign-component/example
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: Run visual regression tests
+        working-directory: ./tdesign-component
+        run: dart run tool/run_visual_regression.dart
+
+      - name: Upload golden failure images
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures-flutter-3.32.0
+          path: |
+            tdesign-component/test/**/failures/
+            tdesign-component/example/test/failures/
+          if-no-files-found: ignore
+          retention-days: 7
+
   build:
     strategy:
       fail-fast: false
       matrix:
-          platform: 
-            - apk
-            - ios 
-            - web
-          flutter-version:
-            - 3.16.9
-            - 3.32.0
-            - 3.x
-          include:
-            - platform: apk
-              os: ubuntu-latest
-              build: flutter build apk -t ./lib/main.dart --release --verbose
-            - platform: ios
-              os: macos-latest
-              build: flutter build ios -t ./lib/main.dart --no-codesign --release --verbose
-            - platform: web
-              os: ubuntu-latest 
-              build: flutter build web -t ./lib/main.dart --release --verbose
+        platform:
+          - apk
+          - ios
+          - web
+        flutter-version:
+          - 3.32.0
+          - latest
+        include:
+          - platform: apk
+            os: ubuntu-latest
+            build: flutter build apk -t ./lib/main.dart --release
+          - platform: ios
+            os: macos-14
+            build: flutter build ios -t ./lib/main.dart --no-codesign --release
+          - platform: web
+            os: ubuntu-latest
+            build: flutter build web -t ./lib/main.dart --release
 
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
+
+      - name: Select Xcode version
+        if: matrix.platform == 'ios'
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "16"
 
       - name: Setup Flutter
-        uses: TDesignOteam/workflows/actions/setup-flutter@main
+        uses: flutter-actions/setup-flutter@v4
         with:
-          flutter-version: ${{ matrix.flutter-version }}
-          aop-registry: true
+          version: ${{ matrix.flutter-version }}
+          channel: stable
           cache: true
+          cache-sdk: true
 
-      - name: tdesign-adaptation
-        run: sh ./tdesign-component/init.sh
+      - name: Diagnose iOS toolchain
+        if: matrix.platform == 'ios'
+        run: |
+          xcode-select -p
+          xcodebuild -version
+          pod --version
+          flutter --version
 
-      - name: Get tdesign-flutter-generator
-        uses: actions/checkout@v6
-        with:
-          repository: TDesignOteam/tdesign-flutter-generator
-          path: ./example/tdesign-flutter-generator
+      - name: generate api md
+        working-directory: ./tdesign-component
+        run: sh ./demo_tool/all_build.sh
 
-      - name: flutter pub get
+      - name: Check example code snippets
+        working-directory: ./tdesign-component
+        run: dart run tool/generate_example_code.dart --check
+
+      - name: Check Flutter component contracts
+        run: node scripts/check-flutter-component-contracts.mjs
+
+      - name: install component dependencies
+        working-directory: ./tdesign-component
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
+
+      - name: install example dependencies
         working-directory: ./tdesign-component/example
-        run: flutter pub get --verbose
+        run: flutter pub get ${{ runner.debug && '--verbose' || '' }}
 
+      - name: Diagnose iOS linker settings
+        if: matrix.platform == 'ios'
+        run: echo "Xcode ${{ matrix.platform }} ready"
       - name: flutter build
         working-directory: ./tdesign-component/example
-        run: ${{ matrix.build }}
+        run: ${{ matrix.build }} ${{ runner.debug && '--verbose' || '' }}

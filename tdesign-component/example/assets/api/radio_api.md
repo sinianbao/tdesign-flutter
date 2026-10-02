@@ -1,66 +1,121 @@
 ## API
-### TDRadio
+### TRadio
 #### 简介
-单选框按钮,继承自TDCheckbox，字段含义与父类一致
+由最近的 `TRadioGroup` 控制选中状态的单选框。
+必须作为同类型 `TRadioGroup` 的后代使用：
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| backgroundColor |  | - |  |
-| cardMode |  | - |  |
-| checkBoxLeftSpace |  | - |  |
-| contentDirection |  | TDContentDirection.right |  |
-| customContentBuilder |  | - |  |
-| customIconBuilder |  | - |  |
-| customSpace |  | - |  |
-| disableColor |  | - |  |
-| enable |  | true |  |
-| id |  | - |  |
-| insetSpacing |  | - |  |
-| key |  | - |  |
-| radioStyle | TDRadioStyle | TDRadioStyle.circle | 单选框按钮样式 |
-| selectColor |  | - |  |
-| showDivider | bool | - | 是否显示下划线 |
-| size |  | TDCheckBoxSize.small |  |
-| spacing |  | - |  |
-| subTitle |  | - |  |
-| subTitleColor |  | - |  |
-| subTitleFont |  | - |  |
-| subTitleMaxLine |  | 1 |  |
-| title |  | - |  |
-| titleColor |  | - |  |
-| titleFont |  | - |  |
-| titleMaxLine |  | 1 |  |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向。 |
+| customIconBuilder | TRadioIconBuilder? | - | 自定义单选框指示器。 |
+| disabled | bool | false | 是否禁用当前选项。 |
+| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式；`customIconBuilder` 非空时以自定义指示器为准。 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| size | TRadioSize | TRadioSize.medium | 单选框尺寸。 |
+| subTitle | String? | - | 副标题文案。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
+| title | String? | - | 主标题文案。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
+| value | T | - | 当前选项值。 |
+| variant | TRadioVariant | TRadioVariant.block | 完整视觉结构，默认使用通栏结构。 |
 
-```
-```
- ### TDRadioGroup
+
+### TRadioGroup
 #### 简介
-RadioGroup分组对象，继承自TDCheckboxGroup，字段含义与父类一致
- RadioGroup应该嵌套在RadioGroup内，所有在RadioGroup的RadioButton只能有一个被选中
+严格受控的单选组。
+默认构造通过 `child` 接收调用方布局；标准数据列表使用
+`TRadioGroup.options`。组内的 `TRadio` 从该组件读取选中值和变更回调。
 
- cardMode: 使用卡片样式，需要配合direction 和 directionalTdRadios 使用，
- 组合为横向、纵向卡片，同时需要在每个TDRadio上设置cardMode参数。
+#### 工厂构造方法
+
+##### TRadioGroup.options
+
+使用数据项生成标准布局的单选框组。
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| value | T? | - | 受控选中值。 |
+| options | List<TRadioOption<T>> | - | - |
+| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
+| direction | Axis | Axis.vertical | 排列方向，默认纵向。 |
+| columns | int | 1 | 每行列数，默认 1，必须大于 0。 横向 `TRadioVariant.inline` 按内容自然收缩并在行内两端对齐， 不使用该列数等分宽度。 |
+| variant | TRadioVariant | TRadioVariant.block | 生成项的完整视觉结构，默认 `TRadioVariant.block`。 |
+| showDivider | bool? | - | 是否显示项间分割线。 为空时仅 `TRadioVariant.block` 默认显示；非 block 结构不能设为 true。 |
+| contentDirection | TContentDirection | TContentDirection.right | 控件与文案排列方向，默认文案在指示器右侧。 |
+| size | TRadioSize | TRadioSize.medium | 单选框尺寸，默认 `TRadioSize.medium`。 |
+| iconType | TRadioIconType | TRadioIconType.fill | 内置指示器样式，默认 `TRadioIconType.fill`。 |
+| titleMaxLines | int | 3 | 主标题最大行数，默认 3 行。 |
+| subTitleMaxLines | int | 5 | 副标题最大行数，默认 5 行。 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| cardMode |  | false |  |
-| child |  | - |  |
-| contentDirection |  | - |  |
-| controller |  | - |  |
-| customContentBuilder |  | - |  |
-| customIconBuilder |  | - |  |
-| direction |  | - |  |
-| directionalTdRadios |  | - |  |
-| divider | Widget? | - | 自定义下划线 |
-| key |  | - |  |
-| onRadioGroupChange |  | - |  |
-| passThrough |  | - |  |
-| radioCheckStyle | TDRadioStyle? | - | 勾选样式 |
-| rowCount | int | 1 | 每行几列 |
-| selectId |  | - |  |
-| showDivider | bool | false | 是否显示下划线 |
-| spacing |  | - |  |
-| strictMode | bool | true | 严格模式下，用户不能取消勾选，只能切换选择项， |
-| titleMaxLine |  | - |  |
+| child | Widget | - | 包含 `TRadio` 的自定义布局。 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| onChanged | ValueChanged<T>? | - | 选中值变更回调；为 null 时整组禁用。 |
+| value | T? | - | 受控选中值。 |
+
+
+### TRadioOption
+#### 简介
+单选框组的数据项。
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| disabled | bool | false | 是否禁用该项。 |
+| label | String | - | 主文案。 |
+| subTitle | String? | - | 副文案。 |
+| value | T | - | 选项值。 |
+
+
+### TRadioSize
+#### 简介
+单选框指示器尺寸。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| small | 小尺寸。 |
+| medium | 中尺寸。 |
+| large | 大尺寸。 |
+
+
+### TRadioIconType
+#### 简介
+单选框内置指示器样式。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| dot | 圆环内显示实心圆点。 |
+| check | 选中时显示勾选标记。 |
+| fill | 选中时显示带反色勾选标记的实心圆。 |
+
+
+### TRadioVariant
+#### 简介
+单选框的完整视觉结构。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| inline | 行内结构，不绘制通栏背景、外围内边距或标准块高。 |
+| block | 通栏结构，使用标准块高、容器背景和外围内边距。 |
+| card | 卡片结构。 |
+
+
+### TRadioIconBuilder
+#### 简介
+自定义单选框指示器构建器。
+#### 类型定义
+
+```dart
+typedef TRadioIconBuilder = Widget Function(BuildContext context, bool selected, bool disabled);
+```

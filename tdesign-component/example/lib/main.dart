@@ -21,20 +21,16 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   Log.setCustomLogPrinter((level, tag, msg) => print('[$level] $tag ==> $msg'));
-  runApp(const MyApp());
-
-  /*SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    systemNavigationBarColor: Colors.transparent,
-    systemNavigationBarDividerColor: Colors.transparent,
-  ));*/
-
   exampleMap.forEach((key, value) {
     value.forEach((model) {
       examplePageList.add(model);
     });
   });
   sideBarExamplePage.forEach(examplePageList.add);
+  TExampleRoute.init();
+
+  runApp(const MyApp());
+
 }
 
 class MyApp extends StatefulWidget {
@@ -45,19 +41,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late TDThemeData _themeData;
+  late TThemeData _themeData;
 
   @override
   void initState() {
     super.initState();
-    _themeData = TDThemeData.defaultData();
-    print('_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
+    _themeData = TThemeData.defaultData();
+    print(
+        '_darkThemeData.bgColorPage： ${_themeData.bgColorPage}，_themeData.dark?.bgColorPage: ${_themeData.dark?.bgColorPage}');
   }
 
   @override
   Widget build(BuildContext context) {
-    // 使用多套主题
-    TDTheme.needMultiTheme();
     var delegate = IntlResourceDelegate(context);
     return MultiProvider(
       providers: [
@@ -97,15 +92,15 @@ class _MyAppState extends State<MyApp> {
 
           return MaterialApp(
             title: 'TDesign Flutter Example',
-            theme: _themeData.systemThemeDataLight,
-            darkTheme: _themeData.systemThemeDataDark,
+            theme: TThemeBuilder.light(_themeData),
+            darkTheme: TThemeBuilder.dark(_themeData),
             themeMode: themeModeProvider.themeMode,
             home: PlatformUtil.isWeb
                 ? null
                 : Builder(
                     builder: (context) {
                       // 设置文案代理,国际化需要在MaterialApp初始化完成之后才生效,而且需要每次更新context
-                      TDTheme.setResourceBuilder(
+                      setTResourceBuilder(
                         (context) => delegate..updateContext(context),
                         needAlwaysBuild: true,
                       );
@@ -123,21 +118,40 @@ class _MyAppState extends State<MyApp> {
             locale: localeProvider.locale,
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            onGenerateRoute: TDExampleRoute.onGenerateRoute,
-            routes: _getRoutes(),
+            onGenerateRoute: TExampleRoute.onGenerateRoute,
+            routes: _getRoutes(delegate),
           );
         },
       ),
     );
   }
 
-  Map<String, WidgetBuilder> _getRoutes() {
+  Map<String, WidgetBuilder> _getRoutes(IntlResourceDelegate delegate) {
     if (PlatformUtil.isWeb) {
       return {
         for (var model in examplePageList)
           model.name: (context) => model.pageBuilder.call(context, model)
-      }..putIfAbsent('/',
-          () => (context) => const MyHomePage(title: 'TDesign Flutter 组件库'));
+      }..putIfAbsent('/', () {
+          // Web 模式下通过路由创建 MyHomePage，需要传入 onThemeChange 回调
+          // 并设置文案代理（与非 Web 模式保持一致）
+          return (context) => Builder(
+                builder: (context) {
+                  setTResourceBuilder(
+                    (context) => delegate..updateContext(context),
+                    needAlwaysBuild: true,
+                  );
+                  return MyHomePage(
+                    title: AppLocalizations.of(context)?.components ??
+                        'TDesign Flutter 组件库',
+                    onThemeChange: (themeData) {
+                      setState(() {
+                        _themeData = themeData;
+                      });
+                    },
+                  );
+                },
+              );
+        });
     } else {
       return const {};
     }

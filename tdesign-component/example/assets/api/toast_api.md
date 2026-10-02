@@ -1,17 +1,196 @@
 ## API
-### TDToast
+### TToast
 
 #### 静态方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
+##### TToast.dismissAll
+
+关闭所有Toast
+
+返回类型：`void`
+
+##### TToast.dismissToast
+
+关闭指定的Toast
+
+返回类型：`void`
+
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| dismissAll |  |  | 关闭所有Toast |
-| dismissLoading |  |  | 关闭加载Toast（向后兼容） |
-| dismissToast |  |   required String toastId, | 关闭指定的Toast |
-| showFail |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 失败提示Toast |
-| showIconText |  |   required String? text,  IconData? icon,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带图标的Toast |
-| showLoading |  |   required BuildContext context,  String? text,  Duration duration,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 带文案的加载Toast |
-| showLoadingWithoutText |  |   required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  double? iconSize,  Color? iconColor,  String? toastId, | 不带文案的加载Toast |
-| showSuccess |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 成功提示Toast |
-| showText |  |   required String? text,  required BuildContext context,  Duration duration,  int? maxLines,  BoxConstraints? constraints,  bool? preventTap,  Widget? customWidget,  Color? backgroundColor,  TextStyle? textStyle,  String? toastId, | 普通文本Toast |
-| showWarning |  |   required String? text,  IconTextDirection direction,  required BuildContext context,  Duration duration,  bool? preventTap,  Color? backgroundColor,  int? maxLines,  TextStyle? textStyle,  double? iconSize,  Color? iconColor,  String? toastId, | 警告Toast |
+| toastId | String | - | 要关闭的 Toast 实例 ID。 |
+
+
+##### TToast.showFail
+
+失败提示Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | 提示文案。 |
+| direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| maxLines | int? | - | 文案最大行数。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| iconSize | double? | - | 图标尺寸。 |
+| iconColor | Color? | - | 图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showIconText
+
+带图标的Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | 提示文案。 |
+| icon | IconData? | - | 左侧或上方图标。 |
+| direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| maxLines | int? | - | 文案最大行数。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| iconSize | double? | - | 图标尺寸。 |
+| iconColor | Color? | - | 图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showLoading
+
+带文案的加载Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| text | String? | - | 加载提示文案。 |
+| duration | Duration | TToast.infiniteDuration | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| customWidget | Widget? | - | 自定义加载内容；传入后优先展示。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| iconSize | double? | - | 加载图标尺寸。 |
+| iconColor | Color? | - | 加载图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showLoadingWithoutText
+
+不带文案的加载Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext | - | - |
+| duration | Duration | TToast.infiniteDuration | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| iconSize | double? | - | 加载图标尺寸。 |
+| iconColor | Color? | - | 加载图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showSuccess
+
+成功提示Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | 提示文案。 |
+| direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| maxLines | int? | - | 文案最大行数。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| iconSize | double? | - | 图标尺寸。 |
+| iconColor | Color? | - | 图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showText
+
+普通文本Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | 提示文案；为 null 时只展示自定义内容。 |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
+| maxLines | int? | - | 文案最大行数。 |
+| constraints | BoxConstraints? | - | Toast 内容约束。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| customWidget | Widget? | - | 自定义内容；传入后优先展示。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+
+##### TToast.showWarning
+
+警告Toast
+
+返回类型：`String`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| text | String? | - | 提示文案。 |
+| direction | IconTextDirection | IconTextDirection.horizontal | 图标与文案排列方向。 |
+| context | BuildContext | - | - |
+| duration | Duration | const Duration(milliseconds: 2000) | 自动关闭时长。 |
+| overlay | TOverlayConfig? | - | 蒙层行为配置（可见遮罩、拦截点击等）。 |
+| placement | TToastPlacement | TToastPlacement.middle | Toast 展示位置。 |
+| backgroundColor | Color? | - | Toast 背景色。 |
+| maxLines | int? | - | 文案最大行数。 |
+| textStyle | TextStyle? | - | Toast 文案样式。 |
+| iconSize | double? | - | 图标尺寸。 |
+| iconColor | Color? | - | 图标颜色。 |
+| toastId | String? | - | 指定实例 ID；不传时自动生成。 |
+
+#### 静态成员
+
+| 名称 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| infiniteDuration | Duration | - | 无限时长哨兵值：加载类 Toast 使用，表示"永不自动消失"。 封装为具名常量，避免魔法数字导致用户传入相近的超长 duration 时被误判为无限。 |
+
+
+### IconTextDirection
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| horizontal | 横向 |
+| vertical | 竖向 |
+
+
+### TToastPlacement
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| top | 顶部（距屏幕顶部 25%，水平居中） |
+| middle | 居中（屏幕正中） |
+| bottom | 底部（距屏幕底部 25%，水平居中） |

@@ -1,78 +1,96 @@
 ## API
-### TDCalendarStyle
+### TCalendar
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| cellDecoration | BoxDecoration? | - | 日期decoration |
-| cellPrefixStyle | TextStyle? | - | 日期前面的字符串的样式 |
-| cellStyle | TextStyle? | - | 日期样式 |
-| cellSuffixStyle | TextStyle? | - | 日期后面的字符串的样式 |
-| centreColor | Color? | - | 日期范围内背景样式 |
-| decoration |  | - |  |
-| monthTitleStyle | TextStyle? | - | body区域 年月文字样式 |
-| titleCloseColor | Color? | - | header区域 关闭图标的颜色 |
-| titleMaxLine | int? | - | header区域 [TDCalendar.title]的行数 |
-| titleStyle | TextStyle? | - | header区域 [TDCalendar.title]的样式 |
-| weekdayStyle | TextStyle? | - | header区域 周 文字样式 |
+| anchorDate | DateTime? | - | 滚动锚点日期。 |
+| animateTo | bool | false | 锚点滚动是否使用动画。 |
+| cellBuilder | TCalendarCellBuilder? | - | 日期格构建器。 |
+| firstDayOfWeek | TCalendarFirstDayOfWeek | TCalendarFirstDayOfWeek.sunday | 每周从星期几开始，默认从星期日开始。 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| maxDate | DateTime? | - | 最大可选日期。 |
+| minDate | DateTime? | - | 最小可选日期。 |
+| monthTitleBuilder | TCalendarMonthTitleBuilder? | - | 月标题构建器。 |
+| onChanged | ValueChanged<List<DateTime>>? | - | 选中日期变化回调；为 null 时禁用。 |
+| onMonthChanged | ValueChanged<DateTime>? | - | 可见月份变化回调。 |
+| subtitleBuilder | TCalendarSubtitleBuilder? | - | 日期副标题构建器。 |
+| value | List<DateTime> | - | 受控选中日期列表。 列表长度与 `variant` 对应： - `TCalendarVariant.single`：1 个元素（选中日期） - `TCalendarVariant.multiple`：N 个元素（所有选中日期） - `TCalendarVariant.range`：2 个元素（起始、结束日期） |
+| variant | TCalendarVariant | TCalendarVariant.single | 选择模式。 |
+| weekdayNames | List<String>? | - | 星期标题。未设置时使用当前资源代理中的文案。 |
 
 
-#### 工厂构造方法
+### TCalendarStyle
 
-| 名称  | 说明 |
-| --- |  --- |
-| TDCalendarStyle.cellStyle  | 日期样式 |
-| TDCalendarStyle.generateStyle  | 生成默认样式 |
+#### 静态方法
 
-```
-```
- ### TDCalendar
+##### TCalendarStyle.generateStyle
+
+生成默认样式
+
+返回类型：`TCalendarStyle`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| context | BuildContext? | - | - |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| animateTo | bool? | false | 动画滚动到指定位置 |
-| cellHeight | double? | 60 | 日期高度 |
-| cellWidget | Widget? Function(BuildContext context, TDate tdate, DateSelectType selectType)? | - | 自定义日期单元格组件 |
-| displayFormat | String? | 'year month' | 年月显示格式，`year`表示年，`month`表示月，如`year month`表示年在前、月在后、中间隔一个空格 |
-| firstDayOfWeek | int? | 0 | 第一天从星期几开始，默认 0 = 周日 |
-| format | CalendarFormat? | - | 用于格式化日期的函数，可定义日期前后的显示内容和日期样式 |
-| height | double? | - | 高度 |
-| isTimeUnit | bool? | true | 是否显示时间单位 |
-| key |  | - |  |
-| maxDate | int? | - | 最大可选的日期（fromMillisecondsSinceEpoch），不传则默认半年后 |
-| minDate | int? | - | 最小可选的日期（fromMillisecondsSinceEpoch），不传则默认今天 |
-| monthTitleBuilder | Widget Function(BuildContext context, DateTime monthDate)? | - | 月标题构建器 |
-| monthTitleHeight | double? | 22 | 月标题高度 |
-| onCellClick | void Function(int value, DateSelectType type, TDate tdate)? | - | 点击日期时触发 |
-| onCellLongPress | void Function(int value, DateSelectType type, TDate tdate)? | - | 长安日期时触发 |
-| onChange | void Function(List<int> value)? | - | 选中值变化时触发 |
-| onHeaderClick | void Function(int index, String week)? | - | 点击周时触发 |
-| pickerHeight | double? | 178 | 时间选择器List的视窗高度 |
-| pickerItemCount | int? | 3 | 选择器List视窗中item个数，pickerHeight / pickerItemCount即item高度 |
-| style | TDCalendarStyle? | - | 自定义样式 |
-| timePickerModel | List<DatePickerModel>? | - | 自定义时间选择器 |
-| title | String? | - | 标题 |
-| titleWidget | Widget? | - | 标题组件 |
-| type | CalendarType? | CalendarType.single | 日历的选择类型，single = 单选；multiple = 多选；range = 区间选择 |
-| useSafeArea | bool? | true | 是否使用安全区域，默认true |
-| useTimePicker | bool? | false | 是否显示时间选择器 |
-| value | List<int>? | - | 当前选择的日期（fromMillisecondsSinceEpoch），不传则默认今天，当 type = single 时数组长度为1 |
-| width | double? | - | 宽度 |
+| bodyPadding | double? | - | 内边距 |
+| cellDecoration | BoxDecoration? | - | 日期单元格装饰（选中状态） |
+| cellHeight | double | 60 | 日期单元格高度，默认 60 |
+| centreColor | Color? | - | 区间中间格背景与格间衔接条颜色。 |
+| dayStyle | TextStyle? | - | 日期数字样式 |
+| decoration | BoxDecoration? | - | 组件容器装饰 |
+| monthTitleHeight | double | 22 | 月份标题高度，默认 22 |
+| monthTitleStyle | TextStyle? | - | 月份标题文字样式 |
+| subtitleStyle | TextStyle? | - | 副标题样式 |
+| todayDayStyle | TextStyle? | - | 今天日期数字样式 |
+| verticalGap | double? | - | 日期格垂直间距，水平间距为 `verticalGap` / 2 |
+| weekdayGap | double? | - | 星期之间的水平间距 |
+| weekdayStyle | TextStyle? | - | 星期文字样式 |
 
-```
-```
- ### TDCalendarPopup
+
+### TCalendarCellModel
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| autoClose | bool? | true | 自动关闭；在点击关闭按钮、确认按钮、遮罩层时自动关闭 |
-| builder | CalendarBuilder? | - | 控件构建器，优先级高于[child] |
-| child | TDCalendar? | - | 日历控件 |
-| confirmBtn | Widget? | - | 自定义确认按钮 |
-| context | BuildContext | context | 上下文 |
-| onClose | VoidCallback? | - | 关闭时触发 |
-| onConfirm | void Function(List<int> value)? | - | 点击确认按钮时触发 |
-| top | double? | - | 距离顶部的距离 |
-| visible | bool? | - | 默认是否显示日历 |
+| date | DateTime | - | 当前日期。 |
+| isLastDayOfMonth | bool | - | 是否为当月最后一天。 |
+| selectType | DateSelectType | - | 当前格的选中、区间或禁用展示状态。 |
+
+
+### TCalendarSubtitleContext
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| date | DateTime | - | 当前格子的阳历日期（仅年月日，无时分秒）。 |
+| selectType | DateSelectType | - | 当前格的选中/区间/禁用等展示状态，便于按态设置副标题样式。 |
+
+
+### TCalendarSubtitleBuilder
+#### 类型定义
+
+```dart
+typedef TCalendarSubtitleBuilder = Widget? Function(BuildContext context, TCalendarSubtitleContext subtitleContext);
+```
+
+
+### TCalendarCellBuilder
+#### 类型定义
+
+```dart
+typedef TCalendarCellBuilder = Widget? Function(BuildContext context, TCalendarCellModel cell);
+```
+
+
+### TCalendarMonthTitleBuilder
+#### 类型定义
+
+```dart
+typedef TCalendarMonthTitleBuilder = Widget Function(BuildContext context, DateTime monthDate);
+```

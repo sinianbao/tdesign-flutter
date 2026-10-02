@@ -1,6 +1,6 @@
 <template>
   <td-doc-content ref="tdDocContent" platform="mobile" page-status="hidden">
-    <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader"></td-doc-header>
+    <td-doc-header v-if="info.tdDocHeader" platform="mobile" slot="doc-header" ref="tdDocHeader" changelog="false"></td-doc-header>
     <template v-if="info.isComponent">
       <td-doc-tabs ref="tdDocTabs" :tab="tab"></td-doc-tabs>
       <div class="td-doc-main" v-show="tab === 'demo'">
@@ -38,6 +38,7 @@ import 'prismjs/components/prism-dart.js';
 import 'prismjs/components/prism-yaml.js';
 
 import QrCode from '@components/qrcode.vue';
+import { flutterExampleLiveUrl } from '../flutter-example-docs/live-url.mjs';
 
 export default defineComponent({
   inject: ['info', 'demos'],
@@ -62,9 +63,11 @@ export default defineComponent({
       return path.slice(path.lastIndexOf('/') + 1);
     },
     liveUrl() {
-      // return `/miniprogram-live/m2w/program/miniprogram/#!pages/${this.name}/${this.name}.html`;
-      var path = `/flutter/example/#${this.name}`;
-      return path;
+      return flutterExampleLiveUrl(this.name, {
+        dev: import.meta.env.DEV,
+        hostname: window.location.hostname,
+        devServerPort: import.meta.env.VITE_FLUTTER_WEB_PORT || '19001',
+      });
     },
     qrcode() {
       const { path } = this.$route;

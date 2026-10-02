@@ -8,6 +8,12 @@
 .buildlog/
 .history
 .svn/
+.pnpm-store
+
+
+# Site
+tdesign-site/node_modules/
+tdesign-site/_site/
 
 tdesign-site/node_modules/
 
@@ -75,10 +81,13 @@ build/
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 
+.codebuddy/
 .fvm/
 
 /tdesign-component/local_dependency_override.yaml
 /tdesign-component/pubspec_overrides.yaml
+/tdesign-component/pubspec.lock
 /tdesign-component/example/pubspec_overrides.yaml
-/tdesign-component/example/aop_tools
-/tdesign-component/example/tdesign-flutter-generator
+/tdesign-component/example/pubspec.lock
+
+/tdesign-site/package-lock.json

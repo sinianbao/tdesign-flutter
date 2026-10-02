@@ -33,10 +33,20 @@
 ### 📝 更新日志
 
 <!--
-从用户角度描述具体变化，以及可能的 breaking change 和其他风险。
+更新日志面向实际使用方用户，请从用户角度描述用户在使用组件或库时能够感知到的具体变化，以及可能的 breaking change 和其他风险。
+仅记录用户可感知的变更，不要填写用户无法感知的内部实现、CI/CD 或文档结构调整；如果本次改动用户无法感知，请勾选“本条 PR 不需要纳入 Changelog”。
+
+格式要求：
+- 一个 PR 含多个功能 / 修复时，按条目分开列写，不合并。
+- 每条遵循 Conventional Commits 的 commit type，与最终分组对应：
+  - `breaking` → Breaking Changes
+  - `feat` → Features
+  - `fix` → Bug Fixes
+  - `perf` / `refactor` → Performance
+- 示例：`fix(TInput): 修复密文模式下无法粘贴的问题`
 -->
 
-- fix(组件名称): 处理问题或特性描述 ...
+- 待补充
 
 - [ ] 本条 PR 不需要纳入 Changelog
 
@@ -44,7 +54,8 @@
 
 ⚠️ 请自检并全部**勾选全部选项**。⚠️
 
-- [ ] pr目标分支为develop分支，请勿直接往main分支合并
-- [ ] 标题格式为：`组件类名`: 修改描述（示例：`TDBottomTabBar`: 修复iconText模式，底部溢出2.5像素）
-- [ ] ”相关issue“处带上修复的issue链接
+- [ ] 标题遵循 Conventional Commits 格式：`type(<scope>?): 修改描述`。
+      示例：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`
+- [ ] “相关 Issue”处带上修复的 Issue 链接或无关联 Issue
+- [ ] 已添加对应的 Spec 链接，或已由 Review 确认本次改动无需 Spec
 - [ ] 相关文档已补充或无须补充

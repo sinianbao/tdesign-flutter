@@ -63,7 +63,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('zh')
+    Locale('zh'),
   ];
 
   /// No description provided for @components.
@@ -209,19 +209,19 @@ abstract class AppLocalizations {
   /// No description provided for @releaseRefresh.
   ///
   /// In en, this message translates to:
-  /// **'ReleaseRefresh'**
+  /// **'Release to refresh'**
   String get releaseRefresh;
 
   /// No description provided for @pullToRefresh.
   ///
   /// In en, this message translates to:
-  /// **'PullToRefresh'**
+  /// **'Pull to refresh'**
   String get pullToRefresh;
 
   /// No description provided for @completeRefresh.
   ///
   /// In en, this message translates to:
-  /// **'CompleteRefresh'**
+  /// **'Refresh completed'**
   String get completeRefresh;
 
   /// No description provided for @reset.
@@ -451,6 +451,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Data'**
   String get emptyData;
+
+  /// No description provided for @picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Picker'**
+  String get picker;
+
+  /// No description provided for @pickerColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Column {colIndex}'**
+  String pickerColumn(Object colIndex);
 }
 
 class _AppLocalizationsDelegate
@@ -480,8 +492,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

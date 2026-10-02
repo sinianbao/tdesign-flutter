@@ -6,7 +6,7 @@
 <br/>
 Android请扫码下载预览 ↓
 <br/>
-<img width="260" src="site/public/assets/qrcode/tdesign_apk_qrcode.png" />
+<img width="260" src="https://tdesign.tencent.com/flutter/assets/qrcode/t_apk_qrcode_0_2_7.png" />
 <br/>
 iOS请运行项目预览 ↓
 <br/>
@@ -18,7 +18,7 @@ https://github.com/Tencent/tdesign-flutter/tree/main/tdesign-component
 
 ```yaml
   dependencies:
-    tdesign_flutter: ^0.1.0
+    tdesign_flutter: 1.0.0-alpha.1
 ```
 
 
@@ -30,12 +30,12 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 ## 本地运行官网示例代码
 
-- 进入 `site` 文件夹，安装`npm install` 安装依赖包 
-- `cd ..` 回到 `tdesign-site` 目录，运行命令 `npm run site:dev` 
+- 在 `tdesign-site` 目录执行 `pnpm install --frozen-lockfile` 安装依赖
+- 在 `tdesign-site` 目录运行 `pnpm dev`，同时启动文档站点和 Flutter Web 预览
 
-## 基础库版本
+## 组件库版本
 
-最低基础库版本`^0.1.0`
+当前文档对应组件库版本 `1.0.0-alpha.1`，Flutter SDK 最低要求为 `3.32.0`。
 
 ## 开源协议
 

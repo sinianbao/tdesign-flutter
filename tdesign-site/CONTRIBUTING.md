@@ -14,13 +14,11 @@ spline: explain
 ```txt
 tdesign-component/
 ├── demo_tool       // API 和演示代码工具
-├── examples        // 组件使用示例
+├── example         // 组件使用示例
 ├── lib             // 组件库
-└── tests           // 组件测试
+└── test            // 组件测试
 
 tdesign-site/       // TDesign Flutter 站点
-
-tdesign-adaptation/ // TDesign Flutter 版本适配仓库
 ```
 
 ## 2. 如何运行
@@ -34,9 +32,7 @@ tdesign-adaptation/ // TDesign Flutter 版本适配仓库
 
 ### 2.2 开发环境要求
 
-Flutter SDK 版本： `>= 3.16.9`
-
-**注意：** TD 需要支持 `3.16.9` ~ 最新稳定版本，因此最好在 `3.16.9` 版本开发完成后，使用最新稳定版本确认能否正常运行。如果版本无法兼容，请将不兼容文件移至 `tdesign-adaptation`，做兼容处理。
+Flutter SDK 版本： `>= 3.32.0`
 
 ### 2.3 克隆项目
 
@@ -49,8 +45,6 @@ git clone <https://github.com/Tencent/tdesign-flutter.git>
 
 下面是命令行运行方法，正常也可以不使用命令行，而在 IDE 直接运行，推荐使用 Android Studio 进行开发。运行时请选择 Android 设备和 iOS 模拟器，不要直接在浏览器运行。
 
-**注意：** 首次开发请先运行 `tdesign-flutter/tdesign-component/init.sh` 脚本，它会根据当前 Flutter 版本，选择适合的 `tdesign-adaptation` 依赖。
-
 ```bash
 # 运行 Flutter 组件项目
 cd tdesign-flutter/tdesign-component/
@@ -58,55 +52,24 @@ cd tdesign-flutter/tdesign-component/
 # 拉取依赖
 flutter pub get
 
-# 进入示例项目，需要把 AOPMarket|enable 改为 false，禁用 AOP 才行
+# 进入示例项目
 cd example/
 
 # 运行项目，最好在运行前先确认设备已连接
 flutter run
 ```
 
-### 2.5 Flutter 多版本兼容
-
-在 Flutter `3.32` 版本，SDK 代码变更较大，同一代码可能无法同时支持跨版本运行，因此抽离了 `tdesign-adaptation` 库，用于进行不同 Flutter 版本之间的代码适配。
-
-#### 2.5.1 版本切换
-
-首次运行，可以先将 Flutter SDK 切到 `3.16.9` 版本，执行 `tdesign-component/init.sh` 脚本，配置对应依赖。
-
-开发完成，切换至最新稳定版尝试运行，如果有不兼容代码，需要在 `tdesign-adaptation` 库进行适配。
-
-其中，高于 `3.32` 版本的代码，请在 `feature/3.32_adaptation` 分支开发，低于 `3.32` 版本的代码，请在 `feature/3.16_adaptation` 分支开发。
-
-本地开发 `tdesign-adaptation`，可以修改 `tdesign-component/pubspec_overrides.yaml` 和 `tdesign-component/example/pubspec_overrides.yaml` 文件，使用本地依赖，内容如下：
-
-```yaml
-dependency_overrides:
-  tdesign_adaptation:
-    path: ../tdesign-adaptation  # 本地相对路径
-```
-
-但是，提交 Git 时，**请不要将 `pubspec_overrides.yaml` 提交到仓库！！！**
-
-#### 2.5.2 国际化适配
-
-对于 `3.32` 以下版本，请在 `l10n.yaml` 中设置 `synthetic-package: false`。
-
-更多信息请参阅flutter官方文档说明：https://docs.flutter.dev/release/breaking-changes/flutter-generate-i10n-source
-
-### 2.6 运行前端官网项目
+### 2.5 运行前端官网项目
 
 ```bash
-# 进入官网前端项目
-cd tdesign-flutter/tdesign-site/site/
+# 进入官网项目
+cd tdesign-flutter/tdesign-site/
 
-# 安装依赖
-npm install
-
-# 回到 tdesign-site 目录
-cd ..
+# 安装依赖（仓库使用 pnpm）
+pnpm install --frozen-lockfile
 
 # 运行项目
-npm run site:dev
+pnpm site:dev
 ```
 
 **注意：** 本地运行项目，右侧 example 未展示对应组件示例，是正常现象，该示例正式部署才会展示。
@@ -136,21 +99,21 @@ npm run site:dev
 
 ## 4. 开发规范
 
-- 组件命名规范：以 `TD` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
+- 组件命名规范：以 `T` 为前缀，组件名称、API 名称参考 TDesign 现有组件和 API 命名，可以根据 Flutter 原生 Widget 的特点进行修改。组件 API 以满足设计要求和使用为准，可根据 Flutter 特点做精简或定制。
 - 组件库用到的所有色值、圆角、字体字号等样式属性需全部定义在主题中。
 - 代码规范遵循腾讯 Dart 代码规范。
 - 对于系统原有组件，如 `Text`、`Image` 等，应兼容系统原组件功能，只能扩展，不能阉割，以免业务需要使用系统功能时，必须放弃 TDesign 控件。
-- 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现；页面写完后，在 `main.dart` 中修改 `exampleMap` 对应组件的 `isTodo` 属性即可。
+- 示例页面尽量使用 `ExamplePage` + `ExampleModule` + `ExampleItem` 组合，按照示例稿的布局实现。
 - 组件 API 和演示代码，请参考 `demo_tool/README.md` 文件。
-- 组件内部的固定文案，都应该抽离到 `TDResourceDelegate` 中统一管理，方便业务进行国际化适配。
-- 如果使用的组件 TD 有封装，尽量使用 TD 已有组件，而非直接使用系统组件。
+- 组件内部的固定文案，都应该抽离到 `TResourceDelegate` 中统一管理，方便业务进行国际化适配。
+- 如果已有 TDesign 组件封装，尽量使用现有 T 组件，而非直接使用系统组件。
 
 ## 5. 验收标准
 
 ### 5.1 PR 规则
 
-- PR 目标分支为 `develop` 分支，请勿直接往 `main` 分支合并。
-- 标题格式：`组件类名`: 修改描述（示例：`TDUpload`: 新增 Upload 组件；`TDBottomTabBar`: 修复 iconText 模式，底部溢出 2.5 像素）。
+- PR 标题遵循 Conventional Commits 格式：`type(scope): 修改描述`。`scope` 可填写组件、文档或 CI 模块；常用 `type` 包括 `feat`、`fix`、`docs`、`refactor`、`test`、`ci` 和 `chore`。例如：`fix(TBottomTabBar): 修复 iconText 模式底部溢出`、`docs(contributing): 更新 PR 提交流程`。
+- 复杂需求、公共 API 变更、组件重构和跨目录改动应附带 [Spec](https://github.com/Tencent/tdesign-flutter/tree/develop/specs) 目录链接；是否可以不创建 Spec，由 Review 根据实际改动判断。
 - 勾选规则：
   > 1. 只要有新增参数，就勾选"新特性提交"。
   >
@@ -162,7 +125,7 @@ npm run site:dev
 
 ### 5.2 代码 Review 自检【欢迎大家补充】
 
-- 尽量使用 TD 已有组件，而非系统组件。比如有直接使用 `Text` 组件的，请换成 `TDText` 组件。
+- 尽量使用 TD 已有组件，而非系统组件。比如有直接使用 `Text` 组件的，请换成 `TText` 组件。
 - 检测边界条件，比如参数为 `null` 是否会导致代码异常？
 - 是否提供验收用例？用例是否 `ExamplePage` 放在 `test` 字段里？
 - 是否提供完善文档？
@@ -192,6 +155,17 @@ npm run site:dev
 
 ![概览示例](https://tdesign.tencent.com/flutter/assets/contributing_overview.png)
 
+#### 5.3.3 Spec 文档
+
+复杂需求、公共 API 变更、组件重构和跨目录改动通常需要创建 Spec。请从仓库根目录的 `specs/_template/` 复制模板，创建 `specs/<编号>-<短名称>/` 目录，并在 PR 中附上目录链接；是否可以例外，由 Review 根据实际改动判断。
+
+- `spec.md`：记录背景、目标、范围、非目标、行为契约和验收标准。
+- `plan.md`：记录技术方案、影响范围、API 变化、风险和验证策略。
+- `tasks.md`：拆分实现、测试、示例和文档任务，并更新任务状态。
+- `acceptance.md`：记录实际验证命令、结果、人工验收项和未覆盖风险。
+
+实现或验收标准发生变化时，应先同步更新 Spec，再继续修改代码。简单文案、格式调整和单文件局部修改不要求创建完整 Spec。
+
 ### 5.4 Demo 自测
 
 提交 PR 后，会触发流水线自动打包。打包完成会添加评论如下：
@@ -200,7 +174,7 @@ npm run site:dev
 
 点击 “体验 apk” 后面链接，即可跳转打包完成的 apk 下载地址，可以安装自测。
 
-**注意：** 该 demo 是基于 Flutter `3.16.9` 打包的。请留意最新 Flutter 版本的包是否打包成功；如果评论打包失败，请检测失败原因。
+**注意：** 该 demo 使用 CI 配置的 Flutter 版本打包；如果评论打包失败，请检查流水线日志确认原因。
 
 #### 自测内容
 

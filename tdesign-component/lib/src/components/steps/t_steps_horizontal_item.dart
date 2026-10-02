@@ -1,0 +1,285 @@
+import 'package:flutter/material.dart';
+import 'package:tdesign_flutter_icons/tdesign_flutter_icons.dart' show TIcons;
+
+import '../../theme/t_colors.dart';
+import '../../theme/t_fonts.dart';
+import '../../theme/t_theme.dart';
+import '../text/t_text.dart';
+import '../text/t_text_resolve.dart';
+import 't_steps.dart';
+import 't_steps_mode.dart';
+
+/// Steps步骤条，水平步骤item
+class TStepsHorizontalItem extends StatelessWidget {
+  /// 步骤条数据
+  final TStepsItemData data;
+
+  /// 当前步骤索引
+  final int index;
+
+  /// 步骤总数
+  final int stepsCount;
+
+  /// 当前激活的步骤索引
+  final int activeIndex;
+
+  /// 步骤条状态
+  final TStepsStatus status;
+
+  /// 步骤条指示器样式。
+  final TStepsIndicator indicator;
+
+  /// 根组件已解析的使用模式。
+  final TStepsMode mode;
+
+  /// 点击回调。
+  final VoidCallback? onTap;
+
+  const TStepsHorizontalItem({
+    super.key,
+    required this.data,
+    required this.index,
+    required this.stepsCount,
+    required this.activeIndex,
+    required this.status,
+    required this.indicator,
+    required this.mode,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.tTheme;
+
+    /// 步骤条数字背景色
+    var stepsNumberBgColor = theme.brandNormalColor;
+
+    /// 步骤条数字颜色
+    var stepsNumberTextColor = theme.textColorAnti;
+
+    /// 步骤条标题颜色
+    var stepsTitleColor = theme.brandNormalColor;
+
+    /// 步骤条icon颜色
+    var stepsIconColor = theme.brandNormalColor;
+
+    /// 简略步骤条icon颜色
+    var simpleStepsIconColor = theme.brandNormalColor;
+
+    /// 是否要设置步骤图标widget的Decoration
+    var shouldSetIconWidgetDecoration = true;
+
+    Widget? completeIconWidget;
+
+    /// 已完成步骤条
+    if (activeIndex > index) {
+      stepsNumberBgColor = theme.brandLightColor;
+      stepsNumberTextColor = theme.brandNormalColor;
+      stepsTitleColor = theme.textColorPrimary;
+
+      completeIconWidget = Icon(
+        TIcons.check,
+        color: theme.brandNormalColor,
+        size: 16,
+      );
+    } else if (activeIndex < index) {
+      /// 未完成步骤条
+      stepsNumberBgColor = theme.bgColorComponent;
+      stepsNumberTextColor = theme.textColorPlaceholder;
+      stepsTitleColor = theme.textColorPlaceholder;
+      stepsIconColor = theme.textColorPlaceholder;
+      simpleStepsIconColor = theme.componentBorderColor;
+    }
+
+    /// 步骤条icon图标组件，默认为索引文字
+    Widget? stepsIconWidget = Text(
+      (index + 1).toString(),
+      style: TTextResolve.resolve(
+        context: context,
+        defaults: TextStyle(
+          color: stepsNumberTextColor,
+          fontWeight: FontWeight.w400,
+          fontSize: theme.fontBodyMedium?.size ?? 14,
+        ),
+      ),
+    );
+
+    /// 已完成的用icon图标显示
+    if (completeIconWidget != null) {
+      stepsIconWidget = completeIconWidget;
+    }
+
+    /// 传递了成功的icon图标, 已完成的step都需要显示
+    if (data.icon != null) {
+      stepsIconWidget = Icon(data.icon, color: stepsIconColor, size: 22);
+
+      /// 传了图标则不用设置背景色
+      shouldSetIconWidgetDecoration = false;
+    }
+
+    /// 错误状态处理
+    /// 激活索引是当前索引，只有当前激活索引才需要显示
+    if (status == TStepsStatus.error && activeIndex == index) {
+      stepsNumberBgColor = theme.errorLightColor;
+      stepsTitleColor = theme.errorNormalColor;
+
+      if (indicator != TStepsIndicator.standard) {
+        simpleStepsIconColor = theme.errorNormalColor;
+      } else {
+        shouldSetIconWidgetDecoration = data.errorIcon == null;
+        stepsIconWidget = Icon(
+          data.errorIcon ?? TIcons.close,
+          color: theme.errorNormalColor,
+          size: shouldSetIconWidgetDecoration ? 16 : 22,
+        );
+      }
+    }
+
+    /// 步骤条icon图标背景和形状
+    var iconWidgetDecoration = shouldSetIconWidgetDecoration
+        ? BoxDecoration(color: stepsNumberBgColor, shape: BoxShape.circle)
+        : null;
+
+    /// icon组件容器大小
+    double iconContainerSize = 22;
+
+    /// 简略步骤条
+    if (indicator != TStepsIndicator.standard) {
+      /// display 纯展示
+      if (mode == TStepsMode.display) {
+        simpleStepsIconColor = theme.brandNormalColor;
+        stepsTitleColor = theme.textColorPrimary;
+      }
+      iconContainerSize = 8;
+      stepsIconWidget = null;
+
+      /// 简略步骤条BoxDecoration
+      var simpleDecoration = BoxDecoration(
+        color: Colors.transparent,
+        shape: BoxShape.circle,
+        border: Border.all(color: simpleStepsIconColor, width: 1),
+      );
+      if (mode == TStepsMode.display || activeIndex == index) {
+        simpleDecoration = BoxDecoration(
+          color: simpleStepsIconColor,
+          shape: BoxShape.circle,
+        );
+      }
+      iconWidgetDecoration = simpleDecoration;
+    }
+
+    var leftLineColor = (activeIndex >= index || mode == TStepsMode.display)
+        ? theme.brandNormalColor
+        : theme.componentBorderColor;
+    var rightLineColor = (activeIndex > index || mode == TStepsMode.display)
+        ? theme.brandNormalColor
+        : theme.componentBorderColor;
+
+    final content = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildLineWidget(
+              context,
+              visible: index != 0,
+              color: leftLineColor,
+            ),
+            Container(
+              width: iconContainerSize,
+              height: iconContainerSize,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(left: 8, right: 8),
+              decoration: iconWidgetDecoration,
+              child: stepsIconWidget,
+            ),
+            _buildLineWidget(
+              context,
+              visible: index != stepsCount - 1,
+              color: rightLineColor,
+            ),
+          ],
+        ),
+        _buildTitleWidget(context, stepsTitleColor),
+        _buildContentWidget(context),
+      ],
+    );
+    return onTap == null
+        ? content
+        : GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTap,
+            child: content,
+          );
+  }
+
+  /// 构建步骤条横线组件
+  Widget _buildLineWidget(
+    BuildContext context, {
+    required bool visible,
+    required Color color,
+  }) {
+    return Expanded(
+      flex: 1,
+      child: Visibility(
+        visible: visible,
+        child: Container(width: double.infinity, height: 1, color: color),
+      ),
+    );
+  }
+
+  /// 构建标题组件
+  Widget _buildTitleWidget(BuildContext context, Color stepsTitleColor) {
+    final title = data.title ?? '';
+    if (data.customTitle == null && title.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(top: 8),
+      alignment: Alignment.center,
+      child:
+          data.customTitle ??
+          TText(
+            title,
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontWeight: (activeIndex == index && mode != TStepsMode.display)
+                    ? FontWeight.w600
+                    : FontWeight.w400,
+                color: stepsTitleColor,
+                fontSize: context.tTheme.fontBodyMedium?.size ?? 14,
+              ),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+    );
+  }
+
+  /// 构建内容组件
+  Widget _buildContentWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 4),
+      alignment: Alignment.center,
+      child:
+          data.customContent ??
+          TText(
+            data.content ?? '',
+            style: TTextResolve.resolve(
+              context: context,
+              defaults: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: context.tTheme.textColorPlaceholder,
+                fontSize: context.tTheme.fontBodySmall?.size ?? 12,
+              ),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+    );
+  }
+}

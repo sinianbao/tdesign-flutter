@@ -1,4 +1,17 @@
-# api_tool：基于smart_cli实现的组件库生成工具
+# API 文档生成
+
+API 生成配置统一维护在 [`../tool/components.json`](../tool/components.json)。每项配置描述组件源码位置、API 类型和是否读取注释；它同时是站点组件契约检查的 API 来源。
+
+从 `tdesign-component` 目录执行：
+
+```bash
+bash demo_tool/all_build.sh
+node tool/generate_api.mjs --dry-run
+```
+
+`all_build.sh` 仅保留为兼容入口，实际调用 `tool/generate_api.mjs`。新增或迁移组件时先更新 `tool/components.json`，再生成并提交 `example/assets/api/<component>_api.md`。
+
+## 旧 api_tool 说明
 
 ## 组件注释规范
 
@@ -46,7 +59,7 @@
    如果没有指定 `--folder-name`，默认文件夹名称是第一个 `name` 参数的下划线表示。示例：
 
    ```bash
-   ./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/td_tag.dart --name TDTag --folder-name tag --only-api
+   ./demo_tool/bin/api_tool_xxx generate --file lib/src/components/tags/t_tag.dart --name TTag --folder-name tag --only-api
    ```
 
 2. **把一个文件中的多个组件合并生成一份示例数据**  
@@ -71,7 +84,7 @@
 
 ### 生成逻辑
 
-演示代码依赖 Flutter AOP 能力，通过解析 `@Demo` 注解所在的方法自动生成。因此，组件示例的写法要求将可显示的部分提取成独立方法，并添加 `@Demo` 注解。示例：
+演示代码由普通 Dart analyzer 脚本生成。组件示例的写法要求将可显示的部分提取成独立方法，并添加 `@ExampleCode` 注解。示例：
 
 ```dart
 @Override
@@ -92,11 +105,11 @@ Widget build(BuildContext context) {
   );
 }
 
-@Demo(group: 'button')
-TDButton _buildNormalClickButton(BuildContext context) {
-  return TDButton(
+@ExampleCode(group: 'button')
+TButton _buildNormalClickButton(BuildContext context) {
+  return TButton(
     content: '强按钮',
-    style: TDButtonStyle.primary(),
+    style: TButtonStyle.primary(),
     onTap: onTap,
     onLongPress: onLongPress,
   );
@@ -105,6 +118,11 @@ TDButton _buildNormalClickButton(BuildContext context) {
 
 其中，`group` 参数需与 `exampleCodeGroup` 参数一致，为直接的字符串赋值，不能是变量引用或者字符串拼接。
 
-## Flutter AOP
+生成或校验示例代码片段：
 
-提交 PR 后，将会触发流水线自动打包 APK，流水线配置了 AOP 能力。
+```bash
+dart run tool/generate_example_code.dart
+dart run tool/generate_example_code.dart --check
+```
+
+生成的 `example/assets/code/*.txt` 需要与源码一同提交；CI 会使用 `--check` 校验它们是否同步。

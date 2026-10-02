@@ -17,9 +17,9 @@
   "loadingWithPoint": "Loading...",
   "other": "Other",
   "refreshing": "Refreshing",
-  "releaseRefresh": "ReleaseRefresh",
-  "pullToRefresh": "PullToRefresh",
-  "completeRefresh": "CompleteRefresh",
+  "releaseRefresh": "Release to refresh",
+  "pullToRefresh": "Pull to refresh",
+  "completeRefresh": "Refresh completed",
   "reset": "Reset",
   "days": "d",
   "hours": "h",
@@ -61,5 +61,7 @@
   "weeks": "w",
   "back": "BACK",
   "top": "TOP",
-  "emptyData": "No Data"
+  "emptyData": "No Data",
+  "picker": "Picker",
+  "pickerColumn": "Column {colIndex}"
 }

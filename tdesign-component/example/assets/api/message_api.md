@@ -1,48 +1,50 @@
 ## API
-### MessageLink
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| color | Color? | - | 颜色 |
-| name | String | - | 名称 |
-| uri | Uri? | - | 资源链接 |
-
-```
-```
- ### MessageMarquee
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| delay | int? | - | 延迟时间(毫秒) |
-| loop | int? | - | 循环次数 |
-| speed | int? | - | 速度 |
-
-```
-```
- ### TDMessage
-#### 默认构造方法
-
-| 参数 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
-| closeBtn | dynamic | - | 关闭按钮 |
-| content | String? | - | 通知内容 |
-| duration | int? | 3000 | 消息内置计时器 |
-| icon | dynamic | true | 自定义消息前面的图标 |
-| key |  | - |  |
-| link | dynamic | - | 链接名称 |
-| marquee | MessageMarquee? | - | 跑马灯效果 |
-| offset | List<double>? | - | 相对于 placement 的偏移量 |
-| onCloseBtnClick | VoidCallback? | - | 点击关闭按钮触发 |
-| onDurationEnd | VoidCallback? | - | 计时结束后触发 |
-| onLinkClick | VoidCallback? | - | 点击链接文本时触发 |
-| theme | MessageTheme? | MessageTheme.info | 消息组件风格 info/success/warning/error |
-| visible | bool? | true | 是否显示 |
-
+### TMessage
 
 #### 静态方法
 
-| 名称 | 返回类型 | 参数 | 说明 |
+##### TMessage.show
+
+在 Overlay 中显示消息并返回控制句柄。
+未显式传入 `offset` 时，新消息会替换同一 Overlay 中上一条默认位置的消息；
+显式传入不同 `offset` 的消息可以同时展示。
+
+返回类型：`TMessageHandle`
+
+| 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| showMessage |  |   required BuildContext context,  String? content,  bool? visible,  int? duration,  dynamic closeBtn,  dynamic icon,  dynamic link,  MessageMarquee? marquee,  List<double>? offset,  MessageTheme? theme,  VoidCallback? onCloseBtnClick,  VoidCallback? onDurationEnd,  VoidCallback? onLinkClick, |  |
+| context | BuildContext | - | - |
+| content | String | '' | 通知内容 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭。 |
+| showIcon | bool | true | 是否显示前置图标 |
+| icon | Widget? | - | 自定义前置图标 |
+| action | Widget? | - | 消息尾部操作组件。 操作的外观与行为由组件自身负责，例如传入带 `VoidCallback` 的按钮或链接。 |
+| showCloseButton | bool | false | 是否显示关闭按钮 |
+| closeButton | Widget? | - | 自定义关闭按钮 |
+| marquee | TMessageMarquee? | - | 跑马灯配置 |
+| offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 |
+| status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
+| onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
+| onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 |
+
+#### 默认构造方法
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| action | Widget? | - | 消息尾部操作组件。 操作的外观与行为由组件自身负责，例如传入带 `VoidCallback` 的按钮或链接。 |
+| closeButton | Widget? | - | 自定义关闭按钮 |
+| content | String | '' | 通知内容 |
+| duration | Duration? | const Duration(seconds: 3) | 自动关闭时长；必须为正数，null 表示不自动关闭。 |
+| icon | Widget? | - | 自定义前置图标 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| marquee | TMessageMarquee? | - | 跑马灯配置 |
+| offset | Offset? | - | 期望的屏幕绝对坐标。 未显式传入时，消息保留 16 逻辑像素水平外间距；`useSafeArea` 为 true 时， 显式坐标也会被约束在含该外间距的系统安全可视区域内。 |
+| onCloseButtonPressed | VoidCallback? | - | 点击关闭按钮时触发 |
+| onDismissed | VoidCallback? | - | 消息完成关闭、被句柄移除、被新消息替换或 Overlay 卸载时触发。 每次展示最多触发一次。 |
+| onDurationEnd | VoidCallback? | - | 自动展示时长结束且关闭动画完成时触发 |
+| showCloseButton | bool | false | 是否显示关闭按钮 |
+| showIcon | bool | true | 是否显示前置图标 |
+| status | TMessageStatus | TMessageStatus.info | 消息语义状态 |
+| useSafeArea | bool | true | 是否避让系统安全区，默认为 true。设为 false 时显式 `offset` 保持绝对坐标， 消息宽度仍使用扣除 16 像素水平外间距后的默认宽度。 |

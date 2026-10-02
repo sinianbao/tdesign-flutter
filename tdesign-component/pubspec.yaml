@@ -1,19 +1,20 @@
 name: tdesign_flutter
 description: Tencent TDesign UI component library of Flutter, suitable for use in mobile projects.
-version: 0.2.6
+version: 1.0.0-alpha.1
 homepage: https://github.com/Tencent/tdesign-flutter
 
 environment:
-  sdk: ">=3.2.6 <4.0.0"
-  flutter: ">=3.16.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  collection:
+  collection: ^1.19.0
+  meta: ^1.16.0
 
-  # 轮播图组件
-  flutter_swiper_null_safety: ^1.0.2
+  # TDesign 图标资源包
+  tdesign_flutter_icons: ^0.0.6
 
   # 图片预览缩放组件
   photo_view: ^0.15.0
@@ -22,16 +23,21 @@ dependencies:
   easy_refresh: ^3.4.0
 
   # 滑动单元格组件
-  flutter_slidable: 3.1.2
 
-  tdesign_flutter_adaptation: 3.32.0
-
+  # 相册选择组件
   image_picker: 1.1.2
+  image_picker_android: 0.8.12+23
 
 dev_dependencies:
+  analyzer: ^7.4.0
   flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
+  image_picker_platform_interface: 2.11.1
+  tdesign_flutter_tools:
+    git:
+      url: https://github.com/TDesignOteam/tdesign-flutter-tools.git
+      ref: main
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -44,13 +50,9 @@ flutter:
   # adding or updating assets for this project.
   uses-material-design: true
   fonts:
-    - family: TDIcons
-      fonts:
-        - asset: assets/tdesign/td_icons.ttf
     - family: TCloudNumber
       fonts:
         - asset: assets/tdesign/TCloudNumberVF.ttf
-
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

@@ -18,8 +18,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.2.6 <4.0.0"
-  flutter: ">=3.16.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,11 +30,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web: any
+  flutter_localizations:
+    sdk: flutter
+  web: 1.1.1
 
   #轮播图组件
-  flutter_swiper_null_safety: ^1.0.2
   intl: any
+  
+  # 农历支持
+  lunar: ^1.7.8
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,16 +48,18 @@ dependencies:
   http: ^0.13.5
   tdesign_flutter:
     path: ../
+  tdesign_flutter_icons: ^0.0.6
 #  path_provider: 2.1.5
-  extended_nested_scroll_view: any
-  flutter_screenutil: any
+  extended_nested_scroll_view: 6.2.1
+  flutter_screenutil: 5.9.3
   provider: ^6.1.5+1
   shared_preferences: ^2.2.3
+  url_launcher: 6.3.0
 
 dev_dependencies:
-  flutter_test:
+  integration_test:
     sdk: flutter
-  flutter_localizations:
+  flutter_test:
     sdk: flutter
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -65,7 +71,6 @@ dev_dependencies:
 
 dependency_overrides:
   flutter_plugin_android_lifecycle: 2.0.32
-  web: ^1.1.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -118,14 +123,3 @@ flutter:
     - assets/img/
     - assets/theme.json
     - assets/publish_time
-
-# 生成演示代码
-AOPRegistry:
-  enable: true
-  compileTarget: frontend_server, dart2js
-  versions:
-    negativeInfinity~3.0.0:
-      unsupportedTips: 请在Flutter 3.+ 运行心悦工程
-    3.0.0~infinity:
-      path: ./tdesign-flutter-generator
-  saveDartDependencies: true

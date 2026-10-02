@@ -1,47 +1,88 @@
 ## API
-### TDNoticeBar
+### TNoticeBar
 #### 简介
-
+公告栏
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| content | dynamic | - | 文本内容（字符串或字符串数组等） |
-| context | dynamic | - | 文本内容（请使用content属性） |
-| direction | Axis? | Axis.horizontal | 滚动方向 |
-| height | double | 22 | 文字高度 (当使用prefixIcon或suffixIcon时，icon大小值等于该属性） |
-| interval | int? | 3000 | 步进滚动间隔时间（毫秒） |
-| key |  | - |  |
-| left | Widget? | - | 左侧内容（自定义左侧内容，优先级高于prefixIcon） |
-| marquee | bool? | false | 跑马灯效果 |
-| maxLines | int? | 1 | 文本行数（仅静态有效） |
-| onTap | ValueChanged? | - | 点击事件 |
-| prefixIcon | IconData? | - | 左侧图标 |
-| right | Widget? | - | 右侧内容（自定义右侧内容，优先级高于suffixIcon） |
-| speed | double? | 50 | 滚动速度 |
-| style | TDNoticeBarStyle? | - | 公告栏样式 [TDNoticeBarStyle] |
-| suffixIcon | IconData? | - | 右侧图标 |
-| theme | TDNoticeBarTheme? | TDNoticeBarTheme.info | 主题 |
+| content | String | '' | 单条公告内容。 当 `items` 非空时不显示此内容。 |
+| direction | Axis | Axis.horizontal | 滚动方向 |
+| interval | Duration | const Duration(seconds: 2) | 垂直轮播的切换间隔，仅在 `direction` 为 `Axis.vertical` 时生效。 |
+| items | List<String> | const <String>[] | 多条公告内容，主要用于垂直轮播。 非空时作为内容数据源，并优先于 `content`。 |
+| key | Key? | - | 组件标识，用于区分或保留组件状态。 |
+| marquee | bool | false | 是否启用横向跑马灯展示。 |
+| maxLines | int | 1 | 文本行数（仅静态有效） |
+| onPressed | ValueChanged<TNoticeBarTapTarget>? | - | 点击事件 |
+| operation | Widget? | - | 内容右侧、`suffixIcon` 左侧的自定义操作区。 可以和 `suffixIcon` 同时显示。 |
+| prefix | Widget? | - | 自定义前缀区域。 为 null 时根据 `status` 显示默认图标；传入 `SizedBox.shrink` 可隐藏 前缀区域。组件统一在非空前缀与正文之间保留 `TSpacers.spacer8` 间距 （默认 8 逻辑像素）；自定义 `Icon` 中未显式指定的颜色或尺寸会继承公告栏 状态色和标准图标尺寸。 |
+| speed | double | 50 | 横向跑马灯每秒滚动的逻辑像素，仅在 `direction` 为 `Axis.horizontal` 且 `marquee` 为 true 时生效。 |
+| status | TNoticeBarStatus | TNoticeBarStatus.info | 公告栏业务状态，决定默认配色和默认前缀图标。 |
+| suffixIcon | IconData? | - | 尾部图标，可以和 `operation` 同时显示。 |
 
-```
-```
- ### TDNoticeBarStyle
+
+### TNoticeBarThemeData
 #### 简介
-公告栏样式
+TNoticeBar 组件级 ThemeExtension
+通过 Theme 子树注入，控制子树的默认公告栏样式。
+
+#### 静态方法
+
+##### TNoticeBarThemeData.lerpDouble
+
+在两个可选数值之间插值。
+当仅一端有值时采用离散切换，避免把缺省值错误地当作 0。组件已知默认值
+的字段会在 `lerp` 内使用其实际默认值平滑插值。
+
+返回类型：`double?`
+
+| 参数 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| a | double? | - | 起始值。 |
+| b | double? | - | 目标值。 |
+| t | double | - | 插值进度。 |
+
 #### 默认构造方法
 
 | 参数 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | backgroundColor | Color? | - | 公告栏背景色 |
-| context | BuildContext? | - | 上下文 |
+| height | double? | - | 文字高度 |
 | leftIconColor | Color? | - | 公告栏左侧图标颜色 |
 | padding | EdgeInsetsGeometry? | - | 公告栏内边距 |
 | rightIconColor | Color? | - | 公告栏右侧图标颜色 |
 | textStyle | TextStyle? | - | 公告栏内容样式 |
 
+#### 静态成员
 
-#### 工厂构造方法
+| 名称 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| defaultPadding | EdgeInsets | - | 默认内边距 |
 
-| 名称  | 说明 |
-| --- |  --- |
-| TDNoticeBarStyle.generateTheme  | 根据主题生成样式 |
+
+### TNoticeBarTapTarget
+#### 简介
+公告栏点击区域
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| prefix | 前缀区域 |
+| content | 公告内容 |
+| operation | 右侧操作区 |
+| suffix | 尾部图标 |
+
+
+### TNoticeBarStatus
+#### 简介
+公告栏业务状态。
+#### 枚举值
+
+
+| 名称 | 说明 |
+| --- | --- |
+| info | 普通信息（默认）。 |
+| success | 成功信息。 |
+| warning | 警示信息。 |
+| error | 错误信息。 |

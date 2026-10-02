@@ -63,7 +63,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get refreshing => '正在刷新';
 
   @override
-  String get releaseRefresh => '松开刷新';
+  String get releaseRefresh => '松手刷新';
 
   @override
   String get pullToRefresh => '下拉刷新';
@@ -184,4 +184,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get emptyData => '暂无数据';
+
+  @override
+  String get picker => '选择器';
+
+  @override
+  String pickerColumn(Object colIndex) {
+    return '第 $colIndex 列';
+  }
 }

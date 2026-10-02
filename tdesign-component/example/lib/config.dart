@@ -1,74 +1,66 @@
 import 'package:flutter/material.dart';
 
 import 'base/example_base.dart';
-import 'page/sidebar/td_sidebar_page.dart';
-import 'page/sidebar/td_sidebar_page_anchor.dart';
-import 'page/sidebar/td_sidebar_page_custom.dart';
-import 'page/sidebar/td_sidebar_page_icon.dart';
-import 'page/sidebar/td_sidebar_page_loading.dart';
-import 'page/sidebar/td_sidebar_page_outline.dart';
-import 'page/sidebar/td_sidebar_page_pagination.dart';
-import 'page/sidebar/td_sidebar_page_unselected_color.dart';
-import 'page/td_action_sheet_page.dart';
-import 'page/td_avatar_page.dart';
-import 'page/td_backtop_page.dart';
-import 'page/td_badge_page.dart';
-import 'page/td_bottom_tab_bar_page.dart';
-import 'page/td_button_page.dart';
-import 'page/td_calendar_page.dart';
-import 'page/td_cascader_page.dart';
-import 'page/td_cell_page.dart';
-import 'page/td_checkbox_page.dart';
-import 'page/td_collapse_page.dart';
-import 'page/td_date_picker_page.dart';
-import 'page/td_dialog_page.dart';
-import 'page/td_divider_page.dart';
-import 'page/td_drawer_page.dart';
-import 'page/td_dropdown_menu_page.dart';
-import 'page/td_empty_page.dart';
-import 'page/td_fab_page.dart';
-import 'page/td_font_page.dart';
-import 'page/td_footer_page.dart';
-import 'page/td_form_page.dart';
-import 'page/td_icon_page.dart';
-import 'page/td_image_page.dart';
-import 'page/td_image_viewer_page.dart';
-import 'page/td_indexes_page.dart';
-import 'page/td_input_page.dart';
-import 'page/td_link_page.dart';
-import 'page/td_loading_page.dart';
-import 'page/td_message_page.dart';
-import 'page/td_navbar_page.dart';
-import 'page/td_notice_bar_page.dart';
-import 'page/td_picker_page.dart';
-import 'page/td_popover_page.dart';
-import 'page/td_popup_page.dart';
-import 'page/td_progress_page.dart';
-import 'page/td_radio_page.dart';
-import 'page/td_radius_page.dart';
-import 'page/td_rate_page.dart';
-import 'page/td_refresh_page.dart';
-import 'page/td_result_page.dart';
-import 'page/td_search_bar_page.dart';
-import 'page/td_shadows_page.dart';
-import 'page/td_skeleton_page.dart';
-import 'page/td_slider_page.dart';
-import 'page/td_stepper_page.dart';
-import 'page/td_steps_page.dart';
-import 'page/td_swipe_cell_page.dart';
-import 'page/td_swiper_page.dart';
-import 'page/td_switch_page.dart';
-import 'page/td_table_page.dart';
-import 'page/td_tabs_page.dart';
-import 'page/td_tag_page.dart';
-import 'page/td_text_page.dart';
-import 'page/td_textarea_page.dart';
-import 'page/td_theme_page.dart';
-import 'page/td_time_counter_page.dart';
-import 'page/td_toast_page.dart';
-import 'page/td_tree_select_page.dart';
-import 'page/td_upload_page.dart';
-import 'page/todo_page.dart';
+import 'page/action_sheet/action_sheet_page.dart';
+import 'page/avatar/avatar_page.dart';
+import 'page/backtop/backtop_page.dart';
+import 'page/badge/badge_page.dart';
+import 'page/button/button_page.dart';
+import 'page/calendar/calendar_page.dart';
+import 'page/cascader/cascader_page.dart';
+import 'page/cell/cell_page.dart';
+import 'page/checkbox/checkbox_page.dart';
+import 'page/collapse/collapse_page.dart';
+import 'page/date_time_picker/date_time_picker_page.dart';
+import 'page/dialog/dialog_page.dart';
+import 'page/divider/divider_page.dart';
+import 'page/drawer/drawer_page.dart';
+import 'page/dropdown_menu/dropdown_menu_page.dart';
+import 'page/empty/empty_page.dart';
+import 'page/fab/fab_page.dart';
+import 'page/footer/footer_page.dart';
+import 'page/form/form_page.dart';
+import 'page/icon/icon_page.dart';
+import 'page/image/image_page.dart';
+import 'page/image_viewer/image_viewer_page.dart';
+import 'page/indexes/indexes_page.dart';
+import 'page/input/input_page.dart';
+import 'page/link/link_page.dart';
+import 'page/loading/loading_page.dart';
+import 'page/message/message_page.dart';
+import 'page/navbar/navbar_page.dart';
+import 'page/notice_bar/notice_bar_page.dart';
+import 'page/picker/picker_page.dart';
+import 'page/popover/popover_page.dart';
+import 'page/popup/popup_page.dart';
+import 'page/progress/progress_page.dart';
+import 'page/pull_down_refresh/pull_down_refresh_page.dart';
+import 'page/radio/radio_page.dart';
+import 'page/rate/rate_page.dart';
+import 'page/result/result_page.dart';
+import 'page/search_bar/search_bar_page.dart';
+import 'page/sidebar/sidebar_anchor_example.dart';
+import 'page/sidebar/sidebar_custom_example.dart';
+import 'page/sidebar/sidebar_icon_example.dart';
+import 'page/sidebar/sidebar_page.dart';
+import 'page/sidebar/sidebar_pagination_example.dart';
+import 'page/skeleton/skeleton_page.dart';
+import 'page/slider/slider_page.dart';
+import 'page/stepper/stepper_page.dart';
+import 'page/steps/steps_page.dart';
+import 'page/swipe_cell/swipe_cell_page.dart';
+import 'page/swiper/swiper_page.dart';
+import 'page/switch/switch_page.dart';
+import 'page/tab_bar/tab_bar_page.dart';
+import 'page/table/table_page.dart';
+import 'page/tabs/tabs_page.dart';
+import 'page/tag/tag_page.dart';
+import 'page/text/text_page.dart';
+import 'page/textarea/textarea_page.dart';
+import 'page/time_counter/time_counter_page.dart';
+import 'page/toast/toast_page.dart';
+import 'page/tree_select/tree_select_page.dart';
+import 'page/upload/upload_page.dart';
 
 PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
   return (context, model) {
@@ -76,338 +68,328 @@ PageBuilder _wrapInheritedTheme(WidgetBuilder builder) {
   };
 }
 
-/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TDTextPage()
+/// 新增的示例页面，在此增加模型即可,会自动注册增加按钮。示例页面编写参考TTextPage()
 List<ExamplePageModel> examplePageList = [];
 
 Map<String, List<ExamplePageModel>> exampleMap = {
   '基础': [
     ExamplePageModel(
-        text: 'Button 按钮',
-        name: 'button',
-        pageBuilder: _wrapInheritedTheme((context) => const TDButtonPage())),
+      text: 'Button 按钮',
+      name: 'button',
+      pageBuilder: _wrapInheritedTheme((context) => const TButtonPage()),
+    ),
     ExamplePageModel(
-        text: 'Divider 分割线',
-        name: 'divider',
-        pageBuilder: _wrapInheritedTheme((context) => const TDDividerPage())),
+      text: 'Divider 分割线',
+      name: 'divider',
+      pageBuilder: _wrapInheritedTheme((context) => const TDividerPage()),
+    ),
     ExamplePageModel(
-        text: 'Fab 悬浮按钮',
-        name: 'fab',
-        pageBuilder: _wrapInheritedTheme((context) => const TDFabPage())),
+      text: 'Fab 悬浮按钮',
+      name: 'fab',
+      pageBuilder: _wrapInheritedTheme((context) => const TFabPage()),
+    ),
     ExamplePageModel(
-        text: 'Icon 图标',
-        name: 'icon',
-        pageBuilder: _wrapInheritedTheme((context) => const TDIconPage())),
+      text: 'Link 链接',
+      name: 'link',
+      pageBuilder: _wrapInheritedTheme((context) => const TLinkViewPage()),
+    ),
     ExamplePageModel(
-        text: 'Link 链接',
-        name: 'link',
-        pageBuilder: _wrapInheritedTheme((context) => const TDLinkViewPage())),
+      text: 'Text 文本',
+      name: 'text',
+      pageBuilder: _wrapInheritedTheme((context) => const TTextPage()),
+    ),
     ExamplePageModel(
-        text: 'Text 文本',
-        name: 'text',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTextPage())),
+      text: 'Icon 图标',
+      name: 'icon',
+      pageBuilder: _wrapInheritedTheme((context) => const TIconPage()),
+    ),
   ],
   '导航': [
     ExamplePageModel(
-        text: 'BackTop 返回顶部',
-        name: 'back-top',
-        pageName: 'backtop',
-        pageBuilder: _wrapInheritedTheme((context) => const TDBackTopPage())),
+      text: 'BackTop 返回顶部',
+      name: 'backtop',
+      pageBuilder: _wrapInheritedTheme((context) => const TBackTopPage()),
+    ),
     ExamplePageModel(
-        text: 'Drawer 抽屉',
-        name: 'drawer',
-        pageBuilder: _wrapInheritedTheme((context) => const TDDrawerPage())),
+      text: 'Drawer 抽屉',
+      name: 'drawer',
+      pageBuilder: _wrapInheritedTheme((context) => const TDrawerPage()),
+    ),
     ExamplePageModel(
-        text: 'Indexes 索引',
-        name: 'indexes',
-        pageBuilder: _wrapInheritedTheme((context) => const TDIndexesPage())),
+      text: 'Indexes 索引',
+      name: 'indexes',
+      pageBuilder: _wrapInheritedTheme((context) => const TIndexesPage()),
+    ),
     ExamplePageModel(
-        text: 'NavBar 导航栏',
-        name: 'navbar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDNavBarPage())),
+      text: 'NavBar 导航栏',
+      name: 'navbar',
+      pageBuilder: _wrapInheritedTheme((context) => const TNavBarPage()),
+    ),
     ExamplePageModel(
-        text: 'SideBar 侧边栏',
-        name: 'side-bar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSideBarPage())),
+      text: 'SideBar 侧边栏',
+      name: 'sidebar',
+      pageBuilder: _wrapInheritedTheme((context) => const TSideBarPage()),
+    ),
     ExamplePageModel(
-        text: 'Steps 步骤条',
-        name: 'steps',
-        pageBuilder: _wrapInheritedTheme((context) => const TDStepsPage())),
+      text: 'Steps 步骤条',
+      name: 'steps',
+      pageBuilder: _wrapInheritedTheme((context) => const TStepsPage()),
+    ),
     ExamplePageModel(
-        text: 'TabBar 标签栏',
-        name: 'tab-bar',
-        pageName: 'bottom_tab_bar',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDBottomTabBarPage())),
+      text: 'TabBar 标签栏',
+      name: 'tabBar',
+      pageBuilder: _wrapInheritedTheme((context) => const TTabBarPage()),
+    ),
     ExamplePageModel(
-        text: 'Tabs 选项卡',
-        name: 'tabs',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTabsPage())),
+      text: 'Tabs 选项卡',
+      name: 'tabs',
+      pageBuilder: _wrapInheritedTheme((context) => const TTabsPage()),
+    ),
   ],
   '输入': [
     ExamplePageModel(
-        text: 'Calendar 日历',
-        name: 'calendar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCalendarPage())),
+      text: 'Calendar 日历',
+      name: 'calendar',
+      pageBuilder: _wrapInheritedTheme((context) => const TCalendarPage()),
+    ),
     ExamplePageModel(
-        text: 'Cascader 级联选择器',
-        name: 'cascader',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCascaderPage())),
+      text: 'Cascader 级联选择',
+      name: 'cascader',
+      pageBuilder: _wrapInheritedTheme((context) => const TCascaderPage()),
+    ),
     ExamplePageModel(
-        text: 'Checkbox 多选框',
-        name: 'checkbox',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCheckboxPage())),
+      text: 'Checkbox 多选框',
+      name: 'checkbox',
+      pageBuilder: _wrapInheritedTheme((context) => const TCheckboxPage()),
+    ),
     ExamplePageModel(
-        text: 'DateTimePicker 时间选择器',
-        name: 'date-time-picker',
-        pageName: 'data_picker',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDDatePickerPage())),
+      text: 'DateTimePicker 日期时间',
+      name: 'dateTimePicker',
+      pageBuilder: _wrapInheritedTheme(
+        (context) => const TDateTimePickerPage(),
+      ),
+    ),
     ExamplePageModel(
-        text: 'Form 表单',
-        name: 'form',
-        pageBuilder: _wrapInheritedTheme((context) => const TDFormPage())),
+      text: 'Form 表单',
+      name: 'form',
+      pageBuilder: _wrapInheritedTheme((context) => const TFormPage()),
+    ),
     ExamplePageModel(
-        text: 'Input 输入框',
-        name: 'input',
-        pageBuilder: _wrapInheritedTheme((context) => const TDInputViewPage())),
+      text: 'Input 输入框',
+      name: 'input',
+      pageBuilder: _wrapInheritedTheme((context) => const TInputViewPage()),
+    ),
     ExamplePageModel(
-        text: 'Picker 选择器',
-        name: 'picker',
-        pageBuilder: _wrapInheritedTheme((context) => const TDPickerPage())),
+      text: 'Picker 选择器',
+      name: 'picker',
+      pageBuilder: _wrapInheritedTheme((context) => const TPickerPage()),
+    ),
     ExamplePageModel(
-        text: 'Radio 单选框',
-        name: 'radio',
-        pageBuilder: _wrapInheritedTheme((context) => const TDRadioPage())),
+      text: 'Radio 单选框',
+      name: 'radio',
+      pageBuilder: _wrapInheritedTheme((context) => const TRadioPage()),
+    ),
     ExamplePageModel(
-        text: 'Rate 评分',
-        name: 'rate',
-        pageBuilder: _wrapInheritedTheme((context) => const TDRatePage())),
+      text: 'Rate 评分',
+      name: 'rate',
+      pageBuilder: _wrapInheritedTheme((context) => const TRatePage()),
+    ),
     ExamplePageModel(
-        text: 'Search 搜索框',
-        name: 'search',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSearchBarPage())),
+      text: 'Search 搜索框',
+      name: 'search',
+      pageBuilder: _wrapInheritedTheme((context) => const TSearchBarPage()),
+    ),
     ExamplePageModel(
-        text: 'Slider 滑动选择器',
-        name: 'slider',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSliderPage())),
+      text: 'Slider 滑块',
+      name: 'slider',
+      pageBuilder: _wrapInheritedTheme((context) => const TSliderPage()),
+    ),
     ExamplePageModel(
-        text: 'Stepper 步进器',
-        name: 'stepper',
-        pageBuilder: _wrapInheritedTheme((context) => const TDStepperPage())),
+      text: 'Stepper 步进器',
+      name: 'stepper',
+      pageBuilder: _wrapInheritedTheme((context) => const TStepperPage()),
+    ),
     ExamplePageModel(
-        text: 'Switch 开关',
-        name: 'switch',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSwitchPage())),
+      text: 'Switch 开关',
+      name: 'switch',
+      pageBuilder: _wrapInheritedTheme((context) => const TSwitchPage()),
+    ),
     ExamplePageModel(
-        text: 'Textarea 多行文本框',
-        name: 'textarea',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTextareaPage())),
+      text: 'Textarea 多行输入',
+      name: 'textarea',
+      pageBuilder: _wrapInheritedTheme((context) => const TTextareaPage()),
+    ),
     ExamplePageModel(
-        text: 'TreeSelect 树形选择器',
-        name: 'tree-select',
-        pageName: 'tree_select',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDTreeSelectPage())),
+      text: 'TreeSelect 树形选择',
+      name: 'treeSelect',
+      pageBuilder: _wrapInheritedTheme((context) => const TTreeSelectPage()),
+    ),
     ExamplePageModel(
-        text: 'Upload 上传',
-        name: 'upload',
-        pageBuilder: _wrapInheritedTheme((context) => const TDUploadPage())),
+      text: 'Upload 上传',
+      name: 'upload',
+      pageBuilder: _wrapInheritedTheme((context) => const TUploadPage()),
+    ),
   ],
   '数据展示': [
     ExamplePageModel(
-        text: 'Avatar 头像',
-        name: 'avatar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDAvatarPage())),
+      text: 'Avatar 头像',
+      name: 'avatar',
+      pageBuilder: _wrapInheritedTheme((context) => const TAvatarPage()),
+    ),
     ExamplePageModel(
-        text: 'Badge 徽标',
-        name: 'badge',
-        pageBuilder: _wrapInheritedTheme((context) => const TDBadgePage())),
+      text: 'Badge 徽标',
+      name: 'badge',
+      pageBuilder: _wrapInheritedTheme((context) => const TBadgePage()),
+    ),
     ExamplePageModel(
-        text: 'Cell 单元格',
-        name: 'cell',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCellPage())),
+      text: 'Cell 单元格',
+      name: 'cell',
+      pageBuilder: _wrapInheritedTheme((context) => const TCellPage()),
+    ),
     ExamplePageModel(
-        text: 'TimeCounter 计时器',
-        name: 'time-counter',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDTimeCounterPage())),
+      text: 'Collapse 折叠面板',
+      name: 'collapse',
+      pageBuilder: _wrapInheritedTheme((context) => const TCollapsePage()),
+    ),
     ExamplePageModel(
-        text: 'Collapse 折叠面板',
-        name: 'collapse',
-        pageBuilder: _wrapInheritedTheme((context) => const TDCollapsePage())),
+      text: 'Empty 空状态',
+      name: 'empty',
+      pageBuilder: _wrapInheritedTheme((context) => const TEmptyPage()),
+    ),
     ExamplePageModel(
-        text: 'Empty 空状态',
-        name: 'empty',
-        pageBuilder: _wrapInheritedTheme((context) => const TDEmptyPage())),
+      text: 'Footer 页脚',
+      name: 'footer',
+      pageBuilder: _wrapInheritedTheme((context) => const TFooterPage()),
+    ),
     ExamplePageModel(
-        text: 'Footer 页脚',
-        name: 'footer',
-        pageBuilder: _wrapInheritedTheme((context) => const TDFooterPage())),
+      text: 'Image 图片',
+      name: 'image',
+      pageBuilder: _wrapInheritedTheme((context) => const TImagePage()),
+    ),
     ExamplePageModel(
-        text: 'Grid 宫格',
-        name: 'grid',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+      text: 'ImageViewer 图片预览',
+      name: 'imageViewer',
+      pageBuilder: _wrapInheritedTheme((context) => const TImageViewerPage()),
+    ),
     ExamplePageModel(
-        text: 'Image 图片',
-        name: 'image',
-        pageBuilder: _wrapInheritedTheme((context) => const TDImagePage())),
+      text: 'Progress 进度条',
+      name: 'progress',
+      pageBuilder: _wrapInheritedTheme((context) => const TProgressPage()),
+    ),
     ExamplePageModel(
-        text: 'ImageViewer 图片预览',
-        name: 'image-viewer',
-        pageName: 'image_viewer',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDImageViewerPage())),
+      text: 'Result 结果',
+      name: 'result',
+      pageBuilder: _wrapInheritedTheme((context) => const TResultPage()),
+    ),
     ExamplePageModel(
-        text: 'Progress 进度条',
-        name: 'progress',
-        pageBuilder: _wrapInheritedTheme((context) => const TDProgressPage())),
+      text: 'Skeleton 骨架屏',
+      name: 'skeleton',
+      pageBuilder: _wrapInheritedTheme((context) => const TSkeletonPage()),
+    ),
     ExamplePageModel(
-        text: 'Result 结果',
-        name: 'result',
-        pageBuilder: _wrapInheritedTheme((context) => const TDResultPage())),
+      text: 'Swiper 轮播',
+      name: 'swiper',
+      pageBuilder: _wrapInheritedTheme((context) => const TSwiperPage()),
+    ),
     ExamplePageModel(
-        text: 'Skeleton 骨架屏',
-        name: 'skeleton',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSkeletonPage())),
+      text: 'Table 表格',
+      name: 'table',
+      pageBuilder: _wrapInheritedTheme((context) => const TTablePage()),
+    ),
     ExamplePageModel(
-        text: 'Sticky 吸顶',
-        name: 'sticky',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+      text: 'Tag 标签',
+      name: 'tag',
+      pageBuilder: _wrapInheritedTheme((context) => const TTagPage()),
+    ),
     ExamplePageModel(
-        text: 'Swiper 轮播图',
-        name: 'swiper',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSwiperPage())),
-    ExamplePageModel(
-        text: 'Table 表格',
-        name: 'table',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTablePage())),
-    ExamplePageModel(
-        text: 'Tag 标签',
-        name: 'tag',
-        pageBuilder: _wrapInheritedTheme((context) => const TDTagPage())),
+      text: 'TimeCounter 计时器',
+      name: 'timeCounter',
+      pageBuilder: _wrapInheritedTheme((context) => const TTimeCounterPage()),
+    ),
   ],
   '反馈': [
     ExamplePageModel(
-        text: 'ActionSheet 动作面板',
-        name: 'action-sheet',
-        pageName: 'action_sheet',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDActionSheetPage())),
+      text: 'ActionSheet 动作面板',
+      name: 'actionSheet',
+      pageBuilder: _wrapInheritedTheme((context) => const TActionSheetPage()),
+    ),
     ExamplePageModel(
-        text: 'Dialog 对话框',
-        name: 'dialog',
-        pageBuilder: _wrapInheritedTheme((context) => const TDDialogPage())),
+      text: 'Dialog 弹窗',
+      name: 'dialog',
+      pageBuilder: _wrapInheritedTheme((context) => const TDialogPage()),
+    ),
     ExamplePageModel(
-        text: 'DropdownMenu 下拉菜单',
-        name: 'dropdown-menu',
-        pageName: 'dropdown_menu',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDDropdownMenuPage())),
+      text: 'DropdownMenu 下拉菜单',
+      name: 'dropdownMenu',
+      pageBuilder: _wrapInheritedTheme((context) => const TDropdownMenuPage()),
+    ),
     ExamplePageModel(
-        text: 'Loading 加载',
-        name: 'loading',
-        pageBuilder: _wrapInheritedTheme((context) => const TDLoadingPage())),
+      text: 'Loading 加载',
+      name: 'loading',
+      pageBuilder: _wrapInheritedTheme((context) => const TLoadingPage()),
+    ),
     ExamplePageModel(
-        text: 'Message 消息通知',
-        name: 'message',
-        pageBuilder: _wrapInheritedTheme((context) => const TDMessagePage())),
+      text: 'Message 消息通知',
+      name: 'message',
+      pageBuilder: _wrapInheritedTheme((context) => const TMessagePage()),
+    ),
     ExamplePageModel(
-        text: 'NoticeBar 公告栏',
-        name: 'notice-bar',
-        pageBuilder: _wrapInheritedTheme((context) => const TDNoticeBarPage())),
+      text: 'NoticeBar 公告栏',
+      name: 'noticeBar',
+      pageBuilder: _wrapInheritedTheme((context) => const TNoticeBarPage()),
+    ),
     ExamplePageModel(
-        text: 'Overlay 遮罩层',
-        name: 'overlay',
-        isTodo: true,
-        pageBuilder: _wrapInheritedTheme((context) => const TodoPage())),
+      text: 'Popover 气泡弹出',
+      name: 'popover',
+      pageBuilder: _wrapInheritedTheme((context) => const TPopoverPage()),
+    ),
     ExamplePageModel(
-        text: 'Popover 弹出气泡',
-        name: 'popover',
-        pageBuilder: _wrapInheritedTheme((context) => const TDPopoverPage())),
+      text: 'Popup 弹出层',
+      name: 'popup',
+      pageBuilder: _wrapInheritedTheme((context) => const TPopupPage()),
+    ),
     ExamplePageModel(
-        text: 'Popup 弹出层',
-        name: 'popup',
-        pageBuilder: _wrapInheritedTheme((context) => const TDPopupPage())),
+      text: 'PullDownRefresh 下拉刷新',
+      name: 'pullDownRefresh',
+      pageBuilder: _wrapInheritedTheme(
+        (context) => const TPullDownRefreshPage(),
+      ),
+    ),
     ExamplePageModel(
-        text: 'PullDownRefresh 下拉刷新',
-        name: 'pull-down-refresh',
-        pageName: 'refresh',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TdPullDownRefreshPage())),
+      text: 'SwipeCell 滑动操作',
+      name: 'swipeCell',
+      pageBuilder: _wrapInheritedTheme((context) => const TSwipeCellPage()),
+    ),
     ExamplePageModel(
-        text: 'Swipecell 滑动操作',
-        name: 'swipe-cell',
-        pageName: 'swipe_cell',
-        pageBuilder: _wrapInheritedTheme((context) => const TDSwipeCellPage())),
-    ExamplePageModel(
-        text: 'Toast 轻提示',
-        name: 'toast',
-        pageBuilder: _wrapInheritedTheme((context) => const TDToastPage())),
-  ],
-  '主题': [
-    ExamplePageModel(
-        text: '颜色',
-        name: 'theme_colors',
-        pageBuilder:
-            _wrapInheritedTheme((context) => const TDThemeColorsPage())),
-    ExamplePageModel(
-        text: '字体',
-        name: 'font',
-        pageBuilder: _wrapInheritedTheme((context) => const TDFontPage())),
-    ExamplePageModel(
-        text: '圆角',
-        name: 'radius',
-        pageBuilder: _wrapInheritedTheme((context) => const TDRadiusPage())),
-    ExamplePageModel(
-        text: '阴影',
-        name: 'shadows',
-        pageBuilder: _wrapInheritedTheme((context) => const TDShadowsPage())),
+      text: 'Toast 轻提示',
+      name: 'toast',
+      pageBuilder: _wrapInheritedTheme((context) => const TToastPage()),
+    ),
   ],
 };
 
 List<ExamplePageModel> sideBarExamplePage = [
   ExamplePageModel(
-      text: 'SideBar 切页',
-      name: 'SideBarPagination',
-      isTodo: false,
-      showAction: false,
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TDSideBarPaginationPage())),
+    text: 'SideBar 切页',
+    name: 'SideBarPagination',
+    showAction: false,
+    pageBuilder: _wrapInheritedTheme(
+      (context) => const TSideBarPaginationPage(),
+    ),
+  ),
   ExamplePageModel(
-      text: 'SideBar 锚点',
-      name: 'SideBarAnchor',
-      isTodo: false,
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TDSideBarAnchorPage())),
+    text: 'SideBar 锚点',
+    name: 'SideBarAnchor',
+    pageBuilder: _wrapInheritedTheme((context) => const TSideBarAnchorPage()),
+  ),
   ExamplePageModel(
-      text: 'SideBar 带图标',
-      name: 'SideBarIcon',
-      isTodo: false,
-      pageBuilder: _wrapInheritedTheme((context) => const TDSideBarIconPage())),
+    text: 'SideBar 带图标',
+    name: 'SideBarIcon',
+    pageBuilder: _wrapInheritedTheme((context) => const TSideBarIconPage()),
+  ),
   ExamplePageModel(
-      text: 'SideBar 非通栏选项样式',
-      name: 'SideBarOutline',
-      isTodo: false,
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TDSideBarOutlinePage())),
-  ExamplePageModel(
-      text: 'SideBar 自定义样式',
-      name: 'SideBarCustom',
-      isTodo: false,
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TDSideBarCustomPage())),
-  ExamplePageModel(
-      text: 'SideBar 延迟加载',
-      name: 'SideBarLoading',
-      isTodo: false,
-      pageBuilder:
-          _wrapInheritedTheme((context) => const TDSideBarLoadingPage())),
-  ExamplePageModel(
-      text: 'SideBar 自定义未选中颜色',
-      name: 'SideBarUnselectedColor',
-      isTodo: false,
-      pageBuilder: _wrapInheritedTheme(
-          (context) => const TDSideBarUnSelectedColorPage()))
+    text: 'SideBar 自定义样式',
+    name: 'SideBarCustom',
+    pageBuilder: _wrapInheritedTheme((context) => const TSideBarCustomPage()),
+  ),
 ];
