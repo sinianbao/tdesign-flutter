@@ -34,7 +34,7 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.useBorderStyle = false,
     this.border,
     this.boxShadow,
-    this.useSafeArea = false,
+    this.useSafeArea = true,
   }) : super(key: key);
 
   /// 标题控件。
@@ -112,7 +112,8 @@ class TNavBar extends StatelessWidget implements PreferredSizeWidget {
 
   /// 是否避让顶部系统安全区。
   ///
-  /// 默认为 false。仅当导航栏直接位于页面顶部且外层未处理安全区时开启。
+  /// 默认为 true（与 [AppBar] 行为一致），作为 [Scaffold.appBar] 或位于页面顶部时自动避让状态栏。
+  /// 外层已用 SafeArea 处理，或用于弹窗/底部面板等非页面顶部场景时，请设为 false。
   /// 开启后，安全区高度只计入实际渲染高度，不计入 [preferredSize]；
   /// [height] 始终表示导航栏内容高度。
   final bool useSafeArea;
