@@ -338,81 +338,90 @@ class TDialog extends StatelessWidget {
       scopesRoute: true,
       label: semanticLabel,
       explicitChildNodes: true,
-      child: Material(
-        color: effectiveBackground,
-        shape: effectiveShape,
-        elevation: effectiveElevation,
-        clipBehavior: Clip.antiAlias,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minWidth: dialogWidth,
-            maxWidth: dialogWidth,
-            maxHeight: effectiveMaxHeight,
-          ),
-          child: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: _DialogScrollableContent(
-                      padding: effectiveContentPadding,
-                      scrollbarColor: token.grayColor4.withValues(alpha: 0.5),
-                      title: title,
-                      titleStyle: titleStyle,
-                      content: content,
-                      contentStyle: contentStyle,
-                      titleContentSpacing: token.spacer8,
-                    ),
-                  ),
-                  if (actionsWidget != null)
-                    actionsWidget!
-                  else if (actions.isNotEmpty)
-                    Padding(
-                      padding: effectiveActionsPadding,
-                      child: _DialogActions(
-                        actions: actions,
-                        spacing: effectiveActionSpacing,
-                        textLayout: useTextActionLayout,
-                        defaultStyle: extension?.actionButtonStyle,
+      // 外层 Align 放宽约束：直接用于 showGeneralDialog 的 pageBuilder 时，
+      // 父级是全屏紧约束，否则弹窗会被撑满全屏高度；在宽松约束下则按内容收缩。
+      child: Align(
+        widthFactor: 1,
+        heightFactor: 1,
+        child: Material(
+          color: effectiveBackground,
+          shape: effectiveShape,
+          elevation: effectiveElevation,
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: dialogWidth,
+              maxWidth: dialogWidth,
+              maxHeight: effectiveMaxHeight,
+            ),
+            child: Stack(
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: _DialogScrollableContent(
+                        padding: effectiveContentPadding,
+                        scrollbarColor: token.grayColor4.withValues(alpha: 0.5),
+                        title: title,
+                        titleStyle: titleStyle,
+                        content: content,
+                        contentStyle: contentStyle,
+                        titleContentSpacing: token.spacer8,
                       ),
                     ),
-                ],
-              ),
-              if (showCloseButton)
-                PositionedDirectional(
-                  top: 0,
-                  end: 0,
-                  child: IconButton(
-                    tooltip: context.resource.close,
-                    padding: EdgeInsetsDirectional.fromSTEB(
-                      token.spacer16,
-                      token.spacer8,
-                      token.spacer8,
-                      token.spacer16,
-                    ),
-                    constraints: BoxConstraints.tightFor(
-                      width: closeButtonExtent,
-                      height: closeButtonExtent,
-                    ),
-                    style: ButtonStyle(
-                      fixedSize: WidgetStatePropertyAll(
-                        Size.square(closeButtonExtent),
+                    if (actionsWidget != null)
+                      actionsWidget!
+                    else if (actions.isNotEmpty)
+                      Padding(
+                        padding: effectiveActionsPadding,
+                        child: _DialogActions(
+                          actions: actions,
+                          spacing: effectiveActionSpacing,
+                          textLayout: useTextActionLayout,
+                          defaultStyle: extension?.actionButtonStyle,
+                        ),
                       ),
-                      minimumSize: WidgetStatePropertyAll(
-                        Size.square(closeButtonExtent),
-                      ),
-                      maximumSize: WidgetStatePropertyAll(
-                        Size.square(closeButtonExtent),
-                      ),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    icon: Icon(TIcons.close, color: token.textColorPlaceholder),
-                    onPressed: () =>
-                        Navigator.maybePop(context, closeButtonResult),
-                  ),
+                  ],
                 ),
-            ],
+                if (showCloseButton)
+                  PositionedDirectional(
+                    top: 0,
+                    end: 0,
+                    child: IconButton(
+                      tooltip: context.resource.close,
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                        token.spacer16,
+                        token.spacer8,
+                        token.spacer8,
+                        token.spacer16,
+                      ),
+                      constraints: BoxConstraints.tightFor(
+                        width: closeButtonExtent,
+                        height: closeButtonExtent,
+                      ),
+                      style: ButtonStyle(
+                        fixedSize: WidgetStatePropertyAll(
+                          Size.square(closeButtonExtent),
+                        ),
+                        minimumSize: WidgetStatePropertyAll(
+                          Size.square(closeButtonExtent),
+                        ),
+                        maximumSize: WidgetStatePropertyAll(
+                          Size.square(closeButtonExtent),
+                        ),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      icon: Icon(
+                        TIcons.close,
+                        color: token.textColorPlaceholder,
+                      ),
+                      onPressed: () =>
+                          Navigator.maybePop(context, closeButtonResult),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
