@@ -254,11 +254,17 @@ class TButtonResolve {
     final colorScheme = Theme.of(context).tExplicitColorScheme;
     Color bg;
     Color fg;
+    // 暗黑模式下 primary 填充按钮：背景为柔和的白色，文字保持黑色
+    final darkPrimary = colorScheme == null &&
+        scheme == TButtonColorScheme.primary &&
+        Theme.of(context).brightness == Brightness.dark;
 
     switch (scheme) {
       case TButtonColorScheme.primary:
-        bg = colorScheme?.primary ?? tTheme.brandNormalColor;
-        fg = colorScheme?.onPrimary ?? tTheme.textColorAnti;
+        bg = colorScheme?.primary ??
+            (darkPrimary ? const Color(0xFFF2F2F7) : tTheme.brandNormalColor);
+        fg = colorScheme?.onPrimary ??
+            (darkPrimary ? const Color(0xFF111111) : tTheme.textColorAnti);
       case TButtonColorScheme.danger:
         bg = colorScheme?.error ?? tTheme.errorNormalColor;
         fg = colorScheme?.onError ?? tTheme.textColorAnti;
@@ -273,10 +279,12 @@ class TButtonResolve {
     return ButtonStyle(
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
+          if (darkPrimary) return bg.withValues(alpha: 0.35);
           return colorScheme?.onSurface.withValues(alpha: 0.12) ??
               _disabledBackgroundColor(scheme, tTheme);
         }
         if (states.contains(WidgetState.pressed)) {
+          if (darkPrimary) return const Color(0xFFD1D1D6);
           return colorScheme == null
               ? _pressedBackgroundColor(scheme, tTheme)
               : Color.alphaBlend(fg.withValues(alpha: 0.12), bg);
@@ -285,6 +293,7 @@ class TButtonResolve {
       }),
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
+          if (darkPrimary) return fg.withValues(alpha: 0.4);
           return colorScheme?.onSurface.withValues(alpha: 0.38) ??
               _disabledFillForegroundColor(scheme, tTheme);
         }
