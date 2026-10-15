@@ -134,6 +134,8 @@ class TButtonResolve {
               fontSize: metrics.fontSize,
               height: metrics.fontHeight,
               fontWeight: metrics.fontWeight,
+              // 行距均分，避免中英文字体度量不同导致文字垂直偏移
+              leadingDistribution: TextLeadingDistribution.even,
             );
       }),
     );
