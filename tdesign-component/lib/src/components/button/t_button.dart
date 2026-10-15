@@ -342,7 +342,12 @@ class _TButtonState extends State<TButton> {
           shape: effectiveShape,
           clipBehavior: Clip.antiAlias,
           elevation: elevation,
-          textStyle: textStyle.copyWith(color: foregroundColor),
+          // 行距均分，避免中英文字体 ascent/descent 不同导致文字垂直偏移
+          textStyle: textStyle.copyWith(
+            color: foregroundColor,
+            leadingDistribution:
+                textStyle.leadingDistribution ?? TextLeadingDistribution.even,
+          ),
           shadowColor: shadowColor,
           surfaceTintColor: surfaceTintColor,
           animationDuration: animationDuration,
